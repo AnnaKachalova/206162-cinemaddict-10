@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
-* Студент: [Анна Качалова](https://up.htmlacademy.ru/ecmascript/10/user/206162).
-* Наставник: `Неизвестно`.
+- Студент: [Анна Качалова](https://up.htmlacademy.ru/ecmascript/10/user/206162).
+- Наставник: [Василиса Медведенко](https://htmlacademy.ru/profile/id1268845).
 
 ---
 
