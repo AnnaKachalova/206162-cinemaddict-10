@@ -310,9 +310,9 @@ const fillTopRatedContainer = () => {
   render(siteMainElement, createTopRatedContainer());
   let extra = siteMainElement.querySelector(`.films-list--extra-top-rated`);
   render(extra, createCardFilmContainer());
-  let filmList = extra.querySelector(`.films-list__container`);
+  let topList = extra.querySelector(`.films-list__container`);
   for (let i = 0; i < 2; i++) {
-    render(filmList, createFilmCard());
+    render(topList, createFilmCard());
   }
 };
 fillTopRatedContainer();
@@ -321,9 +321,9 @@ const fillMostCommentedContainer = () => {
   render(siteMainElement, createMostCommentedContainer());
   let extra = siteMainElement.querySelector(`.films-list--extra-most-commented`);
   render(extra, createCardFilmContainer());
-  let filmList = extra.querySelector(`.films-list__container`);
+  let mostCommentedList = extra.querySelector(`.films-list__container`);
   for (let i = 0; i < 2; i++) {
-    render(filmList, createFilmCard());
+    render(mostCommentedList, createFilmCard());
   }
 };
 fillMostCommentedContainer();
