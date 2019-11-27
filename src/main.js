@@ -1,27 +1,32 @@
 'use strict';
 const CARD_COUNT = 5;
 
-const createCardFilmContainer = () => {
+const createFilmsContainer = () => {
   return `
-<section class="films-list">
-  <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
-  <div class="films-list__container">
-  </div>
-</section>
-  `;
-};
-const createTopRatedContainer = () => {
-  return `
-<section class="films-list--extra films-list--extra-top-rated">
-  <h2 class="films-list__title">Top rated</h2>
+<section class="films">
+  <section class="films-list">
+    <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
+    <div class="films-list__container"></div>
+  </section>
 </section>`;
 };
+
+const createTopRatedContainer = () => {
+  return `
+<section class="films-list--extra">
+  <h2 class="films-list__title">Top rated</h2>
+  <div class="films-list__container"></div>
+</section>`;
+};
+
 const createMostCommentedContainer = () => {
   return `
-  <section class="films-list--extra films-list--extra-most-commented">
+  <section class="films-list--extra">
     <h2 class="films-list__title">Most commented</h2>
+    <div class="films-list__container"></div>
   </section>`;
 };
+
 const createFilmCard = () => {
   return `
 <article class="film-card">
@@ -43,6 +48,7 @@ const createFilmCard = () => {
 </article>  
     `;
 };
+
 const createPopupCard = () => {
   return `
 <section class="film-details">
@@ -294,36 +300,38 @@ const siteHeader = document.querySelector(`.header`);
 render(siteHeader, createHeaderProfile());
 
 const bodyElement = document.querySelector(`body`);
-const siteMainElement = document.querySelector(`.main`);
-render(siteMainElement, createMenu());
-render(siteMainElement, createCardFilmContainer());
+const mainElement = document.querySelector(`.main`);
 
-const filmList = siteMainElement.querySelector(`.films-list`);
+render(mainElement, createMenu());
+render(mainElement, createFilmsContainer());
+
+// fill film cards
+const filmsContainer = mainElement.querySelector(`.films`);
+const filmList = filmsContainer.querySelector(`.films-list`);
 const filmListContainer = filmList.querySelector(`.films-list__container`);
+
 new Array(CARD_COUNT).fill(``).forEach(() => {
   render(filmListContainer, createFilmCard());
 });
 render(filmList, createShowMoreButton());
-render(bodyElement, createPopupCard());
+
+// fill Top rated and Most commented
+render(filmsContainer, createTopRatedContainer());
+render(filmsContainer, createMostCommentedContainer());
+let extra = filmsContainer.querySelectorAll(`.films-list--extra`);
 
 const fillTopRatedContainer = () => {
-  render(siteMainElement, createTopRatedContainer());
-  let extra = siteMainElement.querySelector(`.films-list--extra-top-rated`);
-  render(extra, createCardFilmContainer());
-  let topList = extra.querySelector(`.films-list__container`);
+  let listTop = extra[0].querySelector(`.films-list__container`);
   for (let i = 0; i < 2; i++) {
-    render(topList, createFilmCard());
+    render(listTop, createFilmCard());
   }
 };
 fillTopRatedContainer();
 
 const fillMostCommentedContainer = () => {
-  render(siteMainElement, createMostCommentedContainer());
-  let extra = siteMainElement.querySelector(`.films-list--extra-most-commented`);
-  render(extra, createCardFilmContainer());
-  let mostCommentedList = extra.querySelector(`.films-list__container`);
+  let listMostCommented = extra[1].querySelector(`.films-list__container`);
   for (let i = 0; i < 2; i++) {
-    render(mostCommentedList, createFilmCard());
+    render(listMostCommented, createFilmCard());
   }
 };
 fillMostCommentedContainer();
