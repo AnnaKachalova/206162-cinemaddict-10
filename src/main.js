@@ -7,7 +7,9 @@ import { createMostCommentedContainer } from './components/most-commented-contai
 import { createPopupCard } from './components/popup.js';
 import { createShowMoreButton } from './components/more-button.js';
 
-const CARD_COUNT = 5;
+import { generateFilmCards } from './mock/film-card.js';
+
+const CARD_COUNT = 15;
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
@@ -28,17 +30,16 @@ const filmsContainer = mainElement.querySelector(`.films`);
 const filmList = filmsContainer.querySelector(`.films-list`);
 const filmListContainer = filmList.querySelector(`.films-list__container`);
 
-new Array(CARD_COUNT).fill(``).forEach(() => {
-  render(filmListContainer, createFilmCard());
-});
+const cards = generateFilmCards(CARD_COUNT);
+cards.slice(1).forEach(card => render(filmListContainer, createFilmCard(card)));
 render(filmList, createShowMoreButton());
 
 // fill Top rated and Most commented
 render(filmsContainer, createTopRatedContainer());
 render(filmsContainer, createMostCommentedContainer());
-let extra = filmsContainer.querySelectorAll(`.films-list--extra`);
+//let extra = filmsContainer.querySelectorAll(`.films-list--extra`);
 
-const fillTopRatedContainer = () => {
+/*const fillTopRatedContainer = () => {
   let listTop = extra[0].querySelector(`.films-list__container`);
   for (let i = 0; i < 2; i++) {
     render(listTop, createFilmCard());
@@ -52,4 +53,4 @@ const fillMostCommentedContainer = () => {
     render(listMostCommented, createFilmCard());
   }
 };
-fillMostCommentedContainer();
+fillMostCommentedContainer();*/
