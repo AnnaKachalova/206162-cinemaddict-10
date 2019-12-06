@@ -1,13 +1,17 @@
-import { createFilmsContainer } from './components/films-container.js';
-import { createFilmCard } from './components/film-card.js';
-import { createHeaderProfile } from './components/profile.js';
-import { createMenu } from './components/menu.js';
-import { createTopRatedContainer } from './components/top-rated-container.js';
-import { createMostCommentedContainer } from './components/most-commented-container.js';
-import { createPopupCard } from './components/popup.js';
-import { createShowMoreButton } from './components/more-button.js';
+import { createFilmsContainerComponent } from './components/films-container.js';
+import { createFilmCardComponent } from './components/film-card.js';
+import { createHeaderProfileComponent } from './components/profile.js';
+import { createMenuComponent } from './components/menu.js';
+import { createTopRatedComponent } from './components/top-rated-container.js';
+import { createMostCommentedComponent } from './components/most-commented-container.js';
+import { createPopupCardComponent } from './components/popup.js';
+import { createShowMoreButtonComponent } from './components/more-button.js';
 
-import { generateFilmCards } from './mock/film-card.js';
+// mock
+import { generateFilmCards, films } from './mock/film-card.js';
+import { rank } from './mock/profile.js';
+import { generateFilters } from './mock/menu.js';
+import { generatePopup } from './mock/popup.js';
 
 const CARD_COUNT = 15;
 
@@ -16,27 +20,33 @@ const render = (container, template, place = `beforeend`) => {
 };
 
 const siteHeader = document.querySelector(`.header`);
-render(siteHeader, createHeaderProfile());
+render(siteHeader, createHeaderProfileComponent(rank));
 
 const bodyElement = document.querySelector(`body`);
 const mainElement = document.querySelector(`.main`);
 
-render(mainElement, createMenu());
-render(mainElement, createFilmsContainer());
-render(bodyElement, createPopupCard());
+// создание фильтров
+const cards = generateFilmCards(CARD_COUNT);
+const filters = generateFilters(films);
+render(mainElement, createMenuComponent(filters));
 
-// fill film cards
+render(mainElement, createFilmsContainerComponent());
+const popup = generatePopup();
+render(bodyElement, createPopupCardComponent(popup));
+
+// получение блоков для фильмов
 const filmsContainer = mainElement.querySelector(`.films`);
 const filmList = filmsContainer.querySelector(`.films-list`);
 const filmListContainer = filmList.querySelector(`.films-list__container`);
 
-const cards = generateFilmCards(CARD_COUNT);
-cards.slice(1).forEach(card => render(filmListContainer, createFilmCard(card)));
-render(filmList, createShowMoreButton());
+// наполенение контейнера с фильмами
+cards.slice(1).forEach(card => render(filmListContainer, createFilmCardComponent(card)));
+render(filmList, createShowMoreButtonComponent());
 
-// fill Top rated and Most commented
-render(filmsContainer, createTopRatedContainer());
-render(filmsContainer, createMostCommentedContainer());
+// наполнение контейнеров  Top rated и Most commented
+render(filmsContainer, createTopRatedComponent());
+render(filmsContainer, createMostCommentedComponent());
+
 //let extra = filmsContainer.querySelectorAll(`.films-list--extra`);
 
 /*const fillTopRatedContainer = () => {

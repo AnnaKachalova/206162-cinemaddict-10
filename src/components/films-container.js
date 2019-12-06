@@ -1,4 +1,4 @@
-export const createFilmsContainer = () => {
+export const createFilmsContainerComponent = () => {
   return `
 <section class="films">
   <section class="films-list">

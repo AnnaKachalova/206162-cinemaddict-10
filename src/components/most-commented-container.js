@@ -1,4 +1,4 @@
-export const createMostCommentedContainer = () => {
+export const createMostCommentedComponent = () => {
   return `
   <section class="films-list--extra">
     <h2 class="films-list__title">Most commented</h2>
