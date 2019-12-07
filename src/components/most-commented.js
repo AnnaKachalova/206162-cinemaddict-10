@@ -31,7 +31,7 @@ const createFilmCardTemplate = (films) => {
   });
 };
 
-export const createMostCommentedComponent = films => {
+export const createMostCommentedComponent = (films) => {
   const filmCardMarkup = createFilmCardTemplate(films);
   return `
   <section class="films-list--extra">

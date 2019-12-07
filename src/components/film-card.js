@@ -1,4 +1,4 @@
-export const createFilmCardComponent = film => {
+export const createFilmCardComponent = (film) => {
   const {
     title,
     poster,

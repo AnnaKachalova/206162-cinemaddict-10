@@ -28,7 +28,6 @@ export const createPopupCardComponent = (popup) => {
     title,
     original,
     rating,
-    userRating,
     producer,
     screenwriter,
     actors,

@@ -57,8 +57,8 @@ const getRandomArrayElem = (array) => {
 };
 
 const getDescription = () => {
-  const descriptions = FilmDescriptions.split('. ');
-  return [getRandomArrayElem(descriptions), getRandomArrayElem(descriptions)].join('.');
+  const descriptions = FilmDescriptions.split(`. `);
+  return [getRandomArrayElem(descriptions), getRandomArrayElem(descriptions)].join(`.`);
 };
 const getRating = (min = 0, max = 10) => {
   const randRating = Math.random() * (max - min) + min;

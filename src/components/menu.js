@@ -1,4 +1,4 @@
-export const createMenuComponent = filters => {
+export const createMenuComponent = (filters) => {
   const filtersMarkup = filters
     .map((it, i) => createFilterTemplate(it, i === 0))
     .join(`\n`);
@@ -14,7 +14,7 @@ export const createMenuComponent = filters => {
 </ul>
 `;
 };
-const createFilterTemplate = (filter, isChecked) => {
+const createFilterTemplate = (filter) => {
   const { name, quantity } = filter;
   return `<a href="#${name}" class="main-navigation__item">${name} <span class="main-navigation__item-count">${quantity}</span></a>`;
 };
