@@ -47,11 +47,11 @@ const FilmDescriptions = `Lorem ipsum dolor sit amet, consectetur adipiscing eli
 const getRandomIntegerNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min);
 };
-const getRandomArrayIndex = array => {
+const getRandomArrayIndex = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
   return randomIndex;
 };
-const getRandomArrayElem = array => {
+const getRandomArrayElem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
   return array[randomIndex];
 };
@@ -90,8 +90,8 @@ const generateFilmCard = () => {
 
   return film;
 };
-const generateFilmCards = count => {
+const generateFilmCards = (count) => {
   return new Array(count).fill(``).map(generateFilmCard);
 };
 
-export { generateFilmCards, films };
+export {generateFilmCards, films};

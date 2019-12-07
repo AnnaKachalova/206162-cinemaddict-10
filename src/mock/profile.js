@@ -31,4 +31,4 @@ let rank = Object.keys(RankGradation).find(key => {
 
   if (min <= numberOfMovies && numberOfMovies <= max) return key;
 });
-export { rank };
+export {rank};

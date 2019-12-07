@@ -61,11 +61,11 @@ const FilmDescriptions = `Lorem ipsum dolor sit amet, consectetur adipiscing eli
 const getRandomIntegerNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min);
 };
-const getRandomArrayIndex = array => {
+const getRandomArrayIndex = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
   return randomIndex;
 };
-const getRandomArrayElem = array => {
+const getRandomArrayElem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
   return array[randomIndex];
 };
@@ -82,6 +82,42 @@ const getRandomDate = () => {
 
   return `${day} ${month} ${year}`;
 };
+// комментарии
+const emoticons = [`smile`, `sleeping`, `puke`, `angry`];
+const emoticonsText = [
+  `Almost two hours? Seriously?`,
+  `Very very old. Meh`,
+  `Booooooooooring`,
+];
+const emoticonsAutor = [`John Doe`, `Tim Macoveev`];
+
+const getRandomDateEmoticons = () => {
+  const targerDate = new Date();
+  const sign = Math.random() > 0.5 ? 1 : -1;
+  const diffValue = sign * getRandomIntegerNumber(0, 7);
+  const day = targerDate.getDate() + diffValue;
+  const month = targerDate.getMonth();
+  const year = getRandomIntegerNumber(1990, 2019);
+  const hours = getRandomIntegerNumber(1, 23);
+  const minutes = getRandomIntegerNumber(1, 59);
+
+  return `${year}/${month}/${day} ${hours}:${minutes}`;
+};
+const generateComments = () => {
+  const randomCount = getRandomIntegerNumber(1, 5);
+  const comments = [];
+  for (let i = 0; i < randomCount; i++) {
+    const comment = {
+      emoticon: getRandomArrayElem(emoticons),
+      text: getRandomArrayElem(emoticonsText),
+      autor: getRandomArrayElem(emoticonsAutor),
+      date: getRandomDateEmoticons(),
+    };
+    comments.push(comment);
+  }
+  return comments;
+};
+
 const generatePopup = () => {
   const randomIndex = getRandomArrayIndex(FilmTitles);
 
@@ -100,7 +136,8 @@ const generatePopup = () => {
     genre: getGenres(),
     description: FilmDescriptions,
     ageRating: getRandomIntegerNumber(6, 18),
+    comments: generateComments(),
   };
 };
 
-export { generatePopup };
+export {generatePopup};
