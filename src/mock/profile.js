@@ -28,9 +28,9 @@ const RankGradation = {
 let rank = Object.keys(RankGradation).find((key) => {
   const min = Number(RankGradation[key].MIN_VALUE);
   const max = Number(RankGradation[key].MAX_VALUE);
-  if (min <= numberOfMovies && numberOfMovies <= max){
+  if (min <= numberOfMovies && numberOfMovies <= max) {
     return key;
   }
-  return;
+  return RankType.NEITHER;
 });
 export {rank};
