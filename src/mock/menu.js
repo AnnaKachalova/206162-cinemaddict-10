@@ -4,10 +4,10 @@ const generateFilters = (films) => {
   const isFavorite = films.filter((film) => film.isFavorite === true).length;
 
   return [
-    {name: 'All movies', quantity: films.length},
-    {name: 'Watchlist', quantity: isWatchilst},
-    {name: 'History', quantity: isHistory},
-    {name: 'Favorites', quantity: isFavorite},
+    {name: `All movies`, quantity: films.length},
+    {name: `Watchlist`, quantity: isWatchilst},
+    {name: `History`, quantity: isHistory},
+    {name: `Favorites`, quantity: isFavorite},
   ];
 };
 
