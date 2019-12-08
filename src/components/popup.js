@@ -22,7 +22,7 @@ const createComment = (comments) => {
   </li>`;
   });
 };
-export const createPopupCardComponent = (popup) => {
+export const createPopupCardComponent = (film) => {
   const {
     poster,
     title,
@@ -38,8 +38,9 @@ export const createPopupCardComponent = (popup) => {
     description,
     ageRating,
     comments,
-  } = popup;
-
+    userRating
+  } = film;
+  const isHasUserRatign = userRating !== 0;
   const genreMarkup = createGenre(genre);
   const commentsMarkup = createComment(comments);
 
@@ -66,6 +67,7 @@ export const createPopupCardComponent = (popup) => {
 
             <div class="film-details__rating">
               <p class="film-details__total-rating">${rating}</p>
+              ${isHasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>` : ``}
             </div>
           </div>
 

@@ -11,55 +11,63 @@ import { createShowMoreButtonComponent } from './components/more-button.js';
 import { generateFilmCards, films } from './mock/film-card.js';
 import { rank } from './mock/profile.js';
 import { generateFilters } from './mock/menu.js';
-import { generatePopup } from './mock/popup.js';
+//import { generatePopup } from './mock/popup.js';
 
 import { generateMostCommented } from './mock/most-commented.js';
-import { generateTopRated } from './mock/top-rated';
+import { generateTopRated } from './mock/top-rated.js';
 
 const CARD_COUNT = 15;
-const SHOWING_TASKS_COUNT_ON_START = 6;
+const SHOWING_TASKS_COUNT_ON_START = 5;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 5;
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
 };
 
+// header
 const siteHeader = document.querySelector(`.header`);
 render(siteHeader, createHeaderProfileComponent(rank));
 
 const bodyElement = document.querySelector(`body`);
 const mainElement = document.querySelector(`.main`);
 
-// создание фильтров
+// filters
 const cards = generateFilmCards(CARD_COUNT);
 const filters = generateFilters(films);
 
 render(mainElement, createMenuComponent(filters));
 
 render(mainElement, createFilmsContainerComponent());
-const popup = generatePopup();
-render(bodyElement, createPopupCardComponent(popup));
 
-// получение блоков для фильмов
+// popup
+render(bodyElement, createPopupCardComponent(films[0]));
+
+// film list
 const filmsContainer = mainElement.querySelector(`.films`);
 const filmList = filmsContainer.querySelector(`.films-list`);
 const filmListContainer = filmList.querySelector(`.films-list__container`);
 
-// наполенение контейнера с фильмами
+// fill films
 let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
 cards
-  .slice(1, showingTasksCount)
+  .slice(0, showingTasksCount)
   .forEach((card) => render(filmListContainer, createFilmCardComponent(card)));
 render(filmList, createShowMoreButtonComponent());
 
-// наполнение контейнеров  Top rated и Most commented
+// Most commented
 const mostCommeted = generateMostCommented(films);
-render(filmsContainer, createMostCommentedComponent(mostCommeted));
-
+if(mostCommeted){
+  const mostCommetedFilms = mostCommeted.map((card) => createFilmCardComponent(card));
+  render(filmsContainer, createMostCommentedComponent(mostCommetedFilms));
+}
+// Top rated
 const topRated = generateTopRated(films);
-render(filmsContainer, createTopRatedComponent(topRated));
+if(topRated){
+  const topRatedFilms = topRated.map((card) => createFilmCardComponent(card));
+  render(filmsContainer, createTopRatedComponent(topRatedFilms));
+}
 
-// наполнение контейнеров  Top rated и Most commented
+// show more
 const showMoreButton = mainElement.querySelector(`.films-list__show-more`);
 showMoreButton.addEventListener(`click`, () => {
   const prevTasksCount = showingTasksCount;

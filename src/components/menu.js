@@ -14,7 +14,6 @@ export const createMenuComponent = (filters) => {
 </ul>
 `;
 };
-const createFilterTemplate = (filter) => {
-  const {name, quantity} = filter;
+const createFilterTemplate = ({name, quantity}) => {
   return `<a href="#${name}" class="main-navigation__item">${name} <span class="main-navigation__item-count">${quantity}</span></a>`;
 };

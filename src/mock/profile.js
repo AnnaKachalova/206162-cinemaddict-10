@@ -1,4 +1,4 @@
-const numberOfMovies = 15;
+const numberOfMovies = 5;
 
 const RankType = {
   NEITHER: `neither`,
@@ -28,9 +28,6 @@ const RankGradation = {
 let rank = Object.keys(RankGradation).find((key) => {
   const min = Number(RankGradation[key].MIN_VALUE);
   const max = Number(RankGradation[key].MAX_VALUE);
-  if (min <= numberOfMovies && numberOfMovies <= max) {
-    return key;
-  }
-  return RankType.NEITHER;
+  return (min <= numberOfMovies && numberOfMovies <= max);
 });
 export {rank};

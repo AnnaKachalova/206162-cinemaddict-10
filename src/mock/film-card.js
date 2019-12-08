@@ -1,4 +1,7 @@
+import {MONTH_NAMES} from '../const.js';
 const films = [];
+
+// main fields
 const FilmTitles = [
   `Чужой`,
   `Амели`,
@@ -43,7 +46,21 @@ const FilmGenres = [
   `Мелодрама`,
 ];
 const FilmDescriptions = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
+// additional fields
+const FilmProducers = [`Аарон Спеллинг`, `Джеймс Кэмерон`, `Майкл Бин`];
+const FilmScreenwriters = [`Аарон Спеллинг`, `Джеймс Кэмерон`, `Майкл Бин`];
+const FilmActors = [`Аарон Спеллинг`, `Джеймс Кэмерон`, `Майкл Бин`];
+const FilmCountries = [`США`, `Франция`, `Великобритания`];
+// comments
+const emoticons = [`smile`, `sleeping`, `puke`, `angry`];
+const emoticonsText = [
+  `Almost two hours? Seriously?`,
+  `Very very old. Meh`,
+  `Booooooooooring`,
+];
+const emoticonsAutor = [`John Doe`, `Tim Macoveev`];
 
+// utility functions
 const getRandomIntegerNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min);
 };
@@ -56,6 +73,7 @@ const getRandomArrayElem = (array) => {
   return array[randomIndex];
 };
 
+// functions for fields
 const getDescription = () => {
   const descriptions = FilmDescriptions.split(`. `);
   return [getRandomArrayElem(descriptions), getRandomArrayElem(descriptions)].join(`.`);
@@ -69,6 +87,44 @@ const getDuration = () => {
   const minutes = getRandomIntegerNumber(1, 59);
 
   return `${hours}h ${minutes}m`;
+};
+const getRandomDate = () => {
+  const targerDate = new Date();
+  const sign = Math.random() > 0.5 ? 1 : -1;
+  const diffValue = sign * getRandomIntegerNumber(0, 7);
+  const day = targerDate.getDate() + diffValue;
+  const month = getRandomArrayElem(MONTH_NAMES);
+  const year = getRandomIntegerNumber(1990, 2019);
+
+  return `${day} ${month} ${year}`;
+};
+const getRandomDateEmoticons = () => {
+  const targerDate = new Date();
+  const sign = Math.random() > 0.5 ? 1 : -1;
+  const diffValue = sign * getRandomIntegerNumber(0, 7);
+  const day = targerDate.getDate() + diffValue;
+  const month = targerDate.getMonth();
+  const year = getRandomIntegerNumber(1990, 2019);
+  const hours = getRandomIntegerNumber(1, 23);
+  const minutes = getRandomIntegerNumber(1, 59);
+
+  return `${year}/${month}/${day} ${hours}:${minutes}`;
+};
+
+
+const generateComments = () => {
+  const randomCount = getRandomIntegerNumber(1, 5);
+  const comments = [];
+  for (let i = 0; i < randomCount; i++) {
+    const comment = {
+      emoticon: getRandomArrayElem(emoticons),
+      text: getRandomArrayElem(emoticonsText),
+      autor: getRandomArrayElem(emoticonsAutor),
+      date: getRandomDateEmoticons(),
+    };
+    comments.push(comment);
+  }
+  return comments;
 };
 const generateFilmCard = () => {
   const randomIndex = getRandomArrayIndex(FilmTitles);
@@ -85,6 +141,16 @@ const generateFilmCard = () => {
     isWatchilst: Math.random() > 0.5,
     isHistory: Math.random() > 0.5,
     isFavorite: Math.random() > 0.5,
+    original: FilmTitles[randomIndex],
+    userRating: getRandomIntegerNumber(0, 5),
+    producer: getRandomArrayElem(FilmProducers),
+    screenwriter: getRandomArrayElem(FilmScreenwriters),
+    actors: getRandomArrayElem(FilmActors),
+    releaseDate: getRandomDate(),
+    country: getRandomArrayElem(FilmCountries),
+    fullDescription: FilmDescriptions,
+    ageRating: getRandomIntegerNumber(6, 18),
+    comments: generateComments(),
   };
   films.push(film);
 
