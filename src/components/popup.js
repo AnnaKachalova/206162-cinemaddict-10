@@ -4,7 +4,7 @@ const createGenreTemplate = (genres) => {
 
 const createCommentTemplate = (comments) => {
   return Array.from(comments).map((comment) => {
-    const { emoticon, text, autor, date } = comment;
+    const {emoticon, text, autor, date} = comment;
     return `<li class="film-details__comment">
               <span class="film-details__comment-emoji">
                 <img src="./images/emoji/${emoticon}.png" width="55" height="55" alt="emoji">
@@ -44,13 +44,13 @@ export const createPopupCardComponent = (film) => {
   const isArray = Array.isArray(genre);
   let genreMarkup;
   if (isArray) {
-    genreMarkup =  Array.from(genre).map((element) => {
+    genreMarkup = Array.from(genre).map((element) => {
       return createGenreTemplate(element);
     });
   } else {
     genreMarkup = createGenreTemplate(genre);
-  } 
-  
+  }
+
   return `
 <section class="film-details visually-hidden">
   <form class="film-details__inner" action="" method="get">
@@ -74,14 +74,10 @@ export const createPopupCardComponent = (film) => {
 
             <div class="film-details__rating">
               <p class="film-details__total-rating">${rating}</p>
-              ${
-                isHasUserRatign
-                  ? `<p class="film-details__user-rating">Your rate ${userRating}</p>`
-                  : ``
-              }
+  ${isHasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>`
+                  : ``}
             </div>
           </div>
-
           <table class="film-details__table">
             <tr class="film-details__row">
               <td class="film-details__term">Director</td>

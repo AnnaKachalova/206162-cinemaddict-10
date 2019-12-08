@@ -1,5 +1,3 @@
-
-
 const RankType = {
   NEITHER: false,
   NOVICE: `novice`,
@@ -29,10 +27,9 @@ const generateRank = (isHistoryCount) => {
   let rank = Object.keys(RankGradation).find((key) => {
     const min = Number(RankGradation[key].MIN_VALUE);
     const max = Number(RankGradation[key].MAX_VALUE);
-    return (min <= isHistoryCount && isHistoryCount <= max);
+    return min <= isHistoryCount && isHistoryCount <= max;
   });
-  return rank
-  
+  return rank;
 };
 
 export {generateRank};

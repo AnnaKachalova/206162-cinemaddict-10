@@ -142,9 +142,7 @@ const generateComments = () => {
 
 const generateFilmCard = () => {
   const randomIndex = getRandomIntegerNumber(0, FilmTitles.length);
-  
-  
-  return  {
+  return {
     title: FilmTitles[randomIndex],
     poster: FilmPosters[randomIndex],
     description: getDescription(),

@@ -12,7 +12,6 @@ export const createFilmCardComponent = (film) => {
     isHistory,
     isFavorite,
   } = film;
-  
   const watchlistClass = isWatchlist ? `film-card__controls-item--active` : ``;
   const historyClass = isHistory ? `film-card__controls-item--active` : ``;
   const favoriteClass = isFavorite ? `film-card__controls-item--active` : ``;
