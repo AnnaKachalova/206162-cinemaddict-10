@@ -75,7 +75,7 @@ export const createPopupCardComponent = (film) => {
             <div class="film-details__rating">
               <p class="film-details__total-rating">${rating}</p>
   ${isHasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>`
-                  : ``}
+    : ``}
             </div>
           </div>
           <table class="film-details__table">
