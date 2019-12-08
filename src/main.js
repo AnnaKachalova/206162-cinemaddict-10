@@ -8,10 +8,9 @@ import { createPopupCardComponent } from './components/popup.js';
 import { createShowMoreButtonComponent } from './components/more-button.js';
 
 // mock
-import { generateFilmCards, films } from './mock/film-card.js';
-import { rank } from './mock/profile.js';
+import { generateFilmCards } from './mock/film-card.js';
+import { generateRank } from './mock/profile.js';
 import { generateFilters } from './mock/menu.js';
-//import { generatePopup } from './mock/popup.js';
 
 import { generateMostCommented } from './mock/most-commented.js';
 import { generateTopRated } from './mock/top-rated.js';
@@ -24,25 +23,25 @@ const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
 };
 
-// header
-const siteHeader = document.querySelector(`.header`);
-render(siteHeader, createHeaderProfileComponent(rank));
-
 const bodyElement = document.querySelector(`body`);
 const mainElement = document.querySelector(`.main`);
 
 // filters
 const cards = generateFilmCards(CARD_COUNT);
-const filters = generateFilters(films);
-
+const filters = generateFilters(cards);
 render(mainElement, createMenuComponent(filters));
 
-render(mainElement, createFilmsContainerComponent());
+// header
+const siteHeader = document.querySelector(`.header`);
+const isHistory = cards.filter((film) => film.isHistory === true).length;
+const rank = generateRank(isHistory);
+render(siteHeader, createHeaderProfileComponent(rank));
 
 // popup
-render(bodyElement, createPopupCardComponent(films[0]));
+render(bodyElement, createPopupCardComponent(cards[0]));
 
 // film list
+render(mainElement, createFilmsContainerComponent());
 const filmsContainer = mainElement.querySelector(`.films`);
 const filmList = filmsContainer.querySelector(`.films-list`);
 const filmListContainer = filmList.querySelector(`.films-list__container`);
@@ -55,13 +54,13 @@ cards
 render(filmList, createShowMoreButtonComponent());
 
 // Most commented
-const mostCommeted = generateMostCommented(films);
+const mostCommeted = generateMostCommented(cards);
 if(mostCommeted){
   const mostCommetedFilms = mostCommeted.map((card) => createFilmCardComponent(card));
   render(filmsContainer, createMostCommentedComponent(mostCommetedFilms));
 }
 // Top rated
-const topRated = generateTopRated(films);
+const topRated = generateTopRated(cards);
 if(topRated){
   const topRatedFilms = topRated.map((card) => createFilmCardComponent(card));
   render(filmsContainer, createTopRatedComponent(topRatedFilms));

@@ -1,7 +1,7 @@
-const numberOfMovies = 5;
+
 
 const RankType = {
-  NEITHER: `neither`,
+  NEITHER: false,
   NOVICE: `novice`,
   FAN: `fan`,
   MOVIE_BUFF: `movie buff`,
@@ -25,9 +25,14 @@ const RankGradation = {
   },
 };
 
-let rank = Object.keys(RankGradation).find((key) => {
-  const min = Number(RankGradation[key].MIN_VALUE);
-  const max = Number(RankGradation[key].MAX_VALUE);
-  return (min <= numberOfMovies && numberOfMovies <= max);
-});
-export {rank};
+const generateRank = (isHistoryCount) => {
+  let rank = Object.keys(RankGradation).find((key) => {
+    const min = Number(RankGradation[key].MIN_VALUE);
+    const max = Number(RankGradation[key].MAX_VALUE);
+    return (min <= isHistoryCount && isHistoryCount <= max);
+  });
+  return rank
+  
+};
+
+export {generateRank};

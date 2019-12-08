@@ -1,35 +1,33 @@
-const createGenre = (genres) => {
-  return Array.from(genres).map((genre) => {
-    return `<span class="film-details__genre">${genre}</span>`;
-  });
+const createGenreTemplate = (genres) => {
+  return `<span class="film-details__genre">${genres}</span>`;
 };
 
-const createComment = (comments) => {
+const createCommentTemplate = (comments) => {
   return Array.from(comments).map((comment) => {
-    const {emoticon, text, autor, date} = comment;
+    const { emoticon, text, autor, date } = comment;
     return `<li class="film-details__comment">
-    <span class="film-details__comment-emoji">
-      <img src="./images/emoji/${emoticon}.png" width="55" height="55" alt="emoji">
-    </span>
-    <div>
-      <p class="film-details__comment-text">${text}</p>
-      <p class="film-details__comment-info">
-        <span class="film-details__comment-author">J${autor}</span>
-        <span class="film-details__comment-day">${date}</span>
-        <button class="film-details__comment-delete">Delete</button>
-      </p>
-    </div>
-  </li>`;
+              <span class="film-details__comment-emoji">
+                <img src="./images/emoji/${emoticon}.png" width="55" height="55" alt="emoji">
+              </span>
+              <div>
+                <p class="film-details__comment-text">${text}</p>
+                <p class="film-details__comment-info">
+                  <span class="film-details__comment-author">${autor}</span>
+                  <span class="film-details__comment-day">${date}</span>
+                  <button class="film-details__comment-delete">Delete</button>
+                </p>
+              </div>
+          </li>`;
   });
 };
 export const createPopupCardComponent = (film) => {
   const {
     poster,
     title,
-    original,
+    originalTitle,
     rating,
-    producer,
-    screenwriter,
+    producers,
+    screenwriters,
     actors,
     releaseDate,
     duration,
@@ -38,12 +36,21 @@ export const createPopupCardComponent = (film) => {
     description,
     ageRating,
     comments,
-    userRating
+    userRating,
   } = film;
   const isHasUserRatign = userRating !== 0;
-  const genreMarkup = createGenre(genre);
-  const commentsMarkup = createComment(comments);
+  const commentsMarkup = createCommentTemplate(comments);
 
+  const isArray = Array.isArray(genre);
+  let genreMarkup;
+  if (isArray) {
+    genreMarkup =  Array.from(genre).map((element) => {
+      return createGenreTemplate(element);
+    });
+  } else {
+    genreMarkup = createGenreTemplate(genre);
+  } 
+  
   return `
 <section class="film-details visually-hidden">
   <form class="film-details__inner" action="" method="get">
@@ -62,23 +69,27 @@ export const createPopupCardComponent = (film) => {
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
               <h3 class="film-details__title">${title}</h3>
-              <p class="film-details__title-original">Original: ${original}</p>
+              <p class="film-details__title-original">Original: ${originalTitle}</p>
             </div>
 
             <div class="film-details__rating">
               <p class="film-details__total-rating">${rating}</p>
-              ${isHasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>` : ``}
+              ${
+                isHasUserRatign
+                  ? `<p class="film-details__user-rating">Your rate ${userRating}</p>`
+                  : ``
+              }
             </div>
           </div>
 
           <table class="film-details__table">
             <tr class="film-details__row">
               <td class="film-details__term">Director</td>
-              <td class="film-details__cell">${producer}</td>
+              <td class="film-details__cell">${producers}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${screenwriter}</td>
+              <td class="film-details__cell">${screenwriters}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>

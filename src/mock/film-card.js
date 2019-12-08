@@ -1,5 +1,4 @@
 import {MONTH_NAMES} from '../const.js';
-const films = [];
 
 // main fields
 const FilmTitles = [
@@ -18,6 +17,24 @@ const FilmTitles = [
   `Тёмный рыцарь`,
   `В джазе только девушки`,
   `Шоу Трумана`,
+];
+
+const OriginalTitles = [
+  `Alien`,
+  `Ameli`,
+  `Avatar`,
+  `Back to the future`,
+  `Bruce almighty`,
+  `Fight club`,
+  `Gladiator`,
+  `Gone with the wind`,
+  `Mr and Mrs Smith`,
+  `1+1`,
+  `Pretend my wife`,
+  `Pulp fiction`,
+  `The dark_knight`,
+  `There are only girls in jazz`,
+  `Truman show`,
 ];
 const FilmPosters = [
   `alien`,
@@ -63,10 +80,6 @@ const emoticonsAutor = [`John Doe`, `Tim Macoveev`];
 // utility functions
 const getRandomIntegerNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min);
-};
-const getRandomArrayIndex = (array) => {
-  const randomIndex = getRandomIntegerNumber(0, array.length);
-  return randomIndex;
 };
 const getRandomArrayElem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
@@ -126,10 +139,12 @@ const generateComments = () => {
   }
   return comments;
 };
-const generateFilmCard = () => {
-  const randomIndex = getRandomArrayIndex(FilmTitles);
 
-  const film = {
+const generateFilmCard = () => {
+  const randomIndex = getRandomIntegerNumber(0, FilmTitles.length);
+  
+  
+  return  {
     title: FilmTitles[randomIndex],
     poster: FilmPosters[randomIndex],
     description: getDescription(),
@@ -138,13 +153,13 @@ const generateFilmCard = () => {
     duration: getDuration(),
     genre: getRandomArrayElem(FilmGenres),
     numberOfComments: getRandomIntegerNumber(0, 100),
-    isWatchilst: Math.random() > 0.5,
+    isWatchlist: Math.random() > 0.5,
     isHistory: Math.random() > 0.5,
     isFavorite: Math.random() > 0.5,
-    original: FilmTitles[randomIndex],
+    originalTitle: OriginalTitles[randomIndex],
     userRating: getRandomIntegerNumber(0, 5),
-    producer: getRandomArrayElem(FilmProducers),
-    screenwriter: getRandomArrayElem(FilmScreenwriters),
+    producers: getRandomArrayElem(FilmProducers),
+    screenwriters: getRandomArrayElem(FilmScreenwriters),
     actors: getRandomArrayElem(FilmActors),
     releaseDate: getRandomDate(),
     country: getRandomArrayElem(FilmCountries),
@@ -152,12 +167,10 @@ const generateFilmCard = () => {
     ageRating: getRandomIntegerNumber(6, 18),
     comments: generateComments(),
   };
-  films.push(film);
 
-  return film;
 };
 const generateFilmCards = (count) => {
   return new Array(count).fill(``).map(generateFilmCard);
 };
 
-export {generateFilmCards, films};
+export {generateFilmCards};

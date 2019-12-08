@@ -1,5 +1,5 @@
 export const createHeaderProfileComponent = (rank) => {
-  const isHasRank = rank !== `neither`;
+  const isHasRank = rank !== false;
   return `${isHasRank ? `
     <section class="header__profile profile">
       <p class="profile__rating">${rank}</p>
