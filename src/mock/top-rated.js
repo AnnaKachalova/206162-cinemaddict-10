@@ -1,7 +1,7 @@
-import {sortBy} from '../utils.js';
+import {getItemsByField} from '../utils.js';
 
 const generateTopRated = (films) => {
-  return sortBy(films, `rating`);
+  return getItemsByField(films, `rating`);
 };
 
 export {generateTopRated};

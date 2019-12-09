@@ -142,6 +142,8 @@ const generateComments = () => {
 
 const generateFilmCard = () => {
   const randomIndex = getRandomIntegerNumber(0, FilmTitles.length);
+  const isHistory = Math.random() > 0.5;
+  const isWatchlist = !isHistory;
   return {
     title: FilmTitles[randomIndex],
     poster: FilmPosters[randomIndex],
@@ -151,14 +153,14 @@ const generateFilmCard = () => {
     duration: getDuration(),
     genre: getRandomArrayElem(FilmGenres),
     numberOfComments: getRandomIntegerNumber(0, 100),
-    isWatchlist: Math.random() > 0.5,
-    isHistory: Math.random() > 0.5,
+    isHistory,
+    isWatchlist,
     isFavorite: Math.random() > 0.5,
     originalTitle: OriginalTitles[randomIndex],
     userRating: getRandomIntegerNumber(0, 5),
-    producers: getRandomArrayElem(FilmProducers),
-    screenwriters: getRandomArrayElem(FilmScreenwriters),
-    actors: getRandomArrayElem(FilmActors),
+    producer: getRandomArrayElem(FilmProducers),
+    screenwriter: getRandomArrayElem(FilmScreenwriters),
+    actor: getRandomArrayElem(FilmActors),
     releaseDate: getRandomDate(),
     country: getRandomArrayElem(FilmCountries),
     fullDescription: FilmDescriptions,

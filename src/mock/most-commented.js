@@ -1,7 +1,7 @@
-import {sortBy} from '../utils.js';
+import {getItemsByField} from '../utils.js';
 
 const generateMostCommented = (films) => {
-  return sortBy(films, `numberOfComments`);
+  return getItemsByField(films, `numberOfComments`);
 };
 
 export {generateMostCommented};

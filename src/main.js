@@ -33,8 +33,8 @@ render(mainElement, createMenuComponent(filters));
 
 // header
 const siteHeader = document.querySelector(`.header`);
-const isHistory = cards.filter((film) => film.isHistory === true).length;
-const rank = generateRank(isHistory);
+const historyFilms = cards.filter((film) => film.isHistory === true).length;
+const rank = generateRank(historyFilms);
 render(siteHeader, createHeaderProfileComponent(rank));
 
 // popup
@@ -55,13 +55,13 @@ render(filmList, createShowMoreButtonComponent());
 
 // Most commented
 const mostCommeted = generateMostCommented(cards);
-if(mostCommeted){
+if(mostCommeted.length > 0){
   const mostCommetedFilms = mostCommeted.map((card) => createFilmCardComponent(card));
   render(filmsContainer, createMostCommentedComponent(mostCommetedFilms));
 }
 // Top rated
 const topRated = generateTopRated(cards);
-if(topRated){
+if(topRated.length > 0){
   const topRatedFilms = topRated.map((card) => createFilmCardComponent(card));
   render(filmsContainer, createTopRatedComponent(topRatedFilms));
 }

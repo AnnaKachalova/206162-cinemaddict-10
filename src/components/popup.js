@@ -26,9 +26,9 @@ export const createPopupCardComponent = (film) => {
     title,
     originalTitle,
     rating,
-    producers,
-    screenwriters,
-    actors,
+    producer,
+    screenwriter,
+    actor,
     releaseDate,
     duration,
     country,
@@ -38,12 +38,11 @@ export const createPopupCardComponent = (film) => {
     comments,
     userRating,
   } = film;
-  const isHasUserRatign = userRating !== 0;
+  const hasUserRatign = userRating !== 0;
   const commentsMarkup = createCommentTemplate(comments);
 
-  const isArray = Array.isArray(genre);
   let genreMarkup;
-  if (isArray) {
+  if (Array.isArray(genre)) {
     genreMarkup = Array.from(genre).map((element) => {
       return createGenreTemplate(element);
     });
@@ -74,22 +73,22 @@ export const createPopupCardComponent = (film) => {
 
             <div class="film-details__rating">
               <p class="film-details__total-rating">${rating}</p>
-  ${isHasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>`
+  ${hasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>`
     : ``}
             </div>
           </div>
           <table class="film-details__table">
             <tr class="film-details__row">
               <td class="film-details__term">Director</td>
-              <td class="film-details__cell">${producers}</td>
+              <td class="film-details__cell">${producer}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${screenwriters}</td>
+              <td class="film-details__cell">${screenwriter}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors}</td>
+              <td class="film-details__cell">${actor}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
