@@ -1,5 +1,7 @@
 const createGenreTemplate = (genres) => {
-  return `<span class="film-details__genre">${genres}</span>`;
+  return Array.from(genres).map((element) => {
+    return `<span class="film-details__genre">${element}</span>`;
+  });
 };
 
 const createCommentTemplate = (comments) => {
@@ -40,15 +42,8 @@ export const createPopupCardComponent = (film) => {
   } = film;
   const hasUserRatign = userRating !== 0;
   const commentsMarkup = createCommentTemplate(comments);
-
-  let genreMarkup;
-  if (Array.isArray(genre)) {
-    genreMarkup = Array.from(genre).map((element) => {
-      return createGenreTemplate(element);
-    });
-  } else {
-    genreMarkup = createGenreTemplate(genre);
-  }
+  const genreMarkup = createGenreTemplate(genre);
+  
 
   return `
 <section class="film-details visually-hidden">
