@@ -44,7 +44,6 @@ export const createPopupCardComponent = (film) => {
   const commentsMarkup = createCommentTemplate(comments);
   const genreMarkup = createGenreTemplate(genre);
   
-
   return `
 <section class="film-details visually-hidden">
   <form class="film-details__inner" action="" method="get">
