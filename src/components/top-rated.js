@@ -1,4 +1,4 @@
-import { createElement } from '../utils.js';
+import {createElement} from '../utils.js';
 const createTopRatedComponent = () => {
   return `<section class="films-list--extra">
       <h2 class="films-list__title">Top rated</h2>

@@ -1,10 +1,10 @@
-import { createElement } from '../utils.js';
+import {createElement} from '../utils.js';
 
 const createFilterTemplate = ({ name, quantity }) => {
   return `<a href="#${name}" class="main-navigation__item">${name} <span class="main-navigation__item-count">${quantity}</span></a>`;
 };
 
-const createMenuComponent = filters => {
+const createMenuComponent = (filters) => {
   const filtersMarkup = filters.map((it, i) => createFilterTemplate(it, i === 0)).join(`\n`);
   return `<nav class="main-navigation">
             ${filtersMarkup}

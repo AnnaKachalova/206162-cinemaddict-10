@@ -1,12 +1,12 @@
-import { createElement } from '../utils.js';
-const createGenreTemplate = genres => {
-  return Array.from(genres).map(element => {
+import {createElement} from '../utils.js';
+const createGenreTemplate = (genres) => {
+  return Array.from(genres).map((element) => {
     return `<span class="film-details__genre">${element}</span>`;
   });
 };
 
 const createCommentTemplate = comments => {
-  return Array.from(comments).map(comment => {
+  return Array.from(comments).map((comment) => {
     const { emoticon, text, autor, date } = comment;
     return `<li class="film-details__comment">
               <span class="film-details__comment-emoji">
@@ -23,7 +23,7 @@ const createCommentTemplate = comments => {
           </li>`;
   });
 };
-const createPopupCardComponent = film => {
+const createPopupCardComponent = (film) => {
   const {
     poster,
     title,
@@ -44,7 +44,7 @@ const createPopupCardComponent = film => {
   const hasUserRatign = userRating !== 0;
   const commentsMarkup = createCommentTemplate(comments);
   const genreMarkup = createGenreTemplate(genre);
-  return `<section class="film-details visually-hidden">
+  return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="form-details__top-container">
       <div class="film-details__close">

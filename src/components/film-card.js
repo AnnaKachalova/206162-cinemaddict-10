@@ -1,5 +1,5 @@
-import { createElement } from '../utils.js';
-const createFilmCardComponent = film => {
+import {createElement} from '../utils.js';
+const createFilmCardComponent = (film) => {
   const {
     title,
     poster,

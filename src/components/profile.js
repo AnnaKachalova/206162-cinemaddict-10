@@ -1,4 +1,4 @@
-import { createElement } from '../utils.js';
+import {createElement} from '../utils.js';
 const createHeaderProfileComponent = (rank) => {
   const hasRank = !!rank;
   return `${hasRank ? `<section class="header__profile profile">
