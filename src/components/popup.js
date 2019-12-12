@@ -5,9 +5,9 @@ const createGenreTemplate = (genres) => {
   });
 };
 
-const createCommentTemplate = comments => {
+const createCommentTemplate = (comments) => {
   return Array.from(comments).map((comment) => {
-    const { emoticon, text, autor, date } = comment;
+    const {emoticon, text, autor, date} = comment;
     return `<li class="film-details__comment">
               <span class="film-details__comment-emoji">
                 <img src="./images/emoji/${emoticon}.png" width="55" height="55" alt="emoji">

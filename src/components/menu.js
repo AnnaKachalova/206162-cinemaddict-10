@@ -1,6 +1,6 @@
 import {createElement} from '../utils.js';
 
-const createFilterTemplate = ({ name, quantity }) => {
+const createFilterTemplate = ({name, quantity}) => {
   return `<a href="#${name}" class="main-navigation__item">${name} <span class="main-navigation__item-count">${quantity}</span></a>`;
 };
 
