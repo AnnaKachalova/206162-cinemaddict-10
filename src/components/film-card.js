@@ -1,4 +1,5 @@
-export const createFilmCardComponent = (film) => {
+import { createElement } from '../utils.js';
+const createFilmCardComponent = film => {
   const {
     title,
     poster,
@@ -16,8 +17,7 @@ export const createFilmCardComponent = (film) => {
   const historyClass = isHistory ? `film-card__controls-item--active` : ``;
   const favoriteClass = isFavorite ? `film-card__controls-item--active` : ``;
 
-  return `
-<article class="film-card">
+  return `<article class="film-card">
     <h3 class="film-card__title">${title}</h3>
         <p class="film-card__rating">${rating}</p>
         <p class="film-card__info">
@@ -35,3 +35,25 @@ export const createFilmCardComponent = (film) => {
     </form>
 </article>`;
 };
+export default class FilmCard {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+
+  getTemplate() {
+    return createFilmCardComponent(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

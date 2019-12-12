@@ -1,12 +1,13 @@
-const createGenreTemplate = (genres) => {
-  return Array.from(genres).map((element) => {
+import { createElement } from '../utils.js';
+const createGenreTemplate = genres => {
+  return Array.from(genres).map(element => {
     return `<span class="film-details__genre">${element}</span>`;
   });
 };
 
-const createCommentTemplate = (comments) => {
-  return Array.from(comments).map((comment) => {
-    const {emoticon, text, autor, date} = comment;
+const createCommentTemplate = comments => {
+  return Array.from(comments).map(comment => {
+    const { emoticon, text, autor, date } = comment;
     return `<li class="film-details__comment">
               <span class="film-details__comment-emoji">
                 <img src="./images/emoji/${emoticon}.png" width="55" height="55" alt="emoji">
@@ -22,7 +23,7 @@ const createCommentTemplate = (comments) => {
           </li>`;
   });
 };
-export const createPopupCardComponent = (film) => {
+const createPopupCardComponent = film => {
   const {
     poster,
     title,
@@ -43,8 +44,7 @@ export const createPopupCardComponent = (film) => {
   const hasUserRatign = userRating !== 0;
   const commentsMarkup = createCommentTemplate(comments);
   const genreMarkup = createGenreTemplate(genre);
-  return `
-<section class="film-details visually-hidden">
+  return `<section class="film-details visually-hidden">
   <form class="film-details__inner" action="" method="get">
     <div class="form-details__top-container">
       <div class="film-details__close">
@@ -66,8 +66,7 @@ export const createPopupCardComponent = (film) => {
 
             <div class="film-details__rating">
               <p class="film-details__total-rating">${rating}</p>
-  ${hasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>`
-    : ``}
+  ${hasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>` : ``}
             </div>
           </div>
           <table class="film-details__table">
@@ -161,3 +160,25 @@ export const createPopupCardComponent = (film) => {
   </form>
 </section>`;
 };
+export default class Popup {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+
+  getTemplate() {
+    return createPopupCardComponent(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
