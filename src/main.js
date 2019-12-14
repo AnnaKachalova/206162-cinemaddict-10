@@ -35,8 +35,9 @@ render(siteHeader, new ProfileComponent(rank).getElement(), RenderPosition.BEFOR
 
 // film list
 const filmsContainer = new FilmsContainerComponent();
-render(mainElement, filmsContainer.getElement(), RenderPosition.BEFOREEND);
-const filmList = filmsContainer.getElement().querySelector(`.films-list`);
+const filmsContainerElement = filmsContainer.getElement();
+render(mainElement, filmsContainerElement, RenderPosition.BEFOREEND);
+const filmList = filmsContainerElement.querySelector(`.films-list`);
 const filmListContainer = filmsContainer
   .getElement()
   .querySelector(`.films-list__container`);
@@ -86,9 +87,10 @@ if (topRated.length) {
 }
 
 // show more
-const showMoreButton = new MoreButtonComponent();
-render(filmList, showMoreButton.getElement(), RenderPosition.BEFOREEND);
-showMoreButton.getElement().addEventListener(`click`, () => {
+const showMoreButtonComponent = new MoreButtonComponent();
+const showMoreButtonElement = showMoreButtonComponent.getElement();
+render(filmList, showMoreButtonElement, RenderPosition.BEFOREEND);
+showMoreButtonElement.addEventListener(`click`, () => {
   const prevTasksCount = showingTasksCount;
   showingTasksCount = showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
 
@@ -97,7 +99,7 @@ showMoreButton.getElement().addEventListener(`click`, () => {
     .forEach((card) => renderCard(card, filmListContainer));
 
   if (showingTasksCount >= cards.length) {
-    showMoreButton.getElement().remove();
+    showMoreButtonElement.remove();
     showMoreButton.removeElement();
   }
 });
