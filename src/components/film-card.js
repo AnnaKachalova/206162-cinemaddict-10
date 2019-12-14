@@ -41,7 +41,7 @@ export default class FilmCard {
   constructor(film) {
     this._element = null;
     this._film = film;
-    this.popup = new PopupComponent(this._element);
+    this.popup = new PopupComponent(this._film);
   }
 
   getTemplate() {
@@ -59,7 +59,7 @@ export default class FilmCard {
   removeElement() {
     this._element = null;
   }
-  
+
   onClick(){
     this.popup.showElement()
   }

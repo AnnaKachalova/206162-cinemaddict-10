@@ -9,13 +9,13 @@ import PopupComponent from './components/popup.js';
 import MoreButtonComponent from './components/more-button.js';
 
 // mock
-import { generateFilmCards } from './mock/film-card.js';
-import { generateRank } from './mock/profile.js';
-import { generateFilters } from './mock/menu.js';
-import { generateMostCommented } from './mock/most-commented.js';
-import { generateTopRated } from './mock/top-rated.js';
+import {generateFilmCards} from './mock/film-card.js';
+import {generateRank} from './mock/profile.js';
+import {generateFilters} from './mock/menu.js';
+import {generateMostCommented} from './mock/most-commented.js';
+import {generateTopRated} from './mock/top-rated.js';
 
-import { render, RenderPosition } from './utils.js';
+import {render, RenderPosition} from './utils.js';
 const CARD_COUNT = 15;
 const SHOWING_TASKS_COUNT_ON_START = 5;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 5;
@@ -29,7 +29,7 @@ render(mainElement, new MenuComponent(filters).getElement(), RenderPosition.BEFO
 
 // header
 const siteHeader = document.querySelector(`.header`);
-const filmsHistory = cards.filter(film => film.isHistory === true).length;
+const filmsHistory = cards.filter((film) => film.isHistory === true).length;
 const rank = generateRank(filmsHistory);
 render(siteHeader, new ProfileComponent(rank).getElement(), RenderPosition.BEFOREEND);
 
@@ -44,22 +44,20 @@ const filmListContainer = filmsContainer
 // fill films
 let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
 
-
-
-
 const renderCard = (card, parent) => {
   const cardComponent = new FilmCardComponent(card);
   const cardElement = cardComponent.getElement();
 
   render(parent, cardElement, RenderPosition.BEFOREEND);
-  const poster = cardElement.querySelector('.film-card__poster');
-  const title = cardElement.querySelector('.film-card__title');
-  const commentBlock = cardElement.querySelector('.film-card__comments');
+  const poster = cardElement.querySelector(`.film-card__poster`);
+  const title = cardElement.querySelector(`.film-card__title`);
+  const commentBlock = cardElement.querySelector(`.film-card__comments`);
 
+  const showPopup = () => cardComponent.onClick();
 
-  poster.addEventListener('click', cardComponent.onClick());
-  title.addEventListener('click', cardComponent.onClick());
-  commentBlock.addEventListener('click', cardComponent.onClick());
+  poster.addEventListener(`click`, showPopup);
+  title.addEventListener(`click`, showPopup);
+  commentBlock.addEventListener(`click`, showPopup);
 };
 
 cards.slice(0, showingTasksCount).forEach(card => {
@@ -73,7 +71,7 @@ if (mostCommeted.length) {
   render(filmsContainer.getElement(), mostCommetedElement, RenderPosition.BEFOREEND);
 
   const mostCommetedList = mostCommetedElement.querySelector(`.films-list__container`);
-  mostCommeted.forEach(card => {
+  mostCommeted.forEach((card) => {
     renderCard(card, mostCommetedList);
   });
 }
@@ -84,7 +82,7 @@ if (topRated.length) {
   render(filmsContainer.getElement(), topRatedElement, RenderPosition.BEFOREEND);
 
   const topRatedList = topRatedElement.querySelector(`.films-list__container`);
-  topRated.forEach(card => renderCard(card, topRatedList));
+  topRated.forEach((card) => renderCard(card, topRatedList));
 }
 
 // show more
@@ -96,7 +94,7 @@ showMoreButton.getElement().addEventListener(`click`, () => {
 
   cards
     .slice(prevTasksCount, showingTasksCount)
-    .forEach(card => renderCard(card, filmListContainer));
+    .forEach((card) => renderCard(card, filmListContainer));
 
   if (showingTasksCount >= cards.length) {
     showMoreButton.getElement().remove();

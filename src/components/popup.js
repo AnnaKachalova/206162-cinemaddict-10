@@ -185,21 +185,22 @@ export default class Popup {
   }
 
   hidePopup() {
-    popup.remove();
-    popup.removeElement();
+    this._element.remove();
+    this.removeElement();
   }
 
   showElement(){
     const bodyElement = document.querySelector(`body`);
-    const visiblePopup = bodyElement.querySelector('.film-details');
-    if (visiblePopup) visiblePopup.remove();
-    const popupElement = this._getElement();
+    const visiblePopup = bodyElement.querySelector(`.film-details`);
+    if (visiblePopup) {
+      visiblePopup.remove();
+    }
+    
+    const popupElement = this.getElement();
     render(bodyElement, popupElement, RenderPosition.BEFOREEND);
     const popupButtonClose = popupElement
-      .getElement()
-      .querySelector('.film-details__close-btn');
+    .querySelector(`.film-details__close-btn`);
   
-   
-    popupButtonClose.addEventListener('click', hidePopup);
+    popupButtonClose.addEventListener(`click`, ()=> this.hidePopup());
   }
 }
