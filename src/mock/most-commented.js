@@ -1,7 +1,7 @@
 import {getItemsByField} from '../utils.js';
 
 const generateMostCommented = (films) => {
-  return getItemsByField(films, `numberOfComments`);
+  return getItemsByField(films, `comments`);
 };
 
 export {generateMostCommented};

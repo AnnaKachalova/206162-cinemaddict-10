@@ -9,18 +9,17 @@ import PopupComponent from './components/popup.js';
 import MoreButtonComponent from './components/more-button.js';
 
 // mock
-import {generateFilmCards} from './mock/film-card.js';
-import {generateRank} from './mock/profile.js';
-import {generateFilters} from './mock/menu.js';
-import {generateMostCommented} from './mock/most-commented.js';
-import {generateTopRated} from './mock/top-rated.js';
+import { generateFilmCards } from './mock/film-card.js';
+import { generateRank } from './mock/profile.js';
+import { generateFilters } from './mock/menu.js';
+import { generateMostCommented } from './mock/most-commented.js';
+import { generateTopRated } from './mock/top-rated.js';
 
-import {render, RenderPosition} from './utils.js';
+import { render, RenderPosition } from './utils.js';
 const CARD_COUNT = 15;
 const SHOWING_TASKS_COUNT_ON_START = 5;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 5;
 
-const bodyElement = document.querySelector(`body`);
 const mainElement = document.querySelector(`.main`);
 
 // filters
@@ -30,7 +29,7 @@ render(mainElement, new MenuComponent(filters).getElement(), RenderPosition.BEFO
 
 // header
 const siteHeader = document.querySelector(`.header`);
-const filmsHistory = cards.filter((film) => film.isHistory === true).length;
+const filmsHistory = cards.filter(film => film.isHistory === true).length;
 const rank = generateRank(filmsHistory);
 render(siteHeader, new ProfileComponent(rank).getElement(), RenderPosition.BEFOREEND);
 
@@ -38,59 +37,54 @@ render(siteHeader, new ProfileComponent(rank).getElement(), RenderPosition.BEFOR
 const filmsContainer = new FilmsContainerComponent();
 render(mainElement, filmsContainer.getElement(), RenderPosition.BEFOREEND);
 const filmList = filmsContainer.getElement().querySelector(`.films-list`);
-const filmListContainer = filmsContainer.getElement().querySelector(`.films-list__container`);
+const filmListContainer = filmsContainer
+  .getElement()
+  .querySelector(`.films-list__container`);
 
 // fill films
 let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
-const renderCard = (card) => {
+
+
+
+
+const renderCard = (card, parent) => {
   const cardComponent = new FilmCardComponent(card);
-  const popupComponent = new PopupComponent(card);
+  const cardElement = cardComponent.getElement();
 
-  render(filmListContainer, cardComponent.getElement(), RenderPosition.BEFOREEND);
-  const poster = cardComponent.getElement().querySelector('.film-card__poster');
-  const title = cardComponent.getElement().querySelector('.film-card__title');
-  const commentBlock = cardComponent.getElement().querySelector('.film-card__comments');
+  render(parent, cardElement, RenderPosition.BEFOREEND);
+  const poster = cardElement.querySelector('.film-card__poster');
+  const title = cardElement.querySelector('.film-card__title');
+  const commentBlock = cardElement.querySelector('.film-card__comments');
 
-  const showPopup = () =>{
-    // popup
-    const popup = popupComponent;
-    render(bodyElement, popup.getElement(), RenderPosition.BEFOREEND);
-    const popupButtonClose = popupComponent.getElement().querySelector('.film-details__close-btn');
-    
-    let hidePopup = function() {
-      popup.getElement().remove();
-      popup.removeElement()
-    };
-    popupButtonClose.addEventListener('click', hidePopup);
-  
-  }
 
-  poster.addEventListener('click', showPopup);
-  title.addEventListener('click', showPopup)
-  commentBlock.addEventListener('click', showPopup)
+  poster.addEventListener('click', cardComponent.onClick());
+  title.addEventListener('click', cardComponent.onClick());
+  commentBlock.addEventListener('click', cardComponent.onClick());
 };
 
-cards.slice(0, showingTasksCount).forEach((card) => {
-  renderCard(card);
+cards.slice(0, showingTasksCount).forEach(card => {
+  renderCard(card, filmListContainer);
 });
 
 // Most commented
 const mostCommeted = generateMostCommented(cards);
 if (mostCommeted.length) {
-  const mostCommetedFilms = mostCommeted.map((card) => new FilmCardComponent(card).getElement());
   const mostCommetedElement = new MostCommentedComponent().getElement();
   render(filmsContainer.getElement(), mostCommetedElement, RenderPosition.BEFOREEND);
+
   const mostCommetedList = mostCommetedElement.querySelector(`.films-list__container`);
-  mostCommetedFilms.forEach((card) => render(mostCommetedList, card, RenderPosition.BEFOREEND));
+  mostCommeted.forEach(card => {
+    renderCard(card, mostCommetedList);
+  });
 }
 // Top rated
 const topRated = generateTopRated(cards);
 if (topRated.length) {
-  const topRatedFilms = topRated.map((card) => new FilmCardComponent(card).getElement());
   const topRatedElement = new TopRatedComponent().getElement();
   render(filmsContainer.getElement(), topRatedElement, RenderPosition.BEFOREEND);
+
   const topRatedList = topRatedElement.querySelector(`.films-list__container`);
-  topRatedFilms.forEach((card) => render(topRatedList, card, RenderPosition.BEFOREEND));
+  topRated.forEach(card => renderCard(card, topRatedList));
 }
 
 // show more
@@ -102,7 +96,7 @@ showMoreButton.getElement().addEventListener(`click`, () => {
 
   cards
     .slice(prevTasksCount, showingTasksCount)
-    .forEach((card) => render(filmListContainer, new FilmCardComponent(card).getElement(), RenderPosition.BEFOREEND));
+    .forEach(card => renderCard(card, filmListContainer));
 
   if (showingTasksCount >= cards.length) {
     showMoreButton.getElement().remove();

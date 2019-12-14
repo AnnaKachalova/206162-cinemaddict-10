@@ -1,4 +1,6 @@
-import {createElement} from '../utils.js';
+
+import {render, createElement, RenderPosition} from '../utils.js';
+
 const createGenreTemplate = (genres) => {
   return Array.from(genres).map((element) => {
     return `<span class="film-details__genre">${element}</span>`;
@@ -180,5 +182,24 @@ export default class Popup {
 
   removeElement() {
     this._element = null;
+  }
+
+  hidePopup() {
+    popup.remove();
+    popup.removeElement();
+  }
+
+  showElement(){
+    const bodyElement = document.querySelector(`body`);
+    const visiblePopup = bodyElement.querySelector('.film-details');
+    if (visiblePopup) visiblePopup.remove();
+    const popupElement = this._getElement();
+    render(bodyElement, popupElement, RenderPosition.BEFOREEND);
+    const popupButtonClose = popupElement
+      .getElement()
+      .querySelector('.film-details__close-btn');
+  
+   
+    popupButtonClose.addEventListener('click', hidePopup);
   }
 }

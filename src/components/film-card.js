@@ -1,4 +1,6 @@
 import {createElement} from '../utils.js';
+import PopupComponent from './popup.js';
+
 const createFilmCardComponent = (film) => {
   const {
     title,
@@ -8,15 +10,15 @@ const createFilmCardComponent = (film) => {
     productionYear,
     duration,
     genre,
-    numberOfComments,
     isWatchlist,
     isHistory,
     isFavorite,
+    comments
   } = film;
   const watchlistClass = isWatchlist ? `film-card__controls-item--active` : ``;
   const historyClass = isHistory ? `film-card__controls-item--active` : ``;
   const favoriteClass = isFavorite ? `film-card__controls-item--active` : ``;
-
+  
   return `<article class="film-card">
     <h3 class="film-card__title">${title}</h3>
         <p class="film-card__rating">${rating}</p>
@@ -27,7 +29,7 @@ const createFilmCardComponent = (film) => {
         </p>
         <img src="./images/posters/${poster}.jpg" alt="" class="film-card__poster">
         <p class="film-card__description">${description}</p>
-        <a class="film-card__comments">${numberOfComments} comments</a>
+        <a class="film-card__comments">${comments.length} comments</a>
     <form class="film-card__controls">
         <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchlistClass}">Add to watchlist</button>
         <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${historyClass}">Mark as watched</button>
@@ -39,6 +41,7 @@ export default class FilmCard {
   constructor(film) {
     this._element = null;
     this._film = film;
+    this.popup = new PopupComponent(this._element);
   }
 
   getTemplate() {
@@ -55,5 +58,9 @@ export default class FilmCard {
 
   removeElement() {
     this._element = null;
+  }
+  
+  onClick(){
+    this.popup.showElement()
   }
 }
