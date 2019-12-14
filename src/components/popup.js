@@ -189,18 +189,16 @@ export default class Popup {
     this.removeElement();
   }
 
-  showElement(){
+  showElement() {
     const bodyElement = document.querySelector(`body`);
     const visiblePopup = bodyElement.querySelector(`.film-details`);
     if (visiblePopup) {
       visiblePopup.remove();
     }
-    
     const popupElement = this.getElement();
     render(bodyElement, popupElement, RenderPosition.BEFOREEND);
     const popupButtonClose = popupElement
     .querySelector(`.film-details__close-btn`);
-  
     popupButtonClose.addEventListener(`click`, ()=> this.hidePopup());
   }
 }

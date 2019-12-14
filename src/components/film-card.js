@@ -18,7 +18,6 @@ const createFilmCardComponent = (film) => {
   const watchlistClass = isWatchlist ? `film-card__controls-item--active` : ``;
   const historyClass = isHistory ? `film-card__controls-item--active` : ``;
   const favoriteClass = isFavorite ? `film-card__controls-item--active` : ``;
-  
   return `<article class="film-card">
     <h3 class="film-card__title">${title}</h3>
         <p class="film-card__rating">${rating}</p>
@@ -60,7 +59,7 @@ export default class FilmCard {
     this._element = null;
   }
 
-  onClick(){
-    this.popup.showElement()
+  onClick() {
+    this.popup.showElement();
   }
 }
