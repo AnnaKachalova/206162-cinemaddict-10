@@ -1,3 +1,6 @@
+
+import {render, createElement, RenderPosition} from '../utils.js';
+
 const createGenreTemplate = (genres) => {
   return Array.from(genres).map((element) => {
     return `<span class="film-details__genre">${element}</span>`;
@@ -22,7 +25,7 @@ const createCommentTemplate = (comments) => {
           </li>`;
   });
 };
-export const createPopupCardComponent = (film) => {
+const createPopupCardComponent = (film) => {
   const {
     poster,
     title,
@@ -43,8 +46,7 @@ export const createPopupCardComponent = (film) => {
   const hasUserRatign = userRating !== 0;
   const commentsMarkup = createCommentTemplate(comments);
   const genreMarkup = createGenreTemplate(genre);
-  return `
-<section class="film-details visually-hidden">
+  return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="form-details__top-container">
       <div class="film-details__close">
@@ -66,8 +68,7 @@ export const createPopupCardComponent = (film) => {
 
             <div class="film-details__rating">
               <p class="film-details__total-rating">${rating}</p>
-  ${hasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>`
-    : ``}
+  ${hasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>` : ``}
             </div>
           </div>
           <table class="film-details__table">
@@ -161,3 +162,43 @@ export const createPopupCardComponent = (film) => {
   </form>
 </section>`;
 };
+export default class Popup {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+
+  getTemplate() {
+    return createPopupCardComponent(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+  hidePopup() {
+    this._element.remove();
+    this.removeElement();
+  }
+
+  showElement() {
+    const bodyElement = document.querySelector(`body`);
+    const visiblePopup = bodyElement.querySelector(`.film-details`);
+    if (visiblePopup) {
+      visiblePopup.remove();
+    }
+    const popupElement = this.getElement();
+    render(bodyElement, popupElement, RenderPosition.BEFOREEND);
+    const popupButtonClose = popupElement
+    .querySelector(`.film-details__close-btn`);
+    popupButtonClose.addEventListener(`click`, ()=> this.hidePopup());
+  }
+}

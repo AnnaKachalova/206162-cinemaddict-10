@@ -146,7 +146,6 @@ const generateFilmCard = () => {
     productionYear: getRandomIntegerNumber(1990, 2019),
     duration: getDuration(),
     genre: FilmGenres,
-    numberOfComments: getRandomIntegerNumber(0, 100),
     isHistory,
     isWatchlist: !isHistory,
     isFavorite: Math.random() > 0.5,
