@@ -207,6 +207,9 @@ export default class Popup {
       }
     };
     document.addEventListener(`keydown`, onEscKeyDown);
-    popupButtonClose.addEventListener(`click`, ()=> this.hidePopup());
+    popupButtonClose.addEventListener(`click`, ()=> {
+      this.hidePopup();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    });
   }
 }
