@@ -199,6 +199,15 @@ export default class Popup {
     render(bodyElement, popupElement, RenderPosition.BEFOREEND);
     const popupButtonClose = popupElement
     .querySelector(`.film-details__close-btn`);
+    const onEscKeyDown = (evt) => {
+      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+  
+      if (isEscKey) {
+        this.hidePopup()
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      }
+    };
+    document.addEventListener(`keydown`, onEscKeyDown);
     popupButtonClose.addEventListener(`click`, ()=> this.hidePopup());
   }
 }
