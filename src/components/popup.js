@@ -201,9 +201,8 @@ export default class Popup {
     .querySelector(`.film-details__close-btn`);
     const onEscKeyDown = (evt) => {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-  
       if (isEscKey) {
-        this.hidePopup()
+        this.hidePopup();
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
