@@ -195,7 +195,6 @@ export default class Popup {
       this.hidePopup();
     }
   }
-  
   showElement() {
     const bodyElement = document.querySelector(`body`);
     const visiblePopup = bodyElement.querySelector(`.film-details`);
