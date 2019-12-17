@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
 const createHeaderProfileComponent = (rank) => {
   const hasRank = !!rank;
   return `${hasRank ? `<section class="header__profile profile">
@@ -7,25 +7,13 @@ const createHeaderProfileComponent = (rank) => {
     </section>`
     : ``}`;
 };
-export default class Profile {
+export default class Profile extends AbstractComponent {
   constructor(rank) {
-    this._element = null;
+    super();
     this._rank = rank;
   }
 
   getTemplate() {
     return createHeaderProfileComponent(this._rank);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,5 +1,6 @@
-import {createElement} from '../utils.js';
+
 import PopupComponent from './popup.js';
+import AbstractComponent from './abstract-component.js';
 
 const createFilmCardComponent = (film) => {
   const {
@@ -36,27 +37,15 @@ const createFilmCardComponent = (film) => {
     </form>
 </article>`;
 };
-export default class FilmCard {
+export default class FilmCard extends AbstractComponent  {
   constructor(film) {
-    this._element = null;
+    super();
     this._film = film;
     this.popup = new PopupComponent(this._film);
   }
 
   getTemplate() {
     return createFilmCardComponent(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   onClick() {

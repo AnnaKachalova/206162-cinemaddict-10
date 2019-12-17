@@ -1,4 +1,4 @@
-import {getItemsByField} from '../utils.js';
+import {getItemsByField} from '../utils/render.js';
 
 const generateTopRated = (films) => {
   return getItemsByField(films, `rating`);

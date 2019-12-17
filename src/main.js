@@ -16,7 +16,8 @@ import { generateFilters } from './mock/menu.js';
 import { generateMostCommented } from './mock/most-commented.js';
 import { generateTopRated } from './mock/top-rated.js';
 
-import { render, RenderPosition } from './utils.js';
+import { render, remove, RenderPosition } from './utils/render.js';
+
 const CARD_COUNT = 15;
 const SHOWING_TASKS_COUNT_ON_START = 5;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 5;
@@ -30,16 +31,16 @@ const cards = generateFilmCards(CARD_COUNT);
 const siteHeader = document.querySelector(`.header`);
 const filmsHistory = cards.filter(film => film.isHistory === true).length;
 const rank = generateRank(filmsHistory);
-render(siteHeader, new ProfileComponent(rank).getElement(), RenderPosition.BEFOREEND);
+render(siteHeader, new ProfileComponent(rank), RenderPosition.BEFOREEND);
 
 // menu
 const filters = generateFilters(cards);
-render(mainElement, new MenuComponent(filters).getElement(), RenderPosition.BEFOREEND);
+render(mainElement, new MenuComponent(filters), RenderPosition.BEFOREEND);
 
 // film list
 const filmsContainer = new FilmsContainerComponent();
+render(mainElement, filmsContainer, RenderPosition.BEFOREEND);
 const filmsContainerElement = filmsContainer.getElement();
-render(mainElement, filmsContainerElement, RenderPosition.BEFOREEND);
 const filmList = filmsContainerElement.querySelector(`.films-list`);
 
 if (cards.length) {
@@ -52,7 +53,7 @@ if (cards.length) {
     const cardComponent = new FilmCardComponent(card);
     const cardElement = cardComponent.getElement();
 
-    render(parent, cardElement, RenderPosition.BEFOREEND);
+    render(parent, cardComponent, RenderPosition.BEFOREEND);
     const poster = cardElement.querySelector(`.film-card__poster`);
     const title = cardElement.querySelector(`.film-card__title`);
     const commentBlock = cardElement.querySelector(`.film-card__comments`);
@@ -73,8 +74,9 @@ if (cards.length) {
   // Most commented
   const mostCommeted = generateMostCommented(cards);
   if (mostCommeted.length) {
-    const mostCommetedElement = new MostCommentedComponent().getElement();
-    render(filmsContainerElement, mostCommetedElement, RenderPosition.BEFOREEND);
+    const mostCommentedComponent = new MostCommentedComponent();
+    const mostCommetedElement = mostCommentedComponent.getElement();
+    render(filmsContainerElement, mostCommentedComponent, RenderPosition.BEFOREEND);
 
     const mostCommetedList = mostCommetedElement.querySelector(`.films-list__container`);
     mostCommeted.forEach(card => {
@@ -84,8 +86,9 @@ if (cards.length) {
   // Top rated
   const topRated = generateTopRated(cards);
   if (topRated.length) {
-    const topRatedElement = new TopRatedComponent().getElement();
-    render(filmsContainerElement, topRatedElement, RenderPosition.BEFOREEND);
+    const topRatedComponent = new TopRatedComponent();
+    const topRatedElement = topRatedComponent.getElement();
+    render(filmsContainerElement, topRatedComponent, RenderPosition.BEFOREEND);
 
     const topRatedList = topRatedElement.querySelector(`.films-list__container`);
     topRated.forEach(card => renderCard(card, topRatedList));
@@ -94,7 +97,7 @@ if (cards.length) {
   // show more
   const showMoreButtonComponent = new MoreButtonComponent();
   const showMoreButtonElement = showMoreButtonComponent.getElement();
-  render(filmList, showMoreButtonElement, RenderPosition.BEFOREEND);
+  render(filmList, showMoreButtonComponent, RenderPosition.BEFOREEND);
   showMoreButtonElement.addEventListener(`click`, () => {
     const prevTasksCount = showingTasksCount;
     showingTasksCount = showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
