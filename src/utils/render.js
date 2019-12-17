@@ -5,12 +5,12 @@ export const RenderPosition = {
 
 export const getItemsByField = (array, field) => {
   return array
-    .filter(element => !!element[field])
+    .filter((element) => !!element[field])
     .sort((a, b) => b[field] - a[field])
     .slice(0, 2);
 };
 
-export const createElement = component => {
+export const createElement = (component) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = component;
 
@@ -26,7 +26,7 @@ export const render = (container, element, place) => {
       break;
   }
 };
-export const remove = component => {
+export const remove = (component) => {
   component.getElement().remove();
   component.removeElement();
 };

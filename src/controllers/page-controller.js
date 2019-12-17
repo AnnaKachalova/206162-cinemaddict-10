@@ -5,9 +5,9 @@ import TopRatedComponent from '../components/top-rated.js';
 import MostCommentedComponent from '../components/most-commented.js';
 import MoreButtonComponent from '../components/more-button.js';
 
-import { generateMostCommented } from '../mock/most-commented.js';
-import { generateTopRated } from '../mock/top-rated.js';
-import { render, remove, RenderPosition } from '../utils/render.js';
+import {generateMostCommented} from '../mock/most-commented.js';
+import {generateTopRated} from '../mock/top-rated.js';
+import {render, RenderPosition} from '../utils/render.js';
 
 const SHOWING_TASKS_COUNT_ON_START = 5;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 5;
@@ -40,7 +40,7 @@ export default class PageController {
 
       // fill films
       let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
-      cards.slice(0, showingTasksCount).forEach(card => {
+      cards.slice(0, showingTasksCount).forEach((card) => {
         renderCard(card, filmListContainer);
       });
 

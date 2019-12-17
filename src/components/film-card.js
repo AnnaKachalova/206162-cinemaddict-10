@@ -37,7 +37,7 @@ const createFilmCardComponent = (film) => {
     </form>
 </article>`;
 };
-export default class FilmCard extends AbstractComponent  {
+export default class FilmCard extends AbstractComponent {
   constructor(film) {
     super();
     this._film = film;
