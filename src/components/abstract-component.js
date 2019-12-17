@@ -1,4 +1,5 @@
 import { createElement } from '../utils/render.js';
+console.log('here4');
 export default class AbstarctComponent {
   constructor() {
     if (new.target === AbstarctComponent) {
