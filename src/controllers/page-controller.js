@@ -67,7 +67,6 @@ export default class PageController {
       let showingCardsCount = SHOWING_TASKS_COUNT_ON_START;
       renderCards(filmListContainer, cards.slice(0, showingCardsCount));
       renderMoreButton();
-      
       this._sortComponent.setSortTypeChangeHandler((sortType) => {
         let sortedCards = [];
         switch (sortType) {
