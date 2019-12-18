@@ -16,9 +16,11 @@ const renderCard = (card, parent) => {
   const cardComponent = new FilmCardComponent(card);
   render(parent, cardComponent, RenderPosition.BEFOREEND);
 
-  cardComponent.setPosterClickHandler(() => cardComponent.onClick());
-  cardComponent.setTitleClickHandler(() => cardComponent.onClick());
-  cardComponent.setCommentBlockClickHandler(() => cardComponent.onClick());
+  const showPopup = () => cardComponent.onClick();
+
+  cardComponent.setPosterClickHandler(showPopup);
+  cardComponent.setTitleClickHandler(showPopup);
+  cardComponent.setCommentBlockClickHandler(showPopup);
 };
 
 export default class PageController {
