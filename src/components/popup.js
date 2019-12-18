@@ -1,5 +1,6 @@
 
-import {render, createElement, RenderPosition} from '../utils.js';
+import {render, RenderPosition} from '../utils/render.js';
+import AbstractComponent from './abstract-component.js';
 
 const createGenreTemplate = (genres) => {
   return Array.from(genres).map((element) => {
@@ -162,26 +163,14 @@ const createPopupCardComponent = (film) => {
   </form>
 </section>`;
 };
-export default class Popup {
+export default class Popup extends AbstractComponent {
   constructor(film) {
-    this._element = null;
+    super();
     this._film = film;
   }
 
   getTemplate() {
     return createPopupCardComponent(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   hidePopup() {
@@ -201,8 +190,9 @@ export default class Popup {
     if (visiblePopup) {
       visiblePopup.remove();
     }
+
     const popupElement = this.getElement();
-    render(bodyElement, popupElement, RenderPosition.BEFOREEND);
+    render(bodyElement, this, RenderPosition.BEFOREEND);
     const popupButtonClose = popupElement
     .querySelector(`.film-details__close-btn`);
 
