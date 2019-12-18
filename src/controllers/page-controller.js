@@ -1,14 +1,14 @@
 import FilmCardComponent from '../components/film-card.js';
 import NoFilms from '../components/no-films.js';
-import SortComponent,{ SortType } from '../components/sort.js';
+import {SortType} from '../components/sort.js';
 
 import TopRatedComponent from '../components/top-rated.js';
 import MostCommentedComponent from '../components/most-commented.js';
 import MoreButtonComponent from '../components/more-button.js';
 
-import { generateMostCommented } from '../mock/most-commented.js';
-import { generateTopRated } from '../mock/top-rated.js';
-import { render, remove, RenderPosition, getItemsByField } from '../utils/render.js';
+import {generateMostCommented} from '../mock/most-commented.js';
+import {generateTopRated} from '../mock/top-rated.js';
+import {render, remove, RenderPosition, getItemsByField} from '../utils/render.js';
 
 const SHOWING_TASKS_COUNT_ON_START = 5;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 5;
@@ -25,7 +25,7 @@ const renderCard = (card, parent) => {
 };
 
 const renderCards = (filmListContainer, cards) => {
-  cards.forEach(card => {
+  cards.forEach((card) => {
     renderCard(card, filmListContainer);
   });
 };
@@ -70,9 +70,6 @@ export default class PageController {
       
       this._sortComponent.setSortTypeChangeHandler((sortType) => {
         let sortedCards = [];
-      
-        
-
         switch (sortType) {
           case SortType.DATE:
             sortedCards = getItemsByField(cards, `releaseDate`);
@@ -101,7 +98,7 @@ export default class PageController {
         render(filmsContainerElement, this._mostCommentedComponent, RenderPosition.BEFOREEND);
 
         const mostCommetedList = mostCommetedElement.querySelector(`.films-list__container`);
-        mostCommeted.forEach(card => {
+        mostCommeted.forEach((card) => {
           renderCard(card, mostCommetedList);
         });
       }
@@ -112,7 +109,7 @@ export default class PageController {
         render(filmsContainerElement, this._topRatedComponent, RenderPosition.BEFOREEND);
 
         const topRatedList = topRatedElement.querySelector(`.films-list__container`);
-        topRated.forEach(card => renderCard(card, topRatedList));
+        topRated.forEach((card) => renderCard(card, topRatedList));
       }
 
     } else {
