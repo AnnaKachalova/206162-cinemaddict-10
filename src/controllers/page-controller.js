@@ -69,7 +69,7 @@ const sortCards = (component, cards, filmListContainer, moreButton, count, filmL
       remove(moreButton);
     }
   });
-}
+};
 
 export default class PageController {
   constructor(container, sortComponent) {
@@ -94,7 +94,7 @@ export default class PageController {
       renderMoreButton(filmListContainer, filmList, this._moreButtonComponent, cards);
 
       sortCards(this._sortComponent, cards, filmListContainer, this._moreButtonComponent, showingCardsCount, filmList);
-      
+
       const renderSpecial = (component, assortedArray) =>{
         const element = component.getElement();
         render(filmsContainerElement, component, RenderPosition.BEFOREEND);
@@ -102,8 +102,8 @@ export default class PageController {
         const elementList = element.querySelector(`.films-list__container`);
         assortedArray.forEach((card) => {
           renderCard(card, elementList);
-        })
-      }
+        });
+      };
 
       // Most commented
       const mostCommeted = generateMostCommented(cards);
