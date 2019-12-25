@@ -1,6 +1,7 @@
 import FilmCardComponent from '../components/film-card.js';
 import NoFilms from '../components/no-films.js';
-import {SortType} from '../components/sort.js';
+import SortComponent, {SortType} from '../components/sort.js';
+import FilmsContainerComponent from '../components/films-container.js';
 
 import TopRatedComponent from '../components/top-rated.js';
 import MostCommentedComponent from '../components/most-commented.js';
@@ -51,10 +52,10 @@ const sortCards = (component, cards, filmListContainer, moreButton, count, filmL
     let sortedCards = [];
     switch (sortType) {
       case SortType.DATE:
-        sortedCards = getItemsByField(cards, `releaseDate`);
+        sortedCards = cards.slice().sort((a, b) => b.productionYear - a.productionYear).slice();
         break;
       case SortType.RATING:
-        sortedCards = getItemsByField(cards, `rating`);
+        sortedCards = cards.slice().sort((a, b) => b.rating - a.rating).slice();
         break;
       case SortType.DEFAULT:
         sortedCards = cards.slice(0, count);
@@ -72,7 +73,7 @@ const sortCards = (component, cards, filmListContainer, moreButton, count, filmL
 };
 
 export default class PageController {
-  constructor(container, sortComponent) {
+  constructor(container) {
     this._container = container;
 
     this._filmCardComponent = new FilmCardComponent();
@@ -80,21 +81,27 @@ export default class PageController {
     this._topRatedComponent = new TopRatedComponent();
     this._mostCommentedComponent = new MostCommentedComponent();
     this._moreButtonComponent = new MoreButtonComponent();
-    this._sortComponent = sortComponent;
+    this._sortComponent = new SortComponent();
+    this._filmsContainerComponent = new FilmsContainerComponent();
   }
   render(cards) {
-
-    const filmsContainerElement = this._container.getElement();
+   
+    const filmsContainerElement = this._filmsContainerComponent.getElement();
     const filmList = filmsContainerElement.querySelector(`.films-list`);
     const filmListContainer = filmsContainerElement.querySelector(`.films-list__container`);
 
     if (cards.length) {
       let showingCardsCount = SHOWING_TASKS_COUNT_ON_START;
-      renderCards(filmListContainer, cards.slice(0, showingCardsCount));
-      renderMoreButton(filmListContainer, filmList, this._moreButtonComponent, cards);
+      render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
+      render(this._container, this._filmsContainerComponent, RenderPosition.BEFOREEND);
 
       sortCards(this._sortComponent, cards, filmListContainer, this._moreButtonComponent, showingCardsCount, filmList);
 
+      renderCards(filmListContainer, cards.slice(0, showingCardsCount));
+      renderMoreButton(filmListContainer, filmList, this._moreButtonComponent, cards);
+     
+
+      // more commented and top rated
       const renderSpecial = (component, assortedArray) =>{
         const element = component.getElement();
         render(filmsContainerElement, component, RenderPosition.BEFOREEND);
