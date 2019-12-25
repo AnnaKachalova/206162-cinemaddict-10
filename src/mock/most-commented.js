@@ -1,7 +1,11 @@
-import {getItemsByField} from '../utils/render.js';
 
 const generateMostCommented = (films) => {
-  return getItemsByField(films, `comments`);
+
+  return films
+    .filter((element) => !!element.comments)
+    .sort((a, b) => b.comments.length - a.comments.length)
+    .slice(0, 2);
+
 };
 
 export {generateMostCommented};
