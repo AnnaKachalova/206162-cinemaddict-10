@@ -21,8 +21,8 @@ const cards = generateFilmCards(CARD_COUNT);
 
 // header
 const siteHeader = document.querySelector(`.header`);
-const filmsHistory = cards.filter(film => film.isHistory === true).length;
-const rank = generateRank(filmsHistory);
+const filmsHistoryCount = cards.filter(film => film.isHistory === true).length;
+const rank = generateRank(filmsHistoryCount);
 render(siteHeader, new ProfileComponent(rank), RenderPosition.BEFOREEND);
 
 // menu
