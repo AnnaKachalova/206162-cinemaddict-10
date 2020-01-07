@@ -1,16 +1,15 @@
-
-import {render, RenderPosition} from '../utils/render.js';
+import { render, RenderPosition } from '../utils/render.js';
 import AbstractComponent from './abstract-component.js';
 
-const createGenreTemplate = (genres) => {
-  return Array.from(genres).map((element) => {
+const createGenreTemplate = genres => {
+  return Array.from(genres).map(element => {
     return `<span class="film-details__genre">${element}</span>`;
   });
 };
 
-const createCommentTemplate = (comments) => {
-  return Array.from(comments).map((comment) => {
-    const {emoticon, text, autor, date} = comment;
+const createCommentTemplate = comments => {
+  return Array.from(comments).map(comment => {
+    const { emoticon, text, autor, date } = comment;
     return `<li class="film-details__comment">
               <span class="film-details__comment-emoji">
                 <img src="./images/emoji/${emoticon}.png" width="55" height="55" alt="emoji">
@@ -26,7 +25,7 @@ const createCommentTemplate = (comments) => {
           </li>`;
   });
 };
-const createPopupCardComponent = (film) => {
+const createPopupCardComponent = film => {
   const {
     poster,
     title,
@@ -193,10 +192,25 @@ export default class Popup extends AbstractComponent {
 
     const popupElement = this.getElement();
     render(bodyElement, this, RenderPosition.BEFOREEND);
-    const popupButtonClose = popupElement
-    .querySelector(`.film-details__close-btn`);
+    const popupButtonClose = popupElement.querySelector(`.film-details__close-btn`);
 
-    document.onkeydown = (evt) => this.onEscKeyDown(evt);
-    popupButtonClose.addEventListener(`click`, ()=> this.hidePopup());
+    document.onkeydown = evt => this.onEscKeyDown(evt);
+    popupButtonClose.addEventListener(`click`, () => this.hidePopup());
+  }
+
+  onWatchlistButtonClick(element) {
+    this.getElement()
+      .querySelector(`.film-details__control-label--watchlist`)
+      .addEventListener(`click`, element);
+  }
+  onWatchedButtonClick(element) {
+    this.getElement()
+      .querySelector(`.film-details__control-label--watched`)
+      .addEventListener(`click`, element);
+  }
+  onFavoritesButtonClick(element) {
+    this.getElement()
+      .querySelector(`.film-details__control-label--favorite`)
+      .addEventListener(`click`, element);
   }
 }
