@@ -1,15 +1,15 @@
 import FilmCardComponent from '../components/film-card.js';
 import NoFilms from '../components/no-films.js';
-import SortComponent, {SortType} from '../components/sort.js';
+import SortComponent, { SortType } from '../components/sort.js';
 import FilmsContainerComponent from '../components/films-container.js';
 
 import TopRatedComponent from '../components/top-rated.js';
 import MostCommentedComponent from '../components/most-commented.js';
 import MoreButtonComponent from '../components/more-button.js';
 
-import {generateMostCommented} from '../mock/most-commented.js';
-import {generateTopRated} from '../mock/top-rated.js';
-import {render, remove, RenderPosition, getItemsByField} from '../utils/render.js';
+import { generateMostCommented } from '../mock/most-commented.js';
+import { generateTopRated } from '../mock/top-rated.js';
+import { render, remove, RenderPosition, getItemsByField } from '../utils/render.js';
 
 const SHOWING_TASKS_COUNT_ON_START = 5;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 5;
@@ -26,7 +26,7 @@ const renderCard = (card, parent) => {
 };
 
 const renderCards = (filmListContainer, cards) => {
-  cards.forEach((card) => {
+  cards.forEach(card => {
     renderCard(card, filmListContainer);
   });
 };
@@ -48,14 +48,16 @@ const renderMoreButton = (filmListContainer, filmList, button, cards) => {
 };
 
 const sortCards = (component, cards, filmListContainer, moreButton, count, filmList) => {
-  component.setSortTypeChangeHandler((sortType) => {
+  component.setSortTypeChangeHandler(sortType => {
     let sortedCards = [];
     switch (sortType) {
       case SortType.DATE:
-        sortedCards = cards.slice().sort((a, b) => b.productionYear - a.productionYear).slice();
+        sortedCards = getItemsByField(cards, `productionYear`);
+        
         break;
       case SortType.RATING:
-        sortedCards = cards.slice().sort((a, b) => b.rating - a.rating).slice();
+        sortedCards = getItemsByField(cards, `rating`);
+
         break;
       case SortType.DEFAULT:
         sortedCards = cards.slice(0, count);
@@ -85,29 +87,36 @@ export default class PageController {
     this._filmsContainerComponent = new FilmsContainerComponent();
   }
   render(cards) {
-   
     const filmsContainerElement = this._filmsContainerComponent.getElement();
     const filmList = filmsContainerElement.querySelector(`.films-list`);
-    const filmListContainer = filmsContainerElement.querySelector(`.films-list__container`);
+    const filmListContainer = filmsContainerElement.querySelector(
+      `.films-list__container`
+    );
 
     if (cards.length) {
       let showingCardsCount = SHOWING_TASKS_COUNT_ON_START;
       render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
       render(this._container, this._filmsContainerComponent, RenderPosition.BEFOREEND);
 
-      sortCards(this._sortComponent, cards, filmListContainer, this._moreButtonComponent, showingCardsCount, filmList);
+      sortCards(
+        this._sortComponent,
+        cards,
+        filmListContainer,
+        this._moreButtonComponent,
+        showingCardsCount,
+        filmList
+      );
 
       renderCards(filmListContainer, cards.slice(0, showingCardsCount));
       renderMoreButton(filmListContainer, filmList, this._moreButtonComponent, cards);
-     
 
       // more commented and top rated
-      const renderSpecial = (component, assortedArray) =>{
+      const renderSpecial = (component, assortedArray) => {
         const element = component.getElement();
         render(filmsContainerElement, component, RenderPosition.BEFOREEND);
 
         const elementList = element.querySelector(`.films-list__container`);
-        assortedArray.forEach((card) => {
+        assortedArray.forEach(card => {
           renderCard(card, elementList);
         });
       };
@@ -123,7 +132,6 @@ export default class PageController {
       if (topRated.length) {
         renderSpecial(this._topRatedComponent, topRated);
       }
-
     } else {
       render(filmList, this._noFilms, RenderPosition.BEFOREEND);
     }
