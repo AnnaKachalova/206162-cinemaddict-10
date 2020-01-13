@@ -117,7 +117,6 @@ export default class PageController {
   }
 
   _onDataChange(movieController, oldData, newData) {
-    console.log('change');
     const index = this._cards.findIndex(it => it === oldData);
     if (index === -1) {
       return;
@@ -126,7 +125,6 @@ export default class PageController {
     this._cards = [].concat(this._cards.slice(0, index), newData, this._cards.slice(index + 1));
 
     movieController.render(this._cards[index]);
-    console.log(this._cards[index]);
   }
 
   _onSortTypeChange(sortType) {

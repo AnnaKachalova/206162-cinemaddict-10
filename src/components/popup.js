@@ -96,11 +96,11 @@ const createPopupCardComponent = (film, options = {}) => {
     userRating,
   } = film;
   const { isHistory } = options;
-  console.log(isHistory);
 
   const hasUserRatign = userRating !== 0 && isHistory;
   const commentsMarkup = createCommentTemplate(comments);
   const genreMarkup = createGenreTemplate(genre);
+
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="form-details__top-container">
@@ -262,10 +262,9 @@ export default class Popup extends AbstractSmartComponent {
 
     const popupElement = this.getElement();
     render(bodyElement, this, RenderPosition.BEFOREEND);
-    const popupButtonClose = popupElement.querySelector(`.film-details__close-btn`);
 
     document.onkeydown = evt => this.onEscKeyDown(evt);
-    popupButtonClose.addEventListener(`click`, () => this.hidePopup());
+    this._subscribeOnEvents();
   }
 
   onWatchlistButtonClick(element) {
@@ -290,6 +289,8 @@ export default class Popup extends AbstractSmartComponent {
       this._isHistory = !this._isHistory;
       this.rerender();
     });
+    const popupButtonClose = element.querySelector(`.film-details__close-btn`);
+    popupButtonClose.addEventListener(`click`, () => this.hidePopup());
 
     /*const emoji = element.querySelectorAll(`.film-details__emoji-label`);
     const parentEmotion = element.querySelector(`.film-details__add-emoji-label`);

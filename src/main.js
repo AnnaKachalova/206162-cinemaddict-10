@@ -31,8 +31,6 @@ render(mainElement, new MenuComponent(filters), RenderPosition.BEFOREEND);
 //const sortComponent = new SortComponent();
 //render(mainElement, sortComponent, RenderPosition.BEFOREEND);
 
-
-
 const pageController = new PageController(mainElement);
 
 pageController.render(cards);
