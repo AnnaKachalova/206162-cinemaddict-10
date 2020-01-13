@@ -1,5 +1,4 @@
 // components
-import FilmsContainerComponent from './components/films-container.js';
 import PageController from './controllers/page-controller.js';
 import MenuComponent from './components/menu.js';
 import SortComponent from './components/sort.js';
@@ -29,13 +28,12 @@ render(siteHeader, new ProfileComponent(rank), RenderPosition.BEFOREEND);
 const filters = generateFilters(cards);
 render(mainElement, new MenuComponent(filters), RenderPosition.BEFOREEND);
 
-const sortComponent = new SortComponent();
-render(mainElement, sortComponent, RenderPosition.BEFOREEND);
+//const sortComponent = new SortComponent();
+//render(mainElement, sortComponent, RenderPosition.BEFOREEND);
 
-const filmsContainerCompinent = new FilmsContainerComponent();
-render(mainElement, filmsContainerCompinent, RenderPosition.BEFOREEND);
 
-const pageController = new PageController(filmsContainerCompinent, sortComponent);
+
+const pageController = new PageController(mainElement);
 
 pageController.render(cards);
 

@@ -1,8 +1,7 @@
-
 import PopupComponent from './popup.js';
 import AbstractComponent from './abstract-component.js';
 
-const createFilmCardComponent = (film) => {
+const createFilmCardComponent = film => {
   const {
     title,
     poster,
@@ -14,11 +13,12 @@ const createFilmCardComponent = (film) => {
     isWatchlist,
     isHistory,
     isFavorite,
-    comments
+    comments,
   } = film;
   const watchlistClass = isWatchlist ? `film-card__controls-item--active` : ``;
   const historyClass = isHistory ? `film-card__controls-item--active` : ``;
   const favoriteClass = isFavorite ? `film-card__controls-item--active` : ``;
+
   return `<article class="film-card">
     <h3 class="film-card__title">${title}</h3>
         <p class="film-card__rating">${rating}</p>
@@ -41,6 +41,7 @@ export default class FilmCard extends AbstractComponent {
   constructor(film) {
     super();
     this._film = film;
+
     this.popup = new PopupComponent(this._film);
   }
 
@@ -52,15 +53,34 @@ export default class FilmCard extends AbstractComponent {
     this.popup.showElement();
   }
   setPosterClickHandler(handler) {
-    this.getElement().querySelector(`.film-card__poster`)
+    this.getElement()
+      .querySelector(`.film-card__poster`)
       .addEventListener(`click`, handler);
   }
   setTitleClickHandler(handler) {
-    this.getElement().querySelector(`.film-card__title`)
+    this.getElement()
+      .querySelector(`.film-card__title`)
       .addEventListener(`click`, handler);
   }
   setCommentBlockClickHandler(handler) {
-    this.getElement().querySelector(`.film-card__comments`)
+    this.getElement()
+      .querySelector(`.film-card__comments`)
       .addEventListener(`click`, handler);
+  }
+
+  onWatchlistButtonClick(element) {
+    this.getElement()
+      .querySelector(`.film-card__controls-item--add-to-watchlist`)
+      .addEventListener(`click`, element);
+  }
+  onWatchedButtonClick(element) {
+    this.getElement()
+      .querySelector(`.film-card__controls-item--mark-as-watched`)
+      .addEventListener(`click`, element);
+  }
+  onFavoritesButtonClick(element) {
+    this.getElement()
+      .querySelector(`.film-card__controls-item--favorite`)
+      .addEventListener(`click`, element);
   }
 }

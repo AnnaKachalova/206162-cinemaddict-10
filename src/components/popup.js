@@ -1,16 +1,16 @@
+import { render, RenderPosition } from '../utils/render.js';
 
-import {render, RenderPosition} from '../utils/render.js';
-import AbstractComponent from './abstract-component.js';
+import AbstractSmartComponent from './abstract-smart-component.js';
 
-const createGenreTemplate = (genres) => {
-  return Array.from(genres).map((element) => {
+const createGenreTemplate = genres => {
+  return Array.from(genres).map(element => {
     return `<span class="film-details__genre">${element}</span>`;
   });
 };
 
-const createCommentTemplate = (comments) => {
-  return Array.from(comments).map((comment) => {
-    const {emoticon, text, autor, date} = comment;
+const createCommentTemplate = comments => {
+  return Array.from(comments).map(comment => {
+    const { emoticon, text, autor, date } = comment;
     return `<li class="film-details__comment">
               <span class="film-details__comment-emoji">
                 <img src="./images/emoji/${emoticon}.png" width="55" height="55" alt="emoji">
@@ -26,7 +26,58 @@ const createCommentTemplate = (comments) => {
           </li>`;
   });
 };
-const createPopupCardComponent = (film) => {
+
+const createFilmRaringTemplate = () => {
+  return `<div class="form-details__middle-container">
+      <section class="film-details__user-rating-wrap">
+        <div class="film-details__user-rating-controls">
+          <button class="film-details__watched-reset" type="button">Undo</button>
+        </div>
+
+        <div class="film-details__user-score">
+          <div class="film-details__user-rating-poster">
+            <img src="./images/posters/the-great-flamarion.jpg" alt="film-poster" class="film-details__user-rating-img">
+          </div>
+
+          <section class="film-details__user-rating-inner">
+            <h3 class="film-details__user-rating-title">The Great Flamarion</h3>
+
+            <p class="film-details__user-rating-feelings">How you feel it?</p>
+            <div class="film-details__user-rating-score">
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="1" id="rating-1">
+              <label class="film-details__user-rating-label" for="rating-1">1</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="2" id="rating-2">
+              <label class="film-details__user-rating-label" for="rating-2">2</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="3" id="rating-3">
+              <label class="film-details__user-rating-label" for="rating-3">3</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="4" id="rating-4">
+              <label class="film-details__user-rating-label" for="rating-4">4</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="5" id="rating-5">
+              <label class="film-details__user-rating-label" for="rating-5">5</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="6" id="rating-6">
+              <label class="film-details__user-rating-label" for="rating-6">6</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="7" id="rating-7">
+              <label class="film-details__user-rating-label" for="rating-7">7</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="8" id="rating-8">
+              <label class="film-details__user-rating-label" for="rating-8">8</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="9" id="rating-9" checked>
+              <label class="film-details__user-rating-label" for="rating-9">9</label>
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>`;
+};
+
+const createPopupCardComponent = (film, options = {}) => {
   const {
     poster,
     title,
@@ -44,7 +95,10 @@ const createPopupCardComponent = (film) => {
     comments,
     userRating,
   } = film;
-  const hasUserRatign = userRating !== 0;
+  const { isHistory } = options;
+  console.log(isHistory);
+
+  const hasUserRatign = userRating !== 0 && isHistory;
   const commentsMarkup = createCommentTemplate(comments);
   const genreMarkup = createGenreTemplate(genre);
   return `<section class="film-details">
@@ -98,7 +152,7 @@ const createPopupCardComponent = (film) => {
               <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">Genres</td>
+              <td class="film-details__term">${genre.length > 1 ? 'Genres' : 'Genre'}</td>
               <td class="film-details__cell">
                 ${genreMarkup}
               </td>
@@ -120,7 +174,7 @@ const createPopupCardComponent = (film) => {
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
-
+    ${isHistory ? createFilmRaringTemplate() : ''}
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
@@ -163,14 +217,29 @@ const createPopupCardComponent = (film) => {
   </form>
 </section>`;
 };
-export default class Popup extends AbstractComponent {
+export default class Popup extends AbstractSmartComponent {
   constructor(film) {
     super();
     this._film = film;
+
+    this._isHistory = this._film.isHistory;
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
-    return createPopupCardComponent(this._film);
+    return createPopupCardComponent(this._film, { isHistory: this._isHistory });
+  }
+
+  recoveryListeners() {
+    this._subscribeOnEvents();
+  }
+  rerender() {
+    super.rerender();
+  }
+  reset() {
+    this._isHistory = Object.values(this._film.isHistory).some(Boolean);
+
+    this.rerender();
   }
 
   hidePopup() {
@@ -193,10 +262,52 @@ export default class Popup extends AbstractComponent {
 
     const popupElement = this.getElement();
     render(bodyElement, this, RenderPosition.BEFOREEND);
-    const popupButtonClose = popupElement
-    .querySelector(`.film-details__close-btn`);
+    const popupButtonClose = popupElement.querySelector(`.film-details__close-btn`);
 
-    document.onkeydown = (evt) => this.onEscKeyDown(evt);
-    popupButtonClose.addEventListener(`click`, ()=> this.hidePopup());
+    document.onkeydown = evt => this.onEscKeyDown(evt);
+    popupButtonClose.addEventListener(`click`, () => this.hidePopup());
+  }
+
+  onWatchlistButtonClick(element) {
+    this.getElement()
+      .querySelector(`.film-details__control-label--watchlist`)
+      .addEventListener(`click`, element);
+  }
+  onWatchedButtonClick(element) {
+    this.getElement()
+      .querySelector(`.film-details__control-label--watched`)
+      .addEventListener(`click`, element);
+  }
+  onFavoritesButtonClick(element) {
+    this.getElement()
+      .querySelector(`.film-details__control-label--favorite`)
+      .addEventListener(`click`, element);
+  }
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+    element.querySelector(`.film-details__control-label--watched`).addEventListener(`click`, () => {
+      this._isHistory = !this._isHistory;
+      this.rerender();
+    });
+
+    /*const emoji = element.querySelectorAll(`.film-details__emoji-label`);
+    const parentEmotion = element.querySelector(`.film-details__add-emoji-label`);
+    console.log(parentEmotion);
+    emoji.forEach(emotion => {
+      emotion.addEventListener(`click`, () => {
+        console.log(emotion);
+        //parentEmotion.innerHtml = '';
+        const emotionImg = emotion.querySelectorAll(`.img`);
+        console.log(emotionImg);
+
+        let emotionImgClone = emotionImg.cloneNode(true);
+        parentEmotion.appendChild(emotionImgClone);
+
+        //film-details__emoji-label
+        //
+        console.log('эмоция');
+      });
+    });*/
   }
 }

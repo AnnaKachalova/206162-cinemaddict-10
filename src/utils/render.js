@@ -3,14 +3,14 @@ export const RenderPosition = {
   BEFOREEND: `beforeend`,
 };
 
-export const getItemsByField = (array, field) => {
+export const getItemsByField = (array, field, length) => {
   return array
-    .filter((element) => !!element[field])
+    .filter(element => !!element[field])
     .sort((a, b) => b[field] - a[field])
-    .slice(0, 2);
+    .slice(0, length);
 };
 
-export const createElement = (component) => {
+export const createElement = component => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = component;
 
@@ -26,7 +26,18 @@ export const render = (container, element, place) => {
       break;
   }
 };
-export const remove = (component) => {
+export const remove = component => {
   component.getElement().remove();
   component.removeElement();
+};
+export const replace = (newComponent, oldComponent) => {
+  const parentElement = oldComponent.getElement().parentElement;
+  const newElement = newComponent.getElement();
+  const oldElement = oldComponent.getElement();
+
+  const isExistElements = !!(parentElement && newElement && oldElement);
+
+  if (isExistElements && parentElement.contains(oldElement)) {
+    parentElement.replaceChild(newElement, oldElement);
+  }
 };
