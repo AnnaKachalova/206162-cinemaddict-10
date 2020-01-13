@@ -1,5 +1,4 @@
-import { MONTH_NAMES } from '../const.js';
-import { formatReleaseDate, formatDuration, formatDateAgo } from '../utils/common.js';
+import { formatReleaseDate, formatDateAgo } from '../utils/common.js';
 
 // main fields
 const FilmTitles = [

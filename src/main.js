@@ -1,7 +1,6 @@
 // components
 import PageController from './controllers/page-controller.js';
 import MenuComponent from './components/menu.js';
-import SortComponent from './components/sort.js';
 import ProfileComponent from './components/profile.js';
 
 // mock
@@ -27,9 +26,6 @@ render(siteHeader, new ProfileComponent(rank), RenderPosition.BEFOREEND);
 // menu
 const filters = generateFilters(cards);
 render(mainElement, new MenuComponent(filters), RenderPosition.BEFOREEND);
-
-//const sortComponent = new SortComponent();
-//render(mainElement, sortComponent, RenderPosition.BEFOREEND);
 
 const pageController = new PageController(mainElement);
 

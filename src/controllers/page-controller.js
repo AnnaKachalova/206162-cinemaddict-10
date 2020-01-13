@@ -1,4 +1,3 @@
-import FilmCardComponent from '../components/film-card.js';
 import NoFilms from '../components/no-films.js';
 import SortComponent, { SortType } from '../components/sort.js';
 import FilmsContainerComponent from '../components/films-container.js';
