@@ -1,4 +1,5 @@
 import { MONTH_NAMES } from '../const.js';
+import { formatReleaseDate, formatDuration, formatDateAgo } from '../utils/common.js';
 
 // main fields
 const FilmTitles = [
@@ -87,29 +88,9 @@ const getDuration = () => {
   const hours = getRandomIntegerNumber(1, 5);
   const minutes = getRandomIntegerNumber(1, 59);
 
-  return `${hours}h ${minutes}m`;
-};
-const getRandomDate = () => {
-  const targerDate = new Date();
-  const sign = Math.random() > 0.5 ? 1 : -1;
-  const diffValue = sign * getRandomIntegerNumber(0, 7);
-  const day = targerDate.getDate() + diffValue;
-  const month = getRandomArrayElem(MONTH_NAMES);
-  const year = getRandomIntegerNumber(1990, 2019);
+  const time = `${hours}h ${minutes}m`;
 
-  return `${day} ${month} ${year}`;
-};
-const getRandomDateEmoticons = () => {
-  const targerDate = new Date();
-  const sign = Math.random() > 0.5 ? 1 : -1;
-  const diffValue = sign * getRandomIntegerNumber(0, 7);
-  const day = targerDate.getDate() + diffValue;
-  const month = targerDate.getMonth();
-  const year = getRandomIntegerNumber(1990, 2019);
-  const hours = getRandomIntegerNumber(1, 23);
-  const minutes = getRandomIntegerNumber(1, 59);
-
-  return `${year}/${month}/${day} ${hours}:${minutes}`;
+  return time;
 };
 
 const generateComments = () => {
@@ -120,7 +101,7 @@ const generateComments = () => {
       emoticon: getRandomArrayElem(emoticons),
       text: getRandomArrayElem(emoticonsText),
       autor: getRandomArrayElem(emoticonsAutor),
-      date: getRandomDateEmoticons(),
+      date: formatDateAgo(new Date()),
     };
     comments.push(comment);
   }
@@ -146,7 +127,7 @@ const generateFilmCard = () => {
     producer: getRandomArrayElem(FilmProducers),
     screenwriter: getRandomArrayElem(FilmScreenwriters),
     actor: getRandomArrayElem(FilmActors),
-    releaseDate: getRandomDate(),
+    releaseDate: formatReleaseDate(new Date()),
     country: getRandomArrayElem(FilmCountries),
     fullDescription: FilmDescriptions,
     ageRating: getRandomIntegerNumber(6, 18),
