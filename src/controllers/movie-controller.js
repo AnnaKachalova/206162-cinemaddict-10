@@ -8,11 +8,10 @@ export default class MovieController {
     this._onDataChange = onDataChange;
   }
   render(card) {
-    console.log(card);
     const oldCardComponent = this._cardComponent;
     this._cardComponent = new FilmCardComponent(card);
 
-    const showPopup = () => cardComponent.onClick();
+    const showPopup = () => this._cardComponent.onClick();
 
     this._cardComponent.setPosterClickHandler(showPopup);
     this._cardComponent.setTitleClickHandler(showPopup);
@@ -27,12 +26,12 @@ export default class MovieController {
       evt.preventDefault();
       this._onDataChange(this, card, Object.assign({}, card, { isHistory: !card.isHistory }));
     });
+
     this._cardComponent.onFavoritesButtonClick(evt => {
       evt.preventDefault();
       this._onDataChange(this, card, Object.assign({}, card, { isFavorite: !card.isFavorite }));
     });
 
-    console.log(oldCardComponent);
     if (oldCardComponent) {
       replace(this._cardComponent, oldCardComponent);
     } else {

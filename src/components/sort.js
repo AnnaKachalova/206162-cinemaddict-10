@@ -8,12 +8,11 @@ export const SortType = {
 
 const createSortComponent = () => {
   return `<ul class="sort">
-              <li><a href="#" data-sort-type="${SortType.DEFAULT}" class="sort__button">Sort by default</a></li>
+              <li><a href="#" data-sort-type="${SortType.DEFAULT}" class="sort__button sort__button--active">Sort by default</a></li>
               <li><a href="#" data-sort-type="${SortType.DATE}" class="sort__button">Sort by date</a></li>
               <li><a href="#" data-sort-type="${SortType.RATING}" class="sort__button">Sort by rating</a></li>
           </ul>`;
 };
-
 
 export default class Sort extends AbstractComponent {
   constructor() {
@@ -25,7 +24,7 @@ export default class Sort extends AbstractComponent {
     return createSortComponent();
   }
   setSortTypeChangeHandler(handler) {
-    this.getElement().addEventListener(`click`, (evt) => {
+    this.getElement().addEventListener(`click`, evt => {
       evt.preventDefault();
 
       if (evt.target.tagName !== `A`) {
@@ -33,7 +32,7 @@ export default class Sort extends AbstractComponent {
       }
       const sortWrapper = this.getElement();
       const elements = sortWrapper.querySelectorAll(`.sort__button`);
-      elements.forEach((element) => element.classList.remove(`sort__button--active`));
+      elements.forEach(element => element.classList.remove(`sort__button--active`));
       evt.target.classList.add(`sort__button--active`);
 
       const sortType = evt.target.dataset.sortType;

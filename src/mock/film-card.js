@@ -1,4 +1,4 @@
-import {MONTH_NAMES} from '../const.js';
+import { MONTH_NAMES } from '../const.js';
 
 // main fields
 const FilmTitles = [
@@ -53,10 +53,7 @@ const FilmPosters = [
   `there_are_only_girls_in_jazz`,
   `truman_show`,
 ];
-const FilmGenres = [
-  `Комедия`,
-  `Мелодрама`,
-];
+const FilmGenres = [`Комедия`, `Мелодрама`];
 const FilmDescriptions = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 // additional fields
 const FilmProducers = [`Аарон Спеллинг`, `Джеймс Кэмерон`, `Майкл Бин`];
@@ -65,18 +62,14 @@ const FilmActors = [`Аарон Спеллинг`, `Джеймс Кэмерон`
 const FilmCountries = [`США`, `Франция`, `Великобритания`];
 // comments
 const emoticons = [`smile`, `sleeping`, `puke`, `angry`];
-const emoticonsText = [
-  `Almost two hours? Seriously?`,
-  `Very very old. Meh`,
-  `Booooooooooring`,
-];
+const emoticonsText = [`Almost two hours? Seriously?`, `Very very old. Meh`, `Booooooooooring`];
 const emoticonsAutor = [`John Doe`, `Tim Macoveev`];
 
 // utility functions
 const getRandomIntegerNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min);
 };
-const getRandomArrayElem = (array) => {
+const getRandomArrayElem = array => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
   return array[randomIndex];
 };
@@ -119,7 +112,6 @@ const getRandomDateEmoticons = () => {
   return `${year}/${month}/${day} ${hours}:${minutes}`;
 };
 
-
 const generateComments = () => {
   const randomCount = getRandomIntegerNumber(1, 5);
   const comments = [];
@@ -160,10 +152,9 @@ const generateFilmCard = () => {
     ageRating: getRandomIntegerNumber(6, 18),
     comments: generateComments(),
   };
-
 };
-const generateFilmCards = (count) => {
+const generateFilmCards = count => {
   return new Array(count).fill(``).map(generateFilmCard);
 };
 
-export {generateFilmCards};
+export { generateFilmCards };

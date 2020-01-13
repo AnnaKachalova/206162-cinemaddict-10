@@ -2,7 +2,6 @@ import PopupComponent from './popup.js';
 import AbstractComponent from './abstract-component.js';
 
 const createFilmCardComponent = film => {
-  console.log('как-то создается новый');
   const {
     title,
     poster,
@@ -42,6 +41,7 @@ export default class FilmCard extends AbstractComponent {
   constructor(film) {
     super();
     this._film = film;
+
     this.popup = new PopupComponent(this._film);
   }
 
