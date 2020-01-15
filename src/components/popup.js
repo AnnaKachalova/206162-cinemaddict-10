@@ -181,7 +181,9 @@ const createPopupCardComponent = (film, options = {}) => {
     ${isHistory ? createFilmRaringTemplate() : ''}
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${
+          comments.length
+        }</span></h3>
 
         <ul class="film-details__comments-list">
           ${commentsMarkup}
@@ -294,7 +296,6 @@ export default class Popup extends AbstractSmartComponent {
       input.addEventListener(`change`, () => {
         // change watched
         if (input.name === 'watched') {
-          input.checked = true;
           this._isHistory = !this._isHistory;
           this.rerender();
         }
@@ -317,7 +318,6 @@ export default class Popup extends AbstractSmartComponent {
         newImg.src = `./images/emoji/${emotionValue}.png`;
         parentEmotion.innerHTML = '';
         parentEmotion.append(newImg);
-        parentEmotion.checked = true;
       });
     });
   }

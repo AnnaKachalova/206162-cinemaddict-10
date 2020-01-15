@@ -24,8 +24,9 @@ const renderCards = (filmListContainer, cards, onDataChange) => {
 };
 
 export default class PageController {
-  constructor(container) {
+  constructor(container, cardsModel) {
     this._container = container;
+    this._cardsModel = cardsModel;
 
     this._noFilms = new NoFilms();
     this._topRatedComponent = new TopRatedComponent();
@@ -36,7 +37,9 @@ export default class PageController {
     this._filmsContainerComponent = new FilmsContainerComponent();
     this._filmsContainerElement = this._filmsContainerComponent.getElement();
     this._filmList = this._filmsContainerElement.querySelector(`.films-list`);
-    this._filmListContainer = this._filmsContainerElement.querySelector(`.films-list__container`);
+    this._filmListContainer = this._filmsContainerElement.querySelector(
+      `.films-list__container`
+    );
 
     this._showedCardsControllers = [];
     this._onDataChange = this._onDataChange.bind(this);
@@ -44,8 +47,8 @@ export default class PageController {
     this._showingCardsCount = SHOWING_CARDS_COUNT_ON_START;
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
-  render(cards) {
-    this._cards = cards;
+  render() {
+    const cards = this._cardsModel.getCards();
 
     if (cards.length) {
       render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
@@ -53,7 +56,7 @@ export default class PageController {
 
       const newCards = renderCards(
         this._filmListContainer,
-        this._cards.slice(0, this._showingCardsCount),
+        cards.slice(0, this._showingCardsCount),
         this._onDataChange
       );
       this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
@@ -90,7 +93,7 @@ export default class PageController {
   }
 
   _renderMoreButton() {
-    if (this._showingTasksCount >= this._cards.length) {
+    if (this._showingTasksCount >= this._cardsModel.getCards()) {
       return;
     }
 
@@ -98,54 +101,55 @@ export default class PageController {
 
     this._moreButtonComponent.onMoreButtonClick(() => {
       const prevCardsCount = this._showingCardsCount;
+      const cards = this._cardsModel.getTasks();
       this._showingCardsCount = this._showingCardsCount + SHOWING_TASKS_COUNT_BY_BUTTON;
-
-      renderCards(this._filmListContainer, this._cards.slice(prevCardsCount, this._showingCardsCount));
 
       const newCards = renderCards(
         this._filmListContainer,
-        this._cards.slice(prevCardsCount, this._showingCardsCount),
+        cards.slice(prevCardsCount, this._showingCardsCount),
         this._onDataChange
       );
       this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
 
-      if (this._showingCardsCount >= this._cards.length) {
+      if (this._showingCardsCount >= cards.length) {
         remove(button);
       }
     });
   }
 
   _onDataChange(movieController, oldData, newData) {
-    const index = this._cards.findIndex(it => it === oldData);
-    if (index === -1) {
-      return;
+    const isSuccess = this._cardsModel.updateTask(oldData.id, newData);
+
+    if (isSuccess) {
+      movieController.render(newData);
     }
-
-    this._cards = [].concat(this._cards.slice(0, index), newData, this._cards.slice(index + 1));
-
-    movieController.render(this._cards[index]);
   }
 
   _onSortTypeChange(sortType) {
     let sortedCards = [];
+    const cards = this._cardsModel.getTasks();
     switch (sortType) {
       case SortType.DATE:
-        sortedCards = getItemsByField(this._cards, `productionYear`);
+        sortedCards = getItemsByField(cards, `productionYear`);
 
         break;
       case SortType.RATING:
-        sortedCards = getItemsByField(this._cards, `rating`);
+        sortedCards = getItemsByField(cards, `rating`);
 
         break;
       case SortType.DEFAULT:
-        sortedCards = this._cards.slice(0, this._showingCardsCount);
+        sortedCards = cards.slice(0, this._showingCardsCount);
         break;
     }
 
     this._filmListContainer.innerHTML = ``;
     renderCards(this._filmListContainer, sortedCards);
 
-    const newCards = renderCards(this._filmListContainer, sortedCards, this._onDataChange);
+    const newCards = renderCards(
+      this._filmListContainer,
+      sortedCards,
+      this._onDataChange
+    );
     this._showedCardsControllers = newCards;
 
     if (sortType === SortType.DEFAULT) {

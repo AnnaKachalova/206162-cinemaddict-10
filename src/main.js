@@ -3,6 +3,8 @@ import PageController from './controllers/page-controller.js';
 import MenuComponent from './components/menu.js';
 import ProfileComponent from './components/profile.js';
 
+import FilmCardsModel from './models/film-card.js';
+
 // mock
 import { generateFilmCards } from './mock/film-card.js';
 import { generateRank } from './mock/profile.js';
@@ -17,6 +19,9 @@ const mainElement = document.querySelector(`.main`);
 // filters
 const cards = generateFilmCards(CARD_COUNT);
 
+const filmCardsModel = new FilmCardsModel();
+filmCardsModel.setCards(cards);
+
 // header
 const siteHeader = document.querySelector(`.header`);
 const filmsHistoryCount = cards.filter(film => film.isHistory === true).length;
@@ -27,8 +32,8 @@ render(siteHeader, new ProfileComponent(rank), RenderPosition.BEFOREEND);
 const filters = generateFilters(cards);
 render(mainElement, new MenuComponent(filters), RenderPosition.BEFOREEND);
 
-const pageController = new PageController(mainElement);
+const pageController = new PageController(mainElement, filmCardsModel);
 
-pageController.render(cards);
+pageController.render();
 
 document.querySelector('.footer__statistics p').innerHTML = cards.length;

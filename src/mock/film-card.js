@@ -112,6 +112,7 @@ const generateFilmCard = () => {
   const randomIndex = getRandomIntegerNumber(0, FilmTitles.length);
   const isHistory = Math.random() > 0.5;
   return {
+    id: String(new Date() + Math.random()),
     title: FilmTitles[randomIndex],
     poster: FilmPosters[randomIndex],
     description: getDescription(),
