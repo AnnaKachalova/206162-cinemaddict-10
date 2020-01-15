@@ -13,7 +13,6 @@ export const getFavoriteCards = cards => {
 };
 
 export const getCardsByFilter = (cards, filterType) => {
-  console.log(`filter type is ${filterType}`);
   switch (filterType) {
     case FilterType.ALL:
       return cards;

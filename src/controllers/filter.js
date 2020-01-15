@@ -17,17 +17,14 @@ export default class FilterController {
   }
 
   render() {
-    console.log('построение фильтров');
     const container = this._container;
     const allCards = this._cardsModel.getCardsAll();
 
     const filters = Object.values(FilterType).map(filterType => {
-      const isRight = filterType === this._activeFilterType;
-      console.log(`isRight ${isRight}`);
       return {
         name: filterType,
         count: getCardsByFilter(allCards, filterType).length,
-        checked: isRight,
+        checked: filterType === this._activeFilterType,
       };
     });
     const oldComponent = this._filterComponent;

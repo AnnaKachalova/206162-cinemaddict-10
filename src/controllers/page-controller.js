@@ -167,8 +167,6 @@ export default class PageController {
     }
   }
   _onFilterChange() {
-    console.log('change filters remove and add cards');
-    console.log(this._cardsModel);
     this._removeCards();
     this._renderCards(this._cardsModel.getCards().slice(0, SHOWING_CARDS_COUNT_ON_START));
     this._renderMoreButton();

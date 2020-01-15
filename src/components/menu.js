@@ -2,21 +2,20 @@ import AbstractComponent from './abstract-component.js';
 const FILTER_ID_PREFIX = `filter__`;
 
 const getFilterNameById = id => {
-  console.log('getFilterNameById');
-  const idf = id.substring(FILTER_ID_PREFIX.length);
-  console.log(idf);
-  return idf;
+  return id.substring(FILTER_ID_PREFIX.length);
 };
 
-const createFilterTemplate = ({ name, count }) => {
-  return `<a href="#${name}" class="main-navigation__item" id="filter__${name}">${name} <span class="main-navigation__item-count">${count}</span></a>`;
+const createFilterTemplate = ({ name, count, checked }) => {
+  return `<a href="#${name}" class="main-navigation__item ${
+    checked ? 'main-navigation__item--active' : ''
+  }" id="filter__${name}">${name} <span class="main-navigation__item-count">${count}</span></a>`;
 };
 
 const createMenuComponent = filters => {
-  console.log(filters);
   const filtersMarkup = filters
     .map(it => createFilterTemplate(it, it.checked))
     .join(`\n`);
+
   return `<nav class="main-navigation">
             ${filtersMarkup}
             <a href="#stats" class="main-navigation__item main-navigation__item--additional">Stats</a>
@@ -38,6 +37,13 @@ export default class Menu extends AbstractComponent {
 
     filters.forEach(filter => {
       filter.addEventListener(`click`, evt => {
+        const classActive = 'main-navigation__item--active';
+
+        filters.forEach(currentFilter => {
+          currentFilter.classList.remove(classActive);
+        });
+        filter.classList.add(classActive);
+
         const filterName = getFilterNameById(evt.target.id);
         handler(filterName);
       });
