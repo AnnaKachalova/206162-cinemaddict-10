@@ -123,7 +123,11 @@ const createPopupCardComponent = (film, options = {}) => {
 
             <div class="film-details__rating">
               <p class="film-details__total-rating">${rating}</p>
-  ${hasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>` : ``}
+  ${
+    hasUserRatign
+      ? `<p class="film-details__user-rating">Your rate ${userRating}</p>`
+      : ``
+  }
             </div>
           </div>
           <table class="film-details__table">
@@ -191,22 +195,22 @@ const createPopupCardComponent = (film, options = {}) => {
           </label>
 
           <div class="film-details__emoji-list">
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="sleeping">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
             <label class="film-details__emoji-label" for="emoji-smile">
               <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="neutral-face">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
             <label class="film-details__emoji-label" for="emoji-sleeping">
               <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-gpuke" value="grinning">
-            <label class="film-details__emoji-label" for="emoji-gpuke">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
+            <label class="film-details__emoji-label" for="emoji-puke">
               <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="grinning">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
             <label class="film-details__emoji-label" for="emoji-angry">
               <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
             </label>
@@ -223,7 +227,7 @@ export default class Popup extends AbstractSmartComponent {
     this._film = film;
 
     this._isHistory = this._film.isHistory;
-    this._subscribeOnEvents();
+    //this._subscribeOnEvents();
   }
 
   getTemplate() {
@@ -285,30 +289,38 @@ export default class Popup extends AbstractSmartComponent {
 
   _subscribeOnEvents() {
     const element = this.getElement();
-    element.querySelector(`.film-details__control-label--watched`).addEventListener(`click`, () => {
-      this._isHistory = !this._isHistory;
-      this.rerender();
+
+    const controlInputs = element.querySelectorAll(`.film-details__control-input`);
+
+    controlInputs.forEach(input => {
+      input.addEventListener(`change`, () => {
+        // change watched
+        if (input.name === 'watched') {
+          input.checked = true;
+          this._isHistory = !this._isHistory;
+          this.rerender();
+        }
+      });
     });
+
     const popupButtonClose = element.querySelector(`.film-details__close-btn`);
     popupButtonClose.addEventListener(`click`, () => this.hidePopup());
 
-    /*const emoji = element.querySelectorAll(`.film-details__emoji-label`);
+    // change emoji
+    const emoji = element.querySelectorAll(`.film-details__emoji-item`);
     const parentEmotion = element.querySelector(`.film-details__add-emoji-label`);
-    console.log(parentEmotion);
+
     emoji.forEach(emotion => {
-      emotion.addEventListener(`click`, () => {
-        console.log(emotion);
-        //parentEmotion.innerHtml = '';
-        const emotionImg = emotion.querySelectorAll(`.img`);
-        console.log(emotionImg);
-
-        let emotionImgClone = emotionImg.cloneNode(true);
-        parentEmotion.appendChild(emotionImgClone);
-
-        //film-details__emoji-label
-        //
-        console.log('эмоция');
+      emotion.addEventListener(`change`, () => {
+        const emotionValue = emotion.value;
+        const newImg = document.createElement('img');
+        newImg.style.width = '50px';
+        newImg.style.height = '50px';
+        newImg.src = `./images/emoji/${emotionValue}.png`;
+        parentEmotion.innerHTML = '';
+        parentEmotion.append(newImg);
+        parentEmotion.checked = true;
       });
-    });*/
+    });
   }
 }

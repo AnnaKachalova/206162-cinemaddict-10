@@ -1,4 +1,4 @@
-import { formatReleaseDate, formatDateAgo } from '../utils/common.js';
+import { formatReleaseDate, formatDateAgo, formatDuration } from '../utils/common.js';
 
 // main fields
 const FilmTitles = [
@@ -62,7 +62,11 @@ const FilmActors = [`Аарон Спеллинг`, `Джеймс Кэмерон`
 const FilmCountries = [`США`, `Франция`, `Великобритания`];
 // comments
 const emoticons = [`smile`, `sleeping`, `puke`, `angry`];
-const emoticonsText = [`Almost two hours? Seriously?`, `Very very old. Meh`, `Booooooooooring`];
+const emoticonsText = [
+  `Almost two hours? Seriously?`,
+  `Very very old. Meh`,
+  `Booooooooooring`,
+];
 const emoticonsAutor = [`John Doe`, `Tim Macoveev`];
 
 // utility functions
@@ -84,12 +88,9 @@ const getRating = (min = 0, max = 10) => {
   return randRating.toFixed(1);
 };
 const getDuration = () => {
-  const hours = getRandomIntegerNumber(1, 5);
-  const minutes = getRandomIntegerNumber(1, 59);
+  const minutes = getRandomIntegerNumber(120, 400);
 
-  const time = `${hours}h ${minutes}m`;
-
-  return time;
+  return formatDuration(minutes);
 };
 
 const generateComments = () => {
