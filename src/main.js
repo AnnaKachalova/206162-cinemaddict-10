@@ -1,6 +1,6 @@
 // components
 import PageController from './controllers/page-controller.js';
-import MenuComponent from './components/menu.js';
+import FilterController from './controllers/filter.js';
 import ProfileComponent from './components/profile.js';
 
 import FilmCardsModel from './models/film-card.js';
@@ -8,7 +8,6 @@ import FilmCardsModel from './models/film-card.js';
 // mock
 import { generateFilmCards } from './mock/film-card.js';
 import { generateRank } from './mock/profile.js';
-import { generateFilters } from './mock/menu.js';
 
 import { render, RenderPosition } from './utils/render.js';
 
@@ -29,8 +28,10 @@ const rank = generateRank(filmsHistoryCount);
 render(siteHeader, new ProfileComponent(rank), RenderPosition.BEFOREEND);
 
 // menu
-const filters = generateFilters(cards);
-render(mainElement, new MenuComponent(filters), RenderPosition.BEFOREEND);
+//const filters = generateFilters(cards);
+//render(mainElement, new MenuComponent(filters), RenderPosition.BEFOREEND);
+const filterController = new FilterController(mainElement, filmCardsModel);
+filterController.render();
 
 const pageController = new PageController(mainElement, filmCardsModel);
 

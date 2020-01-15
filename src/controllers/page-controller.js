@@ -13,7 +13,7 @@ import { render, remove, RenderPosition, getItemsByField } from '../utils/render
 import MovieController from './movie-controller.js';
 
 const SHOWING_CARDS_COUNT_ON_START = 5;
-const SHOWING_TASKS_COUNT_BY_BUTTON = 5;
+const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
 
 const renderCards = (filmListContainer, cards, onDataChange) => {
   return cards.map(card => {
@@ -45,7 +45,11 @@ export default class PageController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._showingCardsCount = SHOWING_CARDS_COUNT_ON_START;
+    this._onMoreButtonClick = this._onMoreButtonClick.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
+
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+    this._cardsModel.setFilterChangeHandler(this._onFilterChange);
   }
   render() {
     const cards = this._cardsModel.getCards();
@@ -91,34 +95,30 @@ export default class PageController {
       render(this._filmList, this._noFilms, RenderPosition.BEFOREEND);
     }
   }
+  _removeCards() {
+    this._filmListContainer.innerHTML = ``;
+    this._showedCardsControllers = [];
+  }
+
+  _renderCards(cards) {
+    const newCards = renderCards(this._filmListContainer, cards, this._onDataChange);
+    this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
+    this._showingCardsCount = this._showedCardsControllers.length;
+  }
 
   _renderMoreButton() {
+    remove(this._moreButtonComponent);
     if (this._showingTasksCount >= this._cardsModel.getCards()) {
       return;
     }
 
     render(this._filmList, this._moreButtonComponent, RenderPosition.BEFOREEND);
 
-    this._moreButtonComponent.onMoreButtonClick(() => {
-      const prevCardsCount = this._showingCardsCount;
-      const cards = this._cardsModel.getTasks();
-      this._showingCardsCount = this._showingCardsCount + SHOWING_TASKS_COUNT_BY_BUTTON;
-
-      const newCards = renderCards(
-        this._filmListContainer,
-        cards.slice(prevCardsCount, this._showingCardsCount),
-        this._onDataChange
-      );
-      this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
-
-      if (this._showingCardsCount >= cards.length) {
-        remove(button);
-      }
-    });
+    this._moreButtonComponent.setClickHandler(this._onMoreButtonClick);
   }
 
   _onDataChange(movieController, oldData, newData) {
-    const isSuccess = this._cardsModel.updateTask(oldData.id, newData);
+    const isSuccess = this._cardsModel.updateCard(oldData.id, newData);
 
     if (isSuccess) {
       movieController.render(newData);
@@ -127,7 +127,7 @@ export default class PageController {
 
   _onSortTypeChange(sortType) {
     let sortedCards = [];
-    const cards = this._cardsModel.getTasks();
+    const cards = this._cardsModel.getCards();
     switch (sortType) {
       case SortType.DATE:
         sortedCards = getItemsByField(cards, `productionYear`);
@@ -145,17 +145,32 @@ export default class PageController {
     this._filmListContainer.innerHTML = ``;
     renderCards(this._filmListContainer, sortedCards);
 
-    const newCards = renderCards(
-      this._filmListContainer,
-      sortedCards,
-      this._onDataChange
-    );
-    this._showedCardsControllers = newCards;
+    this._removeCards();
+    this._renderCards(sortedCards);
 
     if (sortType === SortType.DEFAULT) {
       this._renderMoreButton();
     } else {
       remove(this._moreButtonComponent);
     }
+  }
+  _onMoreButtonClick() {
+    const prevCardsCount = this._showingCardsCount;
+    const cards = this._cardsModel.getCards();
+
+    this._showingCardsCount = this._showingCardsCount + SHOWING_CARDS_COUNT_BY_BUTTON;
+
+    this._renderCards(cards.slice(prevCardsCount, this._showingCardsCount));
+
+    if (this._showingCardsCount >= cards.length) {
+      remove(this._moreButtonComponent);
+    }
+  }
+  _onFilterChange() {
+    console.log('change filters remove and add cards');
+    console.log(this._cardsModel);
+    this._removeCards();
+    this._renderCards(this._cardsModel.getCards().slice(0, SHOWING_CARDS_COUNT_ON_START));
+    this._renderMoreButton();
   }
 }
