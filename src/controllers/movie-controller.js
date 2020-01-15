@@ -1,5 +1,17 @@
 import FilmCardComponent from '../components/film-card.js';
-import { render, replace, RenderPosition } from '../utils/render.js';
+import { render, replace, remove, RenderPosition } from '../utils/render.js';
+
+/*export const Mode = {
+  ADDING: `adding`,
+  DEFAULT: `default`,
+  DELETE: `edit`,
+};
+export const EmptyComment = {
+  text: ``,
+  emoji: ``,
+  autor: ``,
+  date: ``,
+};*/
 
 export default class MovieController {
   constructor(container, onDataChange) {
@@ -7,8 +19,10 @@ export default class MovieController {
     this._cardComponent = null;
     this._onDataChange = onDataChange;
   }
-  render(card) {
+  render(card, mode) {
     const oldCardComponent = this._cardComponent;
+    this._mode = mode;
+
     this._cardComponent = new FilmCardComponent(card);
 
     const showPopup = () => this._cardComponent.onClick();

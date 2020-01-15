@@ -123,11 +123,7 @@ const createPopupCardComponent = (film, options = {}) => {
 
             <div class="film-details__rating">
               <p class="film-details__total-rating">${rating}</p>
-  ${
-    hasUserRatign
-      ? `<p class="film-details__user-rating">Your rate ${userRating}</p>`
-      : ``
-  }
+  ${hasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>` : ``}
             </div>
           </div>
           <table class="film-details__table">
@@ -253,12 +249,18 @@ export default class Popup extends AbstractSmartComponent {
     this._element.remove();
     this.removeElement();
   }
-  onEscKeyDown(evt) {
+  onButtonKeyDown(evt) {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-    if (isEscKey) {
+    const isCtrlEnter = evt.key == `Enter` && evt.ctrlKey;
+
+    if (isCtrlEnter) {
+      console.log('сохранение комментария');
+    } else if (isEscKey) {
+      console.log('выход из попапа');
       this.hidePopup();
     }
   }
+
   showElement() {
     const bodyElement = document.querySelector(`body`);
     const visiblePopup = bodyElement.querySelector(`.film-details`);
@@ -268,7 +270,8 @@ export default class Popup extends AbstractSmartComponent {
 
     render(bodyElement, this, RenderPosition.BEFOREEND);
 
-    document.onkeydown = evt => this.onEscKeyDown(evt);
+    document.onkeydown = evt => this.onButtonKeyDown(evt);
+
     this._subscribeOnEvents();
   }
 
@@ -298,6 +301,7 @@ export default class Popup extends AbstractSmartComponent {
         if (input.name === 'watched') {
           this._isHistory = !this._isHistory;
           this.rerender();
+          //document.getElementById('watchlist').checked = false;
         }
       });
     });

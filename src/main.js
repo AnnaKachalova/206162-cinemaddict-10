@@ -28,8 +28,6 @@ const rank = generateRank(filmsHistoryCount);
 render(siteHeader, new ProfileComponent(rank), RenderPosition.BEFOREEND);
 
 // menu
-//const filters = generateFilters(cards);
-//render(mainElement, new MenuComponent(filters), RenderPosition.BEFOREEND);
 const filterController = new FilterController(mainElement, filmCardsModel);
 filterController.render();
 
@@ -37,4 +35,4 @@ const pageController = new PageController(mainElement, filmCardsModel);
 
 pageController.render();
 
-document.querySelector('.footer__statistics p').innerHTML = cards.length;
+document.querySelector('.footer__statistics p').innerHTML = `${cards.length} movies inside`;
