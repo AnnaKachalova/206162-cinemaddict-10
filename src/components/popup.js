@@ -264,14 +264,13 @@ export default class Popup extends AbstractSmartComponent {
       visiblePopup.remove();
     }
 
-    const popupElement = this.getElement();
     render(bodyElement, this, RenderPosition.BEFOREEND);
 
     document.onkeydown = evt => this.onEscKeyDown(evt);
     this._subscribeOnEvents();
   }
 
-  onWatchlistButtonClick(element) {
+  /*onWatchlistButtonClick(element) {
     this.getElement()
       .querySelector(`.film-details__control-label--watchlist`)
       .addEventListener(`click`, element);
@@ -285,12 +284,11 @@ export default class Popup extends AbstractSmartComponent {
     this.getElement()
       .querySelector(`.film-details__control-label--favorite`)
       .addEventListener(`click`, element);
-  }
+  }*/
 
   _subscribeOnEvents() {
-    const element = this.getElement();
-
-    const controlInputs = element.querySelectorAll(`.film-details__control-input`);
+    const popupElement = this.getElement();
+    const controlInputs = popupElement.querySelectorAll(`.film-details__control-input`);
 
     controlInputs.forEach(input => {
       input.addEventListener(`change`, () => {
@@ -303,12 +301,12 @@ export default class Popup extends AbstractSmartComponent {
       });
     });
 
-    const popupButtonClose = element.querySelector(`.film-details__close-btn`);
+    const popupButtonClose = popupElement.querySelector(`.film-details__close-btn`);
     popupButtonClose.addEventListener(`click`, () => this.hidePopup());
 
     // change emoji
-    const emoji = element.querySelectorAll(`.film-details__emoji-item`);
-    const parentEmotion = element.querySelector(`.film-details__add-emoji-label`);
+    const emoji = popupElement.querySelectorAll(`.film-details__emoji-item`);
+    const parentEmotion = popupElement.querySelector(`.film-details__add-emoji-label`);
 
     emoji.forEach(emotion => {
       emotion.addEventListener(`change`, () => {
