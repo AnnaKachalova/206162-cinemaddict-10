@@ -2,6 +2,8 @@ import { render, RenderPosition } from '../utils/render.js';
 
 import AbstractSmartComponent from './abstract-smart-component.js';
 
+const EMOJI = [`smile`, `sleeping`, `puke`, `angry`];
+
 const createGenreTemplate = genres => {
   return Array.from(genres).map(element => {
     return `<span class="film-details__genre">${element}</span>`;
@@ -77,7 +79,7 @@ const createFilmRaringTemplate = () => {
     </div>`;
 };
 
-const createPopupCardComponent = (film, options = {}) => {
+const createPopupCardComponent = film => {
   const {
     poster,
     title,
@@ -90,12 +92,15 @@ const createPopupCardComponent = (film, options = {}) => {
     duration,
     country,
     genre,
+    isWatchlist,
+    isHistory,
+    isFavorite,
     description,
     ageRating,
     comments,
     userRating,
   } = film;
-  const { isHistory } = options;
+  //const { isHistory } = options;
 
   const hasUserRatign = userRating !== 0 && isHistory;
   const commentsMarkup = createCommentTemplate(comments);
@@ -164,13 +169,19 @@ const createPopupCardComponent = (film, options = {}) => {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${
+          isWatchlist ? `checked` : ``
+        }>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${
+          isHistory ? `checked` : ``
+        }>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${
+          isFavorite ? `checked` : ``
+        }>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
@@ -219,19 +230,63 @@ const createPopupCardComponent = (film, options = {}) => {
   </form>
 </section>`;
 };
+const parseFormData = formData => {
+  const options = {
+    hour12: false,
+    year: `numeric`,
+    month: `numeric`,
+    day: `numeric`,
+    hour: `numeric`,
+    minute: `numeric`,
+  };
+  console.log(formData.get(`comment-emoji`));
+  return {
+    name: `You`,
+    text: formData.get(`comment`),
+    time: new Date().toLocaleString(`en-US`, options),
+    emoji: `./images/emoji/${formData.get(`comment-emoji`)}.png`,
+  };
+};
+
 export default class Popup extends AbstractSmartComponent {
   constructor(film) {
     super();
     this._film = film;
 
     this._isHistory = this._film.isHistory;
-    //this._subscribeOnEvents();
+    this._commentInputEnterPressHandler = null;
   }
 
   getTemplate() {
-    return createPopupCardComponent(this._film, { isHistory: this._isHistory });
+    return createPopupCardComponent(this._film);
+  }
+  getData() {
+    const form = this.getElement().querySelector(`.film-details__inner`);
+    const formData = new FormData(form);
+
+    return parseFormData(formData);
+  }
+  setDeleteClickHandler(handler) {
+    this.getElement()
+      .querySelectorAll(`.film-details__comment-delete`)
+      .forEach((it, i) =>
+        it.addEventListener(`click`, evt => {
+          evt.preventDefault();
+          handler(i);
+        })
+      );
   }
 
+  setCommentEnterPressHandler(handler) {
+    this.getElement()
+      .querySelector(`.film-details__comment-input`)
+      .addEventListener(`keydown`, evt => {
+        if (evt.ctrlKey === true && evt.key === `Enter`) {
+          handler();
+        }
+      });
+    this._commentInputEnterPressHandler = handler;
+  }
   recoveryListeners() {
     this._subscribeOnEvents();
   }
@@ -271,25 +326,9 @@ export default class Popup extends AbstractSmartComponent {
     render(bodyElement, this, RenderPosition.BEFOREEND);
 
     document.onkeydown = evt => this.onButtonKeyDown(evt);
-
+    this.setCommentEnterPressHandler(this._commentInputEnterPressHandler);
     this._subscribeOnEvents();
   }
-
-  /*onWatchlistButtonClick(element) {
-    this.getElement()
-      .querySelector(`.film-details__control-label--watchlist`)
-      .addEventListener(`click`, element);
-  }
-  onWatchedButtonClick(element) {
-    this.getElement()
-      .querySelector(`.film-details__control-label--watched`)
-      .addEventListener(`click`, element);
-  }
-  onFavoritesButtonClick(element) {
-    this.getElement()
-      .querySelector(`.film-details__control-label--favorite`)
-      .addEventListener(`click`, element);
-  }*/
 
   _subscribeOnEvents() {
     const popupElement = this.getElement();
@@ -297,12 +336,19 @@ export default class Popup extends AbstractSmartComponent {
 
     controlInputs.forEach(input => {
       input.addEventListener(`change`, () => {
-        // change watched
         if (input.name === 'watched') {
-          this._isHistory = !this._isHistory;
-          this.rerender();
-          //document.getElementById('watchlist').checked = false;
+          this._film.isHistory = !this._film.isHistory;
+          this._film.isWatchlist = false;
+          this._onDataChange(this, card, Object.assign({}, card, { isWatchlist: !card.isWatchlist, isHistory: false }));
+        } else if (input.name === 'watchlist') {
+          this._film.isWatchlist = !this._film.isWatchlist;
+          this._film.isHistory = false;
+          this._onDataChange(this, card, Object.assign({}, card, { isHistory: !card.isHistory, isWatchlist: false }));
+        } else if (input.name === 'favorite') {
+          this._film.isFavorite = !this._film.isFavorite;
+          this._onDataChange(this, card, Object.assign({}, card, { isFavorite: !card.isFavorite }));
         }
+        this.rerender();
       });
     });
 

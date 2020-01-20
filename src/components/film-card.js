@@ -18,7 +18,7 @@ const createFilmCardComponent = film => {
     comments,
   } = film;
 
-  const newDescription = description.length > 140 ? `${description.slice(0, 139)}...` : description;
+  const newDescription = description.length > MAX_DESCRIPTION_LENGTH ? `${description.slice(0, 139)}...` : description;
 
   const watchlistClass = isWatchlist ? `film-card__controls-item--active` : ``;
   const historyClass = isHistory ? `film-card__controls-item--active` : ``;
@@ -46,16 +46,10 @@ export default class FilmCard extends AbstractComponent {
   constructor(film) {
     super();
     this._film = film;
-
-    this.popup = new PopupComponent(this._film);
   }
 
   getTemplate() {
     return createFilmCardComponent(this._film);
-  }
-
-  onClick() {
-    this.popup.showElement();
   }
   setPosterClickHandler(handler) {
     this.getElement()

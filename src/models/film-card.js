@@ -31,14 +31,34 @@ export default class FilmCard {
       return false;
     }
 
-    this._cards = [].concat(
-      this._cards.slice(0, index),
-      card,
-      this._cards.slice(index + 1)
-    );
+    this._cards = [].concat(this._cards.slice(0, index), card, this._cards.slice(index + 1));
     this._dataChangeHandlers.forEach(handler => handler());
     return true;
   }
+  addComment(cardId, comment) {
+    const cardIndex = this._cards.findIndex(it => it.id === cardId);
+
+    if (cardIndex === -1) {
+      return;
+    }
+
+    this._cards[cardIndex].comments.unshift(comment);
+
+    this._dataChangeHandlers.forEach(handler => handler());
+  }
+
+  removeComment(cardId, commentIndex) {
+    const cardIndex = this._cards.findIndex(it => it.id === cardId);
+
+    if (cardIndex === -1) {
+      return;
+    }
+
+    this._cards[cardIndex].comments.splice(commentIndex, 1);
+
+    this._dataChangeHandlers.forEach(handler => handler());
+  }
+
   setFilterChangeHandler(handler) {
     this._filterChangeHandlers.push(handler);
   }
