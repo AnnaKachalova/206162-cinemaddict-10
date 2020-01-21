@@ -1,6 +1,8 @@
 import PopupComponent from './popup.js';
 import AbstractComponent from './abstract-component.js';
 
+const MAX_DESCRIPTION_LENGTH = 140;
+
 const createFilmCardComponent = film => {
   const {
     title,
@@ -15,6 +17,9 @@ const createFilmCardComponent = film => {
     isFavorite,
     comments,
   } = film;
+
+  const newDescription = description.length > MAX_DESCRIPTION_LENGTH ? `${description.slice(0, 139)}...` : description;
+
   const watchlistClass = isWatchlist ? `film-card__controls-item--active` : ``;
   const historyClass = isHistory ? `film-card__controls-item--active` : ``;
   const favoriteClass = isFavorite ? `film-card__controls-item--active` : ``;
@@ -28,7 +33,7 @@ const createFilmCardComponent = film => {
         <span class="film-card__genre">${genre}</span>
         </p>
         <img src="./images/posters/${poster}.jpg" alt="" class="film-card__poster">
-        <p class="film-card__description">${description}</p>
+        <p class="film-card__description">${newDescription}</p>
         <a class="film-card__comments">${comments.length} comments</a>
     <form class="film-card__controls">
         <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchlistClass}">Add to watchlist</button>
@@ -41,16 +46,10 @@ export default class FilmCard extends AbstractComponent {
   constructor(film) {
     super();
     this._film = film;
-
-    this.popup = new PopupComponent(this._film);
   }
 
   getTemplate() {
     return createFilmCardComponent(this._film);
-  }
-
-  onClick() {
-    this.popup.showElement();
   }
   setPosterClickHandler(handler) {
     this.getElement()

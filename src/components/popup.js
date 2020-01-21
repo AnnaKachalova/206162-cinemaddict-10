@@ -1,5 +1,4 @@
 import { render, RenderPosition } from '../utils/render.js';
-
 import AbstractSmartComponent from './abstract-smart-component.js';
 
 const createGenreTemplate = genres => {
@@ -10,16 +9,16 @@ const createGenreTemplate = genres => {
 
 const createCommentTemplate = comments => {
   return Array.from(comments).map(comment => {
-    const { emoticon, text, autor, date } = comment;
+    const { emoji, name, text, time } = comment;
     return `<li class="film-details__comment">
               <span class="film-details__comment-emoji">
-                <img src="./images/emoji/${emoticon}.png" width="55" height="55" alt="emoji">
+                <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">
               </span>
               <div>
                 <p class="film-details__comment-text">${text}</p>
                 <p class="film-details__comment-info">
-                  <span class="film-details__comment-author">${autor}</span>
-                  <span class="film-details__comment-day">${date}</span>
+                  <span class="film-details__comment-author">${name}</span>
+                  <span class="film-details__comment-day">${time}</span>
                   <button class="film-details__comment-delete">Delete</button>
                 </p>
               </div>
@@ -77,7 +76,7 @@ const createFilmRaringTemplate = () => {
     </div>`;
 };
 
-const createPopupCardComponent = (film, options = {}) => {
+const createPopupCardComponent = film => {
   const {
     poster,
     title,
@@ -90,12 +89,15 @@ const createPopupCardComponent = (film, options = {}) => {
     duration,
     country,
     genre,
+    isWatchlist,
+    isHistory,
+    isFavorite,
     description,
     ageRating,
     comments,
     userRating,
   } = film;
-  const { isHistory } = options;
+  //const { isHistory } = options;
 
   const hasUserRatign = userRating !== 0 && isHistory;
   const commentsMarkup = createCommentTemplate(comments);
@@ -164,20 +166,28 @@ const createPopupCardComponent = (film, options = {}) => {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${
+          isWatchlist ? `checked` : ``
+        }>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${
+          isHistory ? `checked` : ``
+        }>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${
+          isFavorite ? `checked` : ``
+        }>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
     ${isHistory ? createFilmRaringTemplate() : ''}
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${
+          comments.length
+        }</span></h3>
 
         <ul class="film-details__comments-list">
           ${commentsMarkup}
@@ -191,22 +201,22 @@ const createPopupCardComponent = (film, options = {}) => {
           </label>
 
           <div class="film-details__emoji-list">
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="sleeping">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
             <label class="film-details__emoji-label" for="emoji-smile">
               <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="neutral-face">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
             <label class="film-details__emoji-label" for="emoji-sleeping">
               <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-gpuke" value="grinning">
-            <label class="film-details__emoji-label" for="emoji-gpuke">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
+            <label class="film-details__emoji-label" for="emoji-puke">
               <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="grinning">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
             <label class="film-details__emoji-label" for="emoji-angry">
               <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
             </label>
@@ -217,19 +227,62 @@ const createPopupCardComponent = (film, options = {}) => {
   </form>
 </section>`;
 };
+const parseFormData = formData => {
+  const options = {
+    hour12: false,
+    year: `numeric`,
+    month: `numeric`,
+    day: `numeric`,
+    hour: `numeric`,
+    minute: `numeric`,
+  };
+
+  return {
+    name: `You`,
+    text: formData.get(`comment`),
+    time: new Date().toLocaleString(`en-US`, options),
+    emoji: formData.get(`comment-emoji`),
+  };
+};
+
 export default class Popup extends AbstractSmartComponent {
   constructor(film) {
     super();
     this._film = film;
 
     this._isHistory = this._film.isHistory;
-    this._subscribeOnEvents();
+    this._commentInputEnterPressHandler = null;
   }
 
   getTemplate() {
-    return createPopupCardComponent(this._film, { isHistory: this._isHistory });
+    return createPopupCardComponent(this._film);
+  }
+  getData() {
+    const form = this.getElement().querySelector(`.film-details__inner`);
+    const formData = new FormData(form);
+    return parseFormData(formData);
+  }
+  setDeleteClickHandler(handler) {
+    this.getElement()
+      .querySelectorAll(`.film-details__comment-delete`)
+      .forEach((it, i) =>
+        it.addEventListener(`click`, evt => {
+          evt.preventDefault();
+          handler(i);
+        })
+      );
   }
 
+  setCommentEnterPressHandler(handler) {
+    this.getElement()
+      .querySelector(`.film-details__comment-input`)
+      .addEventListener(`keydown`, evt => {
+        if (evt.ctrlKey === true && evt.key === `Enter`) {
+          handler();
+        }
+      });
+    this._commentInputEnterPressHandler = handler;
+  }
   recoveryListeners() {
     this._subscribeOnEvents();
   }
@@ -247,12 +300,14 @@ export default class Popup extends AbstractSmartComponent {
     this._element.remove();
     this.removeElement();
   }
-  onEscKeyDown(evt) {
+  onButtonKeyDown(evt) {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
     if (isEscKey) {
       this.hidePopup();
     }
   }
+
   showElement() {
     const bodyElement = document.querySelector(`body`);
     const visiblePopup = bodyElement.querySelector(`.film-details`);
@@ -260,55 +315,52 @@ export default class Popup extends AbstractSmartComponent {
       visiblePopup.remove();
     }
 
-    const popupElement = this.getElement();
     render(bodyElement, this, RenderPosition.BEFOREEND);
 
-    document.onkeydown = evt => this.onEscKeyDown(evt);
+    document.onkeydown = evt => this.onButtonKeyDown(evt);
+    //this.setCommentEnterPressHandler(this._commentInputEnterPressHandler);
     this._subscribeOnEvents();
   }
 
-  onWatchlistButtonClick(element) {
-    this.getElement()
-      .querySelector(`.film-details__control-label--watchlist`)
-      .addEventListener(`click`, element);
-  }
-  onWatchedButtonClick(element) {
-    this.getElement()
-      .querySelector(`.film-details__control-label--watched`)
-      .addEventListener(`click`, element);
-  }
-  onFavoritesButtonClick(element) {
-    this.getElement()
-      .querySelector(`.film-details__control-label--favorite`)
-      .addEventListener(`click`, element);
-  }
-
   _subscribeOnEvents() {
-    const element = this.getElement();
-    element.querySelector(`.film-details__control-label--watched`).addEventListener(`click`, () => {
-      this._isHistory = !this._isHistory;
-      this.rerender();
+    const popupElement = this.getElement();
+    const controlInputs = popupElement.querySelectorAll(`.film-details__control-input`);
+
+    controlInputs.forEach(input => {
+      input.addEventListener(`change`, () => {
+        if (input.name === 'watched') {
+          this._film.isHistory = !this._film.isHistory;
+          this._film.isWatchlist = false;
+          //this._onDataChange(this, card, Object.assign({}, card, { isWatchlist: !card.isWatchlist, isHistory: false }));
+        } else if (input.name === 'watchlist') {
+          this._film.isWatchlist = !this._film.isWatchlist;
+          this._film.isHistory = false;
+          //this._onDataChange(this, card, Object.assign({}, card, { isHistory: !card.isHistory, isWatchlist: false }));
+        } else if (input.name === 'favorite') {
+          this._film.isFavorite = !this._film.isFavorite;
+          //this._onDataChange(this, card, Object.assign({}, card, { isFavorite: !card.isFavorite }));
+        }
+        this.rerender();
+      });
     });
-    const popupButtonClose = element.querySelector(`.film-details__close-btn`);
+
+    const popupButtonClose = popupElement.querySelector(`.film-details__close-btn`);
     popupButtonClose.addEventListener(`click`, () => this.hidePopup());
 
-    /*const emoji = element.querySelectorAll(`.film-details__emoji-label`);
-    const parentEmotion = element.querySelector(`.film-details__add-emoji-label`);
-    console.log(parentEmotion);
+    // change emoji
+    const emoji = popupElement.querySelectorAll(`.film-details__emoji-item`);
+    const parentEmotion = popupElement.querySelector(`.film-details__add-emoji-label`);
+
     emoji.forEach(emotion => {
-      emotion.addEventListener(`click`, () => {
-        console.log(emotion);
-        //parentEmotion.innerHtml = '';
-        const emotionImg = emotion.querySelectorAll(`.img`);
-        console.log(emotionImg);
-
-        let emotionImgClone = emotionImg.cloneNode(true);
-        parentEmotion.appendChild(emotionImgClone);
-
-        //film-details__emoji-label
-        //
-        console.log('эмоция');
+      emotion.addEventListener(`change`, () => {
+        const emotionValue = emotion.value;
+        const newImg = document.createElement('img');
+        newImg.style.width = '50px';
+        newImg.style.height = '50px';
+        newImg.src = `./images/emoji/${emotionValue}.png`;
+        parentEmotion.innerHTML = '';
+        parentEmotion.append(newImg);
       });
-    });*/
+    });
   }
 }

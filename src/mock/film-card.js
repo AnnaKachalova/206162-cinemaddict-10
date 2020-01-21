@@ -1,5 +1,4 @@
-import { MONTH_NAMES } from '../const.js';
-import { formatReleaseDate, formatDuration, formatDateAgo } from '../utils/common.js';
+import { formatReleaseDate, formatDateAgo, formatDuration } from '../utils/common.js';
 
 // main fields
 const FilmTitles = [
@@ -55,7 +54,7 @@ const FilmPosters = [
   `truman_show`,
 ];
 const FilmGenres = [`Комедия`, `Мелодрама`];
-const FilmDescriptions = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
+const FilmDescriptions = `Lorem ipsum dolor sit amet, consectetur adipiscing Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 // additional fields
 const FilmProducers = [`Аарон Спеллинг`, `Джеймс Кэмерон`, `Майкл Бин`];
 const FilmScreenwriters = [`Аарон Спеллинг`, `Джеймс Кэмерон`, `Майкл Бин`];
@@ -85,12 +84,9 @@ const getRating = (min = 0, max = 10) => {
   return randRating.toFixed(1);
 };
 const getDuration = () => {
-  const hours = getRandomIntegerNumber(1, 5);
-  const minutes = getRandomIntegerNumber(1, 59);
+  const minutes = getRandomIntegerNumber(120, 400);
 
-  const time = `${hours}h ${minutes}m`;
-
-  return time;
+  return formatDuration(minutes);
 };
 
 const generateComments = () => {
@@ -98,10 +94,10 @@ const generateComments = () => {
   const comments = [];
   for (let i = 0; i < randomCount; i++) {
     const comment = {
-      emoticon: getRandomArrayElem(emoticons),
+      emoji: getRandomArrayElem(emoticons),
+      name: getRandomArrayElem(emoticonsAutor),
       text: getRandomArrayElem(emoticonsText),
-      autor: getRandomArrayElem(emoticonsAutor),
-      date: formatDateAgo(new Date()),
+      time: formatDateAgo(new Date()),
     };
     comments.push(comment);
   }
@@ -112,6 +108,7 @@ const generateFilmCard = () => {
   const randomIndex = getRandomIntegerNumber(0, FilmTitles.length);
   const isHistory = Math.random() > 0.5;
   return {
+    id: String(new Date() + Math.random()),
     title: FilmTitles[randomIndex],
     poster: FilmPosters[randomIndex],
     description: getDescription(),
