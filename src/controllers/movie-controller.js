@@ -54,7 +54,6 @@ export default class MovieController {
     }
   }
   _onCommentDataChange(card, index, newData) {
-    console.log(this._cardModel);
     if (newData === null) {
       this._cardModel.removeComment(card.id, index);
     } else if (index === null) {

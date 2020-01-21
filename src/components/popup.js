@@ -1,8 +1,5 @@
 import { render, RenderPosition } from '../utils/render.js';
-
 import AbstractSmartComponent from './abstract-smart-component.js';
-
-const EMOJI = [`smile`, `sleeping`, `puke`, `angry`];
 
 const createGenreTemplate = genres => {
   return Array.from(genres).map(element => {
@@ -12,16 +9,16 @@ const createGenreTemplate = genres => {
 
 const createCommentTemplate = comments => {
   return Array.from(comments).map(comment => {
-    const { emoticon, text, autor, date } = comment;
+    const { emoji, name, text, time } = comment;
     return `<li class="film-details__comment">
               <span class="film-details__comment-emoji">
-                <img src="./images/emoji/${emoticon}.png" width="55" height="55" alt="emoji">
+                <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">
               </span>
               <div>
                 <p class="film-details__comment-text">${text}</p>
                 <p class="film-details__comment-info">
-                  <span class="film-details__comment-author">${autor}</span>
-                  <span class="film-details__comment-day">${date}</span>
+                  <span class="film-details__comment-author">${name}</span>
+                  <span class="film-details__comment-day">${time}</span>
                   <button class="film-details__comment-delete">Delete</button>
                 </p>
               </div>
@@ -239,12 +236,12 @@ const parseFormData = formData => {
     hour: `numeric`,
     minute: `numeric`,
   };
-  console.log(formData.get(`comment-emoji`));
+
   return {
     name: `You`,
     text: formData.get(`comment`),
     time: new Date().toLocaleString(`en-US`, options),
-    emoji: `./images/emoji/${formData.get(`comment-emoji`)}.png`,
+    emoji: formData.get(`comment-emoji`),
   };
 };
 
@@ -263,7 +260,6 @@ export default class Popup extends AbstractSmartComponent {
   getData() {
     const form = this.getElement().querySelector(`.film-details__inner`);
     const formData = new FormData(form);
-
     return parseFormData(formData);
   }
   setDeleteClickHandler(handler) {
@@ -306,12 +302,8 @@ export default class Popup extends AbstractSmartComponent {
   }
   onButtonKeyDown(evt) {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-    const isCtrlEnter = evt.key == `Enter` && evt.ctrlKey;
 
-    if (isCtrlEnter) {
-      console.log('сохранение комментария');
-    } else if (isEscKey) {
-      console.log('выход из попапа');
+    if (isEscKey) {
       this.hidePopup();
     }
   }
@@ -326,7 +318,7 @@ export default class Popup extends AbstractSmartComponent {
     render(bodyElement, this, RenderPosition.BEFOREEND);
 
     document.onkeydown = evt => this.onButtonKeyDown(evt);
-    this.setCommentEnterPressHandler(this._commentInputEnterPressHandler);
+    //this.setCommentEnterPressHandler(this._commentInputEnterPressHandler);
     this._subscribeOnEvents();
   }
 
@@ -339,14 +331,14 @@ export default class Popup extends AbstractSmartComponent {
         if (input.name === 'watched') {
           this._film.isHistory = !this._film.isHistory;
           this._film.isWatchlist = false;
-          this._onDataChange(this, card, Object.assign({}, card, { isWatchlist: !card.isWatchlist, isHistory: false }));
+          //this._onDataChange(this, card, Object.assign({}, card, { isWatchlist: !card.isWatchlist, isHistory: false }));
         } else if (input.name === 'watchlist') {
           this._film.isWatchlist = !this._film.isWatchlist;
           this._film.isHistory = false;
-          this._onDataChange(this, card, Object.assign({}, card, { isHistory: !card.isHistory, isWatchlist: false }));
+          //this._onDataChange(this, card, Object.assign({}, card, { isHistory: !card.isHistory, isWatchlist: false }));
         } else if (input.name === 'favorite') {
           this._film.isFavorite = !this._film.isFavorite;
-          this._onDataChange(this, card, Object.assign({}, card, { isFavorite: !card.isFavorite }));
+          //this._onDataChange(this, card, Object.assign({}, card, { isFavorite: !card.isFavorite }));
         }
         this.rerender();
       });

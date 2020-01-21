@@ -94,10 +94,10 @@ const generateComments = () => {
   const comments = [];
   for (let i = 0; i < randomCount; i++) {
     const comment = {
-      emoticon: getRandomArrayElem(emoticons),
+      emoji: getRandomArrayElem(emoticons),
+      name: getRandomArrayElem(emoticonsAutor),
       text: getRandomArrayElem(emoticonsText),
-      autor: getRandomArrayElem(emoticonsAutor),
-      date: formatDateAgo(new Date()),
+      time: formatDateAgo(new Date()),
     };
     comments.push(comment);
   }
