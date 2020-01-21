@@ -48,4 +48,24 @@ export default class Menu extends AbstractComponent {
       });
     });
   }
+  // here
+  setActiveItem(menuItem) {
+    const item = this.getElement().querySelector(`#${menuItem}`);
+
+    if (item) {
+      //item.checked = true;
+    }
+  }
+  setOnChange(handler) {
+    this.getElement().addEventListener(`click`, evt => {
+      if (evt.target.tagName !== `INPUT`) {
+        console.log(evt.target.tagName);
+        return;
+      }
+
+      const menuItem = evt.target.id;
+
+      handler(menuItem);
+    });
+  }
 }

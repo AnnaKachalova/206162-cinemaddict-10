@@ -252,6 +252,7 @@ export default class Popup extends AbstractSmartComponent {
 
     this._isHistory = this._film.isHistory;
     this._commentInputEnterPressHandler = null;
+    this._onDataChange = null;
   }
 
   getTemplate() {
@@ -262,6 +263,7 @@ export default class Popup extends AbstractSmartComponent {
     const formData = new FormData(form);
     return parseFormData(formData);
   }
+
   setDeleteClickHandler(handler) {
     this.getElement()
       .querySelectorAll(`.film-details__comment-delete`)
@@ -318,32 +320,30 @@ export default class Popup extends AbstractSmartComponent {
     render(bodyElement, this, RenderPosition.BEFOREEND);
 
     document.onkeydown = evt => this.onButtonKeyDown(evt);
-    //this.setCommentEnterPressHandler(this._commentInputEnterPressHandler);
     this._subscribeOnEvents();
   }
 
   _subscribeOnEvents() {
     const popupElement = this.getElement();
-    const controlInputs = popupElement.querySelectorAll(`.film-details__control-input`);
+    const controlsWrapper = popupElement.querySelector(`.film-details__controls`);
 
-    controlInputs.forEach(input => {
-      input.addEventListener(`change`, () => {
-        if (input.name === 'watched') {
+    controlsWrapper.addEventListener(`change`, evt => {
+      switch (evt.target.name) {
+        case 'watched':
           this._film.isHistory = !this._film.isHistory;
           this._film.isWatchlist = false;
-          //this._onDataChange(this, card, Object.assign({}, card, { isWatchlist: !card.isWatchlist, isHistory: false }));
-        } else if (input.name === 'watchlist') {
+          break;
+        case 'watchlist':
           this._film.isWatchlist = !this._film.isWatchlist;
           this._film.isHistory = false;
-          //this._onDataChange(this, card, Object.assign({}, card, { isHistory: !card.isHistory, isWatchlist: false }));
-        } else if (input.name === 'favorite') {
+          break;
+        case 'favorite':
           this._film.isFavorite = !this._film.isFavorite;
-          //this._onDataChange(this, card, Object.assign({}, card, { isFavorite: !card.isFavorite }));
-        }
-        this.rerender();
-      });
+          break;
+      }
+      this._onDataChange(this._film);
+      this.rerender();
     });
-
     const popupButtonClose = popupElement.querySelector(`.film-details__close-btn`);
     popupButtonClose.addEventListener(`click`, () => this.hidePopup());
 
@@ -362,5 +362,8 @@ export default class Popup extends AbstractSmartComponent {
         parentEmotion.append(newImg);
       });
     });
+  }
+  onControlsChangeHandler(handler) {
+    this._onDataChange = handler;
   }
 }

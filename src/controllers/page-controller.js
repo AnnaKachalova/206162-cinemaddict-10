@@ -49,6 +49,13 @@ export default class PageController {
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     this._cardsModel.setFilterChangeHandler(this._onFilterChange);
   }
+  hide() {
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
+  }
   render() {
     const cards = this._cardsModel.getCards();
 
