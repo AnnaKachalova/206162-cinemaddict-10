@@ -26,7 +26,7 @@ const createCommentTemplate = comments => {
   });
 };
 
-const createFilmRaringTemplate = () => {
+const createFilmRaringTemplate = poster => {
   return `<div class="form-details__middle-container">
       <section class="film-details__user-rating-wrap">
         <div class="film-details__user-rating-controls">
@@ -35,7 +35,7 @@ const createFilmRaringTemplate = () => {
 
         <div class="film-details__user-score">
           <div class="film-details__user-rating-poster">
-            <img src="./images/posters/the-great-flamarion.jpg" alt="film-poster" class="film-details__user-rating-img">
+            <img src="./images/posters/${poster}.jpg" alt="film-poster" class="film-details__user-rating-img">
           </div>
 
           <section class="film-details__user-rating-inner">
@@ -182,7 +182,7 @@ const createPopupCardComponent = film => {
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
-    ${isHistory ? createFilmRaringTemplate() : ''}
+    ${isHistory ? createFilmRaringTemplate(poster) : ''}
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${
@@ -344,6 +344,25 @@ export default class Popup extends AbstractSmartComponent {
       this._onDataChange(this._film);
       this.rerender();
     });
+
+    const ratingWrappers = popupElement.querySelector(`.film-details__user-rating-score`);
+    if (ratingWrappers) {
+      ratingWrappers.addEventListener(`change`, evt => {
+        if (evt.target.name === `score`) {
+          this._film.userRating = evt.target.value;
+          evt.target.checked = true;
+          this._onDataChange(this._film);
+          this.rerender();
+        }
+      });
+      const buttonUndo = popupElement.querySelector('.film-details__watched-reset');
+      buttonUndo.addEventListener(`click`, () => {
+        this._film.userRating = 0;
+        this._onDataChange(this._film);
+        this.rerender();
+      });
+    }
+
     const popupButtonClose = popupElement.querySelector(`.film-details__close-btn`);
     popupButtonClose.addEventListener(`click`, () => this.hidePopup());
 
@@ -364,6 +383,9 @@ export default class Popup extends AbstractSmartComponent {
     });
   }
   onControlsChangeHandler(handler) {
+    this._onDataChange = handler;
+  }
+  onRatingClichHandler(handler) {
     this._onDataChange = handler;
   }
 }
