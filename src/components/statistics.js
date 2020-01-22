@@ -50,9 +50,8 @@ const createStatistics = () => {
 };
 // here
 export const MenuItem = {
-  NEW_TASK: `control__new-task`,
   STATISTICS: `control__statistic`,
-  TASKS: `control__task`,
+  FILTER: `control__task`,
 };
 
 export default class Statistics extends AbstractComponent {

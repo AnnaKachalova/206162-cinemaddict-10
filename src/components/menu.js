@@ -44,28 +44,29 @@ export default class Menu extends AbstractComponent {
         filter.classList.add(classActive);
 
         const filterName = getFilterNameById(evt.target.id);
-        handler(filterName);
+        if (!filterName) {
+          // это статистика
+          console.log('statistics');
+        } else {
+          console.log('filter');
+          handler(filterName);
+        }
       });
     });
   }
-  // here
-  setActiveItem(menuItem) {
-    const item = this.getElement().querySelector(`#${menuItem}`);
-
-    if (item) {
-      //item.checked = true;
-    }
-  }
-  setOnChange(handler) {
-    this.getElement().addEventListener(`click`, evt => {
-      if (evt.target.tagName !== `INPUT`) {
-        console.log(evt.target.tagName);
+  /*setOnChange(handler) {
+    this.getElement().addEventListener(`change`, evt => {
+      if (evt.target.tagName !== `a`) {
         return;
       }
-
-      const menuItem = evt.target.id;
+      let menuItem;
+      if (evt.target.classList.contains('.main-navigation__item--additional')) {
+        menuItem = 'STATISTICS';
+      } else {
+        menuItem = 'FILTER';
+      }
 
       handler(menuItem);
     });
-  }
+  }*/
 }

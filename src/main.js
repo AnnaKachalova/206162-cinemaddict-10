@@ -40,4 +40,17 @@ statisticsComponent.hide();
 const pageController = new PageController(mainElement, filmCardsModel);
 pageController.render();
 
+/*siteMenuComponent.setOnChange(menuItem => {
+  switch (menuItem) {
+    case MenuItem.STATISTICS:
+      pageController.hide();
+      statisticsComponent.show();
+      break;
+    case MenuItem.FILTER:
+      statisticsComponent.hide();
+      pageController.show();
+      break;
+  }
+});*/
+
 document.querySelector('.footer__statistics p').innerHTML = `${cards.length} movies inside`;

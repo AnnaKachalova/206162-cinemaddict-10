@@ -1,4 +1,4 @@
-import MenuComponent from '../components/menu.js';
+import MenuComponent, { menuItem } from '../components/menu.js';
 import { FilterType } from '../const.js';
 import { render, replace, RenderPosition } from '../utils/render.js';
 import { getCardsByFilter } from '../utils/filter.js';
