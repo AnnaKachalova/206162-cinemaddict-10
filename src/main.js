@@ -1,8 +1,8 @@
 // components
 import PageController from './controllers/page-controller.js';
-import FilterController from './controllers/filter.js';
+import FilterController from './controllers/filter-controller.js';
 import ProfileComponent from './components/profile.js';
-import StatisticsComponent from './components/statistics.js';
+//import StatisticsComponent from './components/statistics.js';
 
 import FilmCardsModel from './models/film-card.js';
 
@@ -33,24 +33,13 @@ const filterController = new FilterController(mainElement, filmCardsModel);
 filterController.render();
 
 // statistics
-const statisticsComponent = new StatisticsComponent();
-render(mainElement, statisticsComponent, RenderPosition.BEFOREEND);
-statisticsComponent.hide();
+//const statisticsComponent = new StatisticsComponent();
+//render(mainElement, statisticsComponent, RenderPosition.BEFOREEND);
+//statisticsComponent.hide();
 
 const pageController = new PageController(mainElement, filmCardsModel);
 pageController.render();
 
-/*siteMenuComponent.setOnChange(menuItem => {
-  switch (menuItem) {
-    case MenuItem.STATISTICS:
-      pageController.hide();
-      statisticsComponent.show();
-      break;
-    case MenuItem.FILTER:
-      statisticsComponent.hide();
-      pageController.show();
-      break;
-  }
-});*/
-
-document.querySelector('.footer__statistics p').innerHTML = `${cards.length} movies inside`;
+document.querySelector(
+  '.footer__statistics p'
+).innerHTML = `${cards.length} movies inside`;

@@ -1,11 +1,11 @@
 import AbstractComponent from './abstract-component.js';
 
-const createStatistics = () => {
+const createStatistics = ({ rank }) => {
   return `<section class="statistic">
   <p class="statistic__rank">
     Your rank
     <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-    <span class="statistic__rank-label">Sci-Fighter</span>
+    <span class="statistic__rank-label">${rank}</span>
   </p>
 
   <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -48,14 +48,22 @@ const createStatistics = () => {
 
 </section>`;
 };
-// here
-export const MenuItem = {
-  STATISTICS: `control__statistic`,
-  FILTER: `control__task`,
-};
 
 export default class Statistics extends AbstractComponent {
+  constructor({ rank }) {
+    super();
+
+    this._rank = rank;
+  }
   getTemplate() {
-    return createStatistics();
+    console.log('создание шаблона');
+    //return createStatistics({ rank: this._rank });
+    return `
+    <p class="statistic__rank">Your rank
+    <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
+    <span class="statistic__rank-label">
+    ${this._rank}
+    </span>
+  </p>`;
   }
 }
