@@ -26,6 +26,7 @@ export default class StatisticController {
     this._durationWatched = null;
 
     this._watchedList = [];
+    this._cardsList = [];
   }
   _render() {
     // rank
@@ -33,8 +34,10 @@ export default class StatisticController {
 
     // topGenre
     console.log(this._watchedList);
+    console.log(this._cardsList);
     this._allGenres = [];
-    this._watchedList.forEach(card => {
+
+    this._cardsList.forEach(card => {
       this._allGenres = this._allGenres.concat(card.genre);
     });
 
@@ -47,17 +50,16 @@ export default class StatisticController {
     this._topGenre = Object.keys(this._allGenres).find(
       key => this._allGenres[key] === Math.max(...Object.values(this._allGenres))
     );
-    console.log(this._topGenre);
 
     // quantityWatched
-    this._quantityWatched = this._watchedList.length;
+    this._quantityWatched = this._cardsList.length;
 
     // durationWatched
     let allDurations = [];
-    this._watchedList.forEach(card => {
+    this._cardsList.forEach(card => {
       allDurations = allDurations.concat(card.duration);
     });
-    this._durationWatched = this._watchedList.reduce(
+    this._durationWatched = this._cardsList.reduce(
       (accumulator, film) => accumulator + film.duration,
       0
     );
@@ -83,6 +85,7 @@ export default class StatisticController {
     const isFavoriteFilms = this._cards.filter(film => film.isFavorite === true);
 
     this._watchedList = isHistoryFilms.concat(isFavoriteFilms);
+    this._cardsList = this._watchedList;
     this._render();
   }
   _onFilterChange(filterType) {
@@ -107,8 +110,7 @@ export default class StatisticController {
 
     this._activeFilter = filterType;
 
-    this._watchedList = getFilteredFilms();
-    console.log(this._watchedList);
+    this._cardsList = getFilteredFilms();
     this._render();
   }
   _onDataChange() {
