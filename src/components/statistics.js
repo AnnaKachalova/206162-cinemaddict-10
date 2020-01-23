@@ -1,4 +1,5 @@
 import AbstractComponent from './abstract-component.js';
+import moment from 'moment';
 
 const createStatistics = ({ rank }) => {
   return `<section class="statistic">
@@ -56,7 +57,6 @@ export default class Statistics extends AbstractComponent {
     this._rank = rank;
   }
   getTemplate() {
-    console.log('создание шаблона');
     return createStatistics({ rank: this._rank });
   }
 }
