@@ -17,7 +17,13 @@ const createFiltersTemplate = (filters, activeFilter) => {
   return scores;
 };
 
-const createStatistics = ({ rank, activeFilter, topGenre }) => {
+const createStatistics = ({
+  rank,
+  activeFilter,
+  topGenre,
+  quantityWatched,
+  durationWatched,
+}) => {
   return `<section class="statistic">
   <p class="statistic__rank">
     Your rank
@@ -33,11 +39,16 @@ const createStatistics = ({ rank, activeFilter, topGenre }) => {
   <ul class="statistic__text-list">
     <li class="statistic__text-item">
       <h4 class="statistic__item-title">You watched</h4>
-      <p class="statistic__item-text">22 <span class="statistic__item-description">movies</span></p>
+      <p class="statistic__item-text">${quantityWatched} <span class="statistic__item-description">movies</span></p>
     </li>
     <li class="statistic__text-item">
       <h4 class="statistic__item-title">Total duration</h4>
-      <p class="statistic__item-text">130 <span class="statistic__item-description">h</span> 22 <span class="statistic__item-description">m</span></p>
+      <p class="statistic__item-text">${moment
+        .duration(durationWatched, `minutes`)
+        .hours()} 
+        <span class="statistic__item-description">h</span> ${moment
+          .duration(durationWatched, `minutes`)
+          .minutes()} <span class="statistic__item-description">m</span></p>
     </li>
     <li class="statistic__text-item">
       <h4 class="statistic__item-title">Top genre</h4>
@@ -53,19 +64,22 @@ const createStatistics = ({ rank, activeFilter, topGenre }) => {
 };
 
 export default class Statistics extends AbstractSmartComponent {
-  constructor({ rank, activeFilter, topGenre }) {
+  constructor({ rank, activeFilter, topGenre, quantityWatched, durationWatched }) {
     super();
     this._rank = rank;
     this._topGenre = topGenre;
+    this._quantityWatched = quantityWatched;
+    this._durationWatched = durationWatched;
     this._onDataChange = null;
     this._activeFilterType = activeFilter;
   }
   getTemplate() {
-    console.log(this._activeFilterType);
     return createStatistics({
       rank: this._rank,
       activeFilter: this._activeFilterType,
       topGenre: this._topGenre,
+      quantityWatched: this._quantityWatched,
+      durationWatched: this._durationWatched,
     });
   }
   setFilterChangeHandler(handler) {

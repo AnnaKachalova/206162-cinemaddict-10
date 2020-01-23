@@ -16,13 +16,19 @@ export default class StatisticController {
     this._container = container;
     this._statistic = null;
     this._activeFilter = `all-time`;
+
     this._onFilterChange = this._onFilterChange.bind(this);
 
     this._allGenres = [];
+    this._topGenre = null;
+    this._quantityWatched = null;
+    this._durationWatched = null;
   }
   _render() {
+    // rank
     const rank = countRank(this._cards);
 
+    // topGenre
     this._cards.forEach(card => {
       this._allGenres = this._allGenres.concat(card.genre);
     });
@@ -31,17 +37,28 @@ export default class StatisticController {
         accum[current] = (accum[current] || 0) + 1;
         return accum;
       }, {});
-      console.log(this._allGenres);
     }
     this._topGenre = Object.keys(this._allGenres).find(
       key => this._allGenres[key] === Math.max(...Object.values(this._allGenres))
     );
-    console.log(this._topGenre);
+
+    // quantityWatched
+    const isHistoryFilms = this._cards.filter(film => film.isHistory === true);
+    const isFavoriteFilms = this._cards.filter(film => film.isFavorite === true);
+
+    const allWatchedFilms = isHistoryFilms.concat(isFavoriteFilms);
+
+    this._quantityWatched = allWatchedFilms.length;
+
+    // durationWatched
+    this._durationWatched = 50;
 
     this._statistic = new StatisticComponent({
       rank,
       activeFilter: this._activeFilter,
       topGenre: this._topGenre,
+      quantityWatched: this._quantityWatched,
+      durationWatched: this._durationWatched,
     });
     this._statistic.setFilterChangeHandler(this._onFilterChange);
     render(this._container, this._statistic, RenderPosition.BEFOREEND);
