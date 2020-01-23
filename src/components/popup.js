@@ -84,7 +84,6 @@ const createPopupCardComponent = film => {
     comments,
     userRating,
   } = film;
-  //const { isHistory } = options;
 
   const hasUserRatign = userRating !== 0 && isHistory;
   const commentsMarkup = createCommentTemplate(comments);
@@ -112,7 +111,11 @@ const createPopupCardComponent = film => {
 
             <div class="film-details__rating">
               <p class="film-details__total-rating">${rating}</p>
-  ${hasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>` : ``}
+  ${
+    hasUserRatign
+      ? `<p class="film-details__user-rating">Your rate ${userRating}</p>`
+      : ``
+  }
             </div>
           </div>
           <table class="film-details__table">

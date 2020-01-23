@@ -1,7 +1,23 @@
-import AbstractComponent from './abstract-component.js';
+import AbstractSmartComponent from './abstract-smart-component.js';
 import moment from 'moment';
+import { StatisticFilterType } from '../const.js';
 
-const createStatistics = ({ rank }) => {
+const createFiltersTemplate = (filters, activeFilter) => {
+  let scores = [];
+  filters.forEach((filter, i) => {
+    const row = `<input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${
+      filter.value
+    }" value="${filter.value}" ${activeFilter === filter.value ? 'checked' : ''}>
+    <label for="statistic-${filter.value}" class="statistic__filters-label">${
+      filter.title
+    }</label>`;
+    scores += row;
+  });
+
+  return scores;
+};
+
+const createStatistics = ({ rank, activeFilter, topGenre }) => {
   return `<section class="statistic">
   <p class="statistic__rank">
     Your rank
@@ -11,21 +27,7 @@ const createStatistics = ({ rank }) => {
 
   <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
     <p class="statistic__filters-description">Show stats:</p>
-
-    <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" checked>
-    <label for="statistic-all-time" class="statistic__filters-label">All time</label>
-
-    <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today">
-    <label for="statistic-today" class="statistic__filters-label">Today</label>
-
-    <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week">
-    <label for="statistic-week" class="statistic__filters-label">Week</label>
-
-    <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month">
-    <label for="statistic-month" class="statistic__filters-label">Month</label>
-
-    <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year">
-    <label for="statistic-year" class="statistic__filters-label">Year</label>
+    ${createFiltersTemplate(StatisticFilterType, activeFilter)}
   </form>
 
   <ul class="statistic__text-list">
@@ -39,7 +41,7 @@ const createStatistics = ({ rank }) => {
     </li>
     <li class="statistic__text-item">
       <h4 class="statistic__item-title">Top genre</h4>
-      <p class="statistic__item-text">Sci-Fi</p>
+      <p class="statistic__item-text">${topGenre}</p>
     </li>
   </ul>
 
@@ -50,13 +52,54 @@ const createStatistics = ({ rank }) => {
 </section>`;
 };
 
-export default class Statistics extends AbstractComponent {
-  constructor({ rank }) {
+export default class Statistics extends AbstractSmartComponent {
+  constructor({ rank, activeFilter, topGenre }) {
     super();
-
     this._rank = rank;
+    this._topGenre = topGenre;
+    this._onDataChange = null;
+    this._activeFilterType = activeFilter;
   }
   getTemplate() {
-    return createStatistics({ rank: this._rank });
+    console.log(this._activeFilterType);
+    return createStatistics({
+      rank: this._rank,
+      activeFilter: this._activeFilterType,
+      topGenre: this._topGenre,
+    });
+  }
+  setFilterChangeHandler(handler) {
+    const statistics = this.getElement();
+    const filters = statistics.querySelectorAll('.statistic__filters-input');
+
+    filters.forEach(filter => {
+      filter.addEventListener(`click`, evt => {
+        const filterName = evt.target.value;
+        console.log(filterName);
+        this._activeFilterType = filterName;
+        handler(filterName);
+        this.rerender();
+      });
+    });
+  }
+  recoveryListeners() {
+    this._subscribeOnEvents();
+  }
+  rerender() {
+    console.log('перерисовка');
+    super.rerender();
+  }
+  _subscribeOnEvents() {
+    const statistics = this.getElement();
+    const filters = statistics.querySelectorAll('.statistic__filters-input');
+
+    filters.forEach(filter => {
+      filter.addEventListener(`click`, evt => {
+        const filterName = evt.target.value;
+        this._activeFilterType = filterName;
+        console.log(filterName);
+        this.rerender();
+      });
+    });
   }
 }
