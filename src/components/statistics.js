@@ -1,4 +1,4 @@
-import AbstractSmartComponent from './abstract-smart-component.js';
+import AbstractComponent from './abstract-component.js';
 import moment from 'moment';
 import { StatisticFilterType } from '../const.js';
 
@@ -63,7 +63,7 @@ const createStatistics = ({
 </section>`;
 };
 
-export default class Statistics extends AbstractSmartComponent {
+export default class Statistics extends AbstractComponent {
   constructor({ rank, activeFilter, topGenre, quantityWatched, durationWatched }) {
     super();
     this._rank = rank;
@@ -72,8 +72,6 @@ export default class Statistics extends AbstractSmartComponent {
     this._durationWatched = durationWatched;
     this._onDataChange = null;
     this._activeFilterType = activeFilter;
-    console.log(quantityWatched);
-    console.log(durationWatched);
   }
   getTemplate() {
     return createStatistics({
@@ -91,30 +89,8 @@ export default class Statistics extends AbstractSmartComponent {
     filters.forEach(filter => {
       filter.addEventListener(`click`, evt => {
         const filterName = evt.target.value;
-        console.log(filterName);
         this._activeFilterType = filterName;
         handler(filterName);
-        this.rerender();
-      });
-    });
-  }
-  recoveryListeners() {
-    this._subscribeOnEvents();
-  }
-  rerender() {
-    console.log('перерисовка');
-    super.rerender();
-  }
-  _subscribeOnEvents() {
-    const statistics = this.getElement();
-    const filters = statistics.querySelectorAll('.statistic__filters-input');
-
-    filters.forEach(filter => {
-      filter.addEventListener(`click`, evt => {
-        const filterName = evt.target.value;
-        this._activeFilterType = filterName;
-        console.log(filterName);
-        this.rerender();
       });
     });
   }

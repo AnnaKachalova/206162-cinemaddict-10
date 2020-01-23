@@ -1,6 +1,6 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { render, RenderPosition } from '../utils/render.js';
+import { render, replace, RenderPosition } from '../utils/render.js';
 import { generateRank } from '../mock/profile.js';
 
 import StatisticComponent from '../components/statistics.js';
@@ -18,6 +18,7 @@ export default class StatisticController {
     this._activeFilter = `all-time`;
 
     this._onFilterChange = this._onFilterChange.bind(this);
+    this._onDataChange = this._onDataChange.bind(this);
 
     this._allGenres = [];
     this._topGenre = null;
@@ -60,7 +61,7 @@ export default class StatisticController {
       (accumulator, film) => accumulator + film.duration,
       0
     );
-
+    const oldComponent = this._statistic;
     this._statistic = new StatisticComponent({
       rank,
       activeFilter: this._activeFilter,
@@ -69,7 +70,12 @@ export default class StatisticController {
       durationWatched: this._durationWatched,
     });
     this._statistic.setFilterChangeHandler(this._onFilterChange);
-    render(this._container, this._statistic, RenderPosition.BEFOREEND);
+
+    if (oldComponent) {
+      replace(this._statistic, oldComponent);
+    } else {
+      render(this._container, this._statistic, RenderPosition.BEFOREEND);
+    }
   }
   show(cards) {
     this._cards = cards;
@@ -103,6 +109,9 @@ export default class StatisticController {
 
     this._watchedList = getFilteredFilms();
     console.log(this._watchedList);
+    this._render();
+  }
+  _onDataChange() {
     this._render();
   }
 }
