@@ -23,15 +23,21 @@ export default class StatisticController {
     this._topGenre = null;
     this._quantityWatched = null;
     this._durationWatched = null;
+
+    this._watchedList = [];
   }
   _render() {
     // rank
     const rank = countRank(this._cards);
 
     // topGenre
-    this._cards.forEach(card => {
+    console.log(this._watchedList);
+
+    this._watchedList.forEach(card => {
+      console.log(this._allGenres);
       this._allGenres = this._allGenres.concat(card.genre);
     });
+
     if (this._allGenres.length) {
       this._allGenres = this._allGenres.reduce((accum, current) => {
         accum[current] = (accum[current] || 0) + 1;
@@ -41,25 +47,20 @@ export default class StatisticController {
     this._topGenre = Object.keys(this._allGenres).find(
       key => this._allGenres[key] === Math.max(...Object.values(this._allGenres))
     );
+    console.log(this._topGenre);
 
     // quantityWatched
-    const isHistoryFilms = this._cards.filter(film => film.isHistory === true);
-    const isFavoriteFilms = this._cards.filter(film => film.isFavorite === true);
-
-    const allWatchedFilms = isHistoryFilms.concat(isFavoriteFilms);
-
-    this._quantityWatched = allWatchedFilms.length;
+    this._quantityWatched = this._watchedList.length;
 
     // durationWatched
     let allDurations = [];
-    this._cards.forEach(card => {
+    this._watchedList.forEach(card => {
       allDurations = allDurations.concat(card.duration);
     });
-    this._durationWatched = allWatchedFilms.reduce(
+    this._durationWatched = this._watchedList.reduce(
       (accumulator, film) => accumulator + film.duration,
       0
     );
-    console.log(allDurations);
 
     this._statistic = new StatisticComponent({
       rank,
@@ -73,9 +74,36 @@ export default class StatisticController {
   }
   show(cards) {
     this._cards = cards;
+    const isHistoryFilms = this._cards.filter(film => film.isHistory === true);
+    const isFavoriteFilms = this._cards.filter(film => film.isFavorite === true);
+
+    this._watchedList = isHistoryFilms.concat(isFavoriteFilms);
     this._render();
   }
   _onFilterChange(filterType) {
     this._activeFilterType = filterType;
+
+    const getFilteredFilms = () => {
+      switch (this._activeFilterType) {
+        case `today`:
+          return this._watchedList;
+        case `week`:
+          console.log('неделя');
+          return this._watchedList;
+        case `month`:
+          console.log('месяц');
+          return this._watchedList;
+        case `year`:
+          console.log('год');
+          return this._watchedList.filter((el, i) => i < 2);
+      }
+      return this._watchedList;
+    };
+
+    this._activeFilter = filterType;
+
+    this._watchedList = getFilteredFilms();
+    console.log(this._watchedList);
+    this._render();
   }
 }
