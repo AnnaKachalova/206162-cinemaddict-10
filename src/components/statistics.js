@@ -72,6 +72,8 @@ export default class Statistics extends AbstractSmartComponent {
     this._durationWatched = durationWatched;
     this._onDataChange = null;
     this._activeFilterType = activeFilter;
+    console.log(quantityWatched);
+    console.log(durationWatched);
   }
   getTemplate() {
     return createStatistics({

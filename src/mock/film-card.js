@@ -107,12 +107,7 @@ const generateComments = () => {
   }
   return comments;
 };
-console.log(new Date());
-const watchedDates = [
-  'Thu Jan 23 2020 22:37:27 GMT+0300 (GMT+03:00)',
-  'Thu Jan 23 2020 22:37:27 GMT+0300 (GMT+03:00)',
-  'Thu Jan 23 2020 22:37:27 GMT+0300 (GMT+03:00)',
-];
+
 const generateFilmCard = () => {
   const randomIndex = getRandomIntegerNumber(0, FilmTitles.length);
   const isHistory = Math.random() > 0.5;

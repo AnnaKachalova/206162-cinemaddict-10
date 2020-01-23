@@ -32,9 +32,8 @@ export default class StatisticController {
 
     // topGenre
     console.log(this._watchedList);
-
+    this._allGenres = [];
     this._watchedList.forEach(card => {
-      console.log(this._allGenres);
       this._allGenres = this._allGenres.concat(card.genre);
     });
 
