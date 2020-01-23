@@ -1,5 +1,6 @@
 import { render, RenderPosition } from '../utils/render.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
+import { formatDuration } from '../utils/common.js';
 
 const createGenreTemplate = genres => {
   return Array.from(genres).map(element => {
@@ -137,7 +138,7 @@ const createPopupCardComponent = film => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${duration}</td>
+              <td class="film-details__cell">${formatDuration(duration)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>

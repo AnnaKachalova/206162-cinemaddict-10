@@ -51,7 +51,15 @@ export default class StatisticController {
     this._quantityWatched = allWatchedFilms.length;
 
     // durationWatched
-    this._durationWatched = 50;
+    let allDurations = [];
+    this._cards.forEach(card => {
+      allDurations = allDurations.concat(card.duration);
+    });
+    this._durationWatched = allWatchedFilms.reduce(
+      (accumulator, film) => accumulator + film.duration,
+      0
+    );
+    console.log(allDurations);
 
     this._statistic = new StatisticComponent({
       rank,
