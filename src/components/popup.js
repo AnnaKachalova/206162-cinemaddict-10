@@ -1,11 +1,13 @@
 import { render, RenderPosition } from '../utils/render.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
-import { formatDuration } from '../utils/common.js';
+import { formatReleaseDate, formatDateAgo, formatDuration } from '../utils/common.js';
 
 const createGenreTemplate = genres => {
-  return Array.from(genres).map(element => {
-    return `<span class="film-details__genre">${element}</span>`;
-  });
+  return Array.from(genres)
+    .map(element => {
+      return `<span class="film-details__genre">${element},</span>`;
+    })
+    .join('');
 };
 
 const createCommentTemplate = comments => {
@@ -48,7 +50,7 @@ const createFilmRaringTemplate = (poster, title, userRating) => {
 
         <div class="film-details__user-score">
           <div class="film-details__user-rating-poster">
-            <img src="./images/posters/${poster}.jpg" alt="film-poster" class="film-details__user-rating-img">
+            <img src="./${poster}" alt="film-poster" class="film-details__user-rating-img">
           </div>
 
           <section class="film-details__user-rating-inner">
@@ -65,27 +67,28 @@ const createFilmRaringTemplate = (poster, title, userRating) => {
 };
 
 const createPopupCardComponent = film => {
+  console.log('popup film');
+  console.log(film);
   const {
-    poster,
     title,
+    poster,
+    description,
     originalTitle,
     rating,
+    duration,
+    genre,
     producer,
     screenwriter,
-    actor,
-    releaseDate,
-    duration,
+    actors,
     country,
-    genre,
-    isWatchlist,
-    isHistory,
-    isFavorite,
-    description,
     ageRating,
-    comments,
+    releaseDate,
+    isHistory,
+    isWatchlist,
+    isFavorite,
     userRating,
   } = film;
-
+  const comments = film[`comments`];
   const hasUserRatign = userRating !== 0 && isHistory;
   const commentsMarkup = createCommentTemplate(comments);
   const genreMarkup = createGenreTemplate(genre);
@@ -98,7 +101,7 @@ const createPopupCardComponent = film => {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="./images/posters/${poster}.jpg" alt="">
+          <img class="film-details__poster-img" src="./${poster}" alt="">
 
           <p class="film-details__age">${ageRating}+</p>
         </div>
@@ -130,11 +133,11 @@ const createPopupCardComponent = film => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actor}</td>
+              <td class="film-details__cell">${actors}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${releaseDate}</td>
+              <td class="film-details__cell">${formatReleaseDate(releaseDate)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
@@ -218,23 +221,6 @@ const createPopupCardComponent = film => {
   </form>
 </section>`;
 };
-const parseFormData = formData => {
-  const options = {
-    hour12: false,
-    year: `numeric`,
-    month: `numeric`,
-    day: `numeric`,
-    hour: `numeric`,
-    minute: `numeric`,
-  };
-
-  return {
-    name: `You`,
-    text: formData.get(`comment`),
-    time: new Date().toLocaleString(`en-US`, options),
-    emoji: formData.get(`comment-emoji`),
-  };
-};
 
 export default class Popup extends AbstractSmartComponent {
   constructor(film) {
@@ -252,8 +238,9 @@ export default class Popup extends AbstractSmartComponent {
   }
   getData() {
     const form = this.getElement().querySelector(`.film-details__inner`);
-    const formData = new FormData(form);
-    return parseFormData(formData);
+    //const formData = new FormData(form);
+    //return parseFormData(formData);
+    return new FormData(form);
   }
 
   setDeleteClickHandler(handler) {

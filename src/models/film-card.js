@@ -1,68 +1,69 @@
-import { getCardsByFilter } from '../utils/filter.js';
-import { FilterType } from '../const.js';
+import moment from 'moment';
 
 export default class FilmCard {
-  constructor() {
-    this._cards = [];
-    this._activeFilterType = FilterType.ALL;
-
-    this._dataChangeHandlers = [];
-    this._filterChangeHandlers = [];
-  }
-  getCards() {
-    return getCardsByFilter(this._cards, this._activeFilterType);
-  }
-
-  getCardsAll() {
-    return this._cards;
-  }
-
-  setCards(cards) {
-    this._cards = Array.from(cards);
-  }
-  setFilter(filterType) {
-    this._activeFilterType = filterType;
-    this._filterChangeHandlers.forEach(handler => handler());
-  }
-  updateCard(id, card) {
-    const index = this._cards.findIndex(it => it.id === id);
-
-    if (index === -1) {
-      return false;
-    }
-
-    this._cards = [].concat(this._cards.slice(0, index), card, this._cards.slice(index + 1));
-    this._dataChangeHandlers.forEach(handler => handler());
-    return true;
-  }
-  addComment(cardId, comment) {
-    const cardIndex = this._cards.findIndex(it => it.id === cardId);
-
-    if (cardIndex === -1) {
-      return;
-    }
-
-    this._cards[cardIndex].comments.unshift(comment);
-
-    this._dataChangeHandlers.forEach(handler => handler());
+  constructor(data) {
+    this.id = data[`id`];
+    this.title = data[`film_info`][`title`] || ``;
+    this.poster = data[`film_info`][`poster`] || ``;
+    this.description = data[`film_info`][`description`] || ``;
+    this.originalTitle = data[`film_info`][`alternative_title`] || ``;
+    this.rating = data[`film_info`][`total_rating`] || 0;
+    this.duration = data[`film_info`][`runtime`] || null;
+    this.genre = data[`film_info`][`genre`] || [];
+    this.isHistory = Boolean(data[`user_details`][`already_watched`]) || false;
+    this.isWatchlist = Boolean(data[`user_details`][`watchlist`]) || false;
+    this.isFavorite = Boolean(data[`user_details`][`favorite`]) || false;
+    this.userRating = data[`user_details`][`personal_rating`] || ``;
+    this.producer = data[`film_info`][`director`] || ``;
+    this.screenwriter = data[`film_info`][`writers`] || [];
+    this.actors = data[`film_info`][`actors`] || [];
+    this.releaseDate = data[`film_info`][`release`][`date`] || null;
+    this.country = data[`film_info`][`release`][`release_country`] || ``;
+    this.ageRating = data[`film_info`][`age_rating`] || 0;
+    this.comments = data[`comments`];
+    this.watchedDate = moment(data[`user_details`][`watching_date`]).format() || null;
   }
 
-  removeComment(cardId, commentIndex) {
-    const cardIndex = this._cards.findIndex(it => it.id === cardId);
-
-    if (cardIndex === -1) {
-      return;
-    }
-
-    this._cards[cardIndex].comments.splice(commentIndex, 1);
-
-    this._dataChangeHandlers.forEach(handler => handler());
+  toRAW() {
+    return {
+      film_info: {
+        title: this.title,
+        poster: this.poster,
+        description: this.description,
+        originalTitle: this.originalTitle,
+        rating: this.rating,
+        duration: this.duration,
+        genre: this.genre,
+        producer: this.producer,
+        screenwriter: this.screenwriter,
+        actors: this.actors,
+        country: this.country,
+        ageRating: this.ageRating,
+        release: {
+          date: new Date(this.releaseDate),
+          release_country: this.country,
+        },
+      },
+      comments: this.comments,
+      user_details: {
+        watchedDate: this.watchedDate,
+        isHistory: this.isHistory,
+        isWatchlist: this.isWatchlist,
+        isFavorite: this.isFavorite,
+        userRating: this.userRating,
+      },
+    };
   }
 
-  setFilterChangeHandler(handler) {
-    this._filterChangeHandlers.push(handler);
+  static parseCard(data) {
+    return new FilmCard(data);
   }
-  setDataChangeHandler(handler) {
-    this._dataChangeHandlers.push(handler);
+
+  static parseCards(data) {
+    return data.map(FilmCard.parseCard);
+  }
+
+  static clone(data) {
+    return new FilmCard(data.toRAW());
   }
 }

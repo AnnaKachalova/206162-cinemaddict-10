@@ -19,7 +19,9 @@ export default class FilterController {
   render() {
     const container = this._container;
     const allCards = this._cardsModel.getCardsAll();
-
+    console.log(this._cardsModel);
+    console.log('allCards');
+    console.log(allCards);
     const filters = Object.values(FilterType).map(filterType => {
       return {
         name: filterType,

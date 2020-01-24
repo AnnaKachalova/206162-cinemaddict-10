@@ -78,7 +78,7 @@ export default class StatisticController {
       replace(this._statistic, oldComponent);
     } else {
       render(this._container, this._statistic, RenderPosition.BEFOREEND);
-      this.renderChart();
+      //this.renderChart();
     }
   }
   show(cards) {
