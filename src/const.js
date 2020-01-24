@@ -18,3 +18,11 @@ export const FilterType = {
   HISTORY: `History`,
   FAVORITES: `Favorites`,
 };
+
+export const StatisticFilterType = [
+  { title: `All time`, value: `all-time` },
+  { title: `Today`, value: `today` },
+  { title: `Week`, value: `week` },
+  { title: `Month`, value: `month` },
+  { title: `Year`, value: `year` },
+];

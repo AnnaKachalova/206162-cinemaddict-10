@@ -62,7 +62,11 @@ const FilmActors = [`Аарон Спеллинг`, `Джеймс Кэмерон`
 const FilmCountries = [`США`, `Франция`, `Великобритания`];
 // comments
 const emoticons = [`smile`, `sleeping`, `puke`, `angry`];
-const emoticonsText = [`Almost two hours? Seriously?`, `Very very old. Meh`, `Booooooooooring`];
+const emoticonsText = [
+  `Almost two hours? Seriously?`,
+  `Very very old. Meh`,
+  `Booooooooooring`,
+];
 const emoticonsAutor = [`John Doe`, `Tim Macoveev`];
 
 // utility functions
@@ -86,7 +90,7 @@ const getRating = (min = 0, max = 10) => {
 const getDuration = () => {
   const minutes = getRandomIntegerNumber(120, 400);
 
-  return formatDuration(minutes);
+  return minutes;
 };
 
 const generateComments = () => {
@@ -129,6 +133,7 @@ const generateFilmCard = () => {
     fullDescription: FilmDescriptions,
     ageRating: getRandomIntegerNumber(6, 18),
     comments: generateComments(),
+    watchedDate: new Date(),
   };
 };
 const generateFilmCards = count => {

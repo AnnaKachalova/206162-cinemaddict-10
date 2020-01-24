@@ -1,5 +1,6 @@
 import PopupComponent from './popup.js';
 import AbstractComponent from './abstract-component.js';
+import { formatDuration } from '../utils/common.js';
 
 const MAX_DESCRIPTION_LENGTH = 140;
 
@@ -18,7 +19,10 @@ const createFilmCardComponent = film => {
     comments,
   } = film;
 
-  const newDescription = description.length > MAX_DESCRIPTION_LENGTH ? `${description.slice(0, 139)}...` : description;
+  const newDescription =
+    description.length > MAX_DESCRIPTION_LENGTH
+      ? `${description.slice(0, 139)}...`
+      : description;
 
   const watchlistClass = isWatchlist ? `film-card__controls-item--active` : ``;
   const historyClass = isHistory ? `film-card__controls-item--active` : ``;
@@ -29,7 +33,7 @@ const createFilmCardComponent = film => {
         <p class="film-card__rating">${rating}</p>
         <p class="film-card__info">
         <span class="film-card__year">${productionYear}</span>
-        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__duration">${formatDuration(duration)}</span>
         <span class="film-card__genre">${genre}</span>
         </p>
         <img src="./images/posters/${poster}.jpg" alt="" class="film-card__poster">

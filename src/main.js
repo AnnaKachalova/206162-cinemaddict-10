@@ -1,7 +1,8 @@
 // components
 import PageController from './controllers/page-controller.js';
-import FilterController from './controllers/filter.js';
+import FilterController from './controllers/filter-controller.js';
 import ProfileComponent from './components/profile.js';
+//import StatisticsComponent from './components/statistics.js';
 
 import FilmCardsModel from './models/film-card.js';
 
@@ -31,8 +32,14 @@ render(siteHeader, new ProfileComponent(rank), RenderPosition.BEFOREEND);
 const filterController = new FilterController(mainElement, filmCardsModel);
 filterController.render();
 
-const pageController = new PageController(mainElement, filmCardsModel);
+// statistics
+//const statisticsComponent = new StatisticsComponent();
+//render(mainElement, statisticsComponent, RenderPosition.BEFOREEND);
+//statisticsComponent.hide();
 
+const pageController = new PageController(mainElement, filmCardsModel);
 pageController.render();
 
-document.querySelector('.footer__statistics p').innerHTML = `${cards.length} movies inside`;
+document.querySelector(
+  '.footer__statistics p'
+).innerHTML = `${cards.length} movies inside`;

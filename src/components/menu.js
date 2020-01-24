@@ -9,11 +9,17 @@ const createFilterTemplate = ({ name, count, checked }) => {
   return `<a href="#${name}" class="main-navigation__item ${
     checked ? 'main-navigation__item--active' : ''
   }" id="filter__${name}">${name} 
-  ${name === 'All movies' ? '' : `<span class="main-navigation__item-count">${count}</span></a>`}`;
+  ${
+    name === 'All movies'
+      ? ''
+      : `<span class="main-navigation__item-count">${count}</span></a>`
+  }`;
 };
 
 const createMenuComponent = filters => {
-  const filtersMarkup = filters.map(it => createFilterTemplate(it, it.checked)).join(`\n`);
+  const filtersMarkup = filters
+    .map(it => createFilterTemplate(it, it.checked))
+    .join(`\n`);
 
   return `<nav class="main-navigation">
             ${filtersMarkup}
@@ -44,7 +50,13 @@ export default class Menu extends AbstractComponent {
         filter.classList.add(classActive);
 
         const filterName = getFilterNameById(evt.target.id);
-        handler(filterName);
+        if (!filterName) {
+          // это статистика
+          console.log('statistics');
+        } else {
+          console.log('filter');
+          handler(filterName);
+        }
       });
     });
   }

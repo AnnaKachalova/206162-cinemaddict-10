@@ -1,5 +1,6 @@
 import { render, RenderPosition } from '../utils/render.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
+import { formatDuration } from '../utils/common.js';
 
 const createGenreTemplate = genres => {
   return Array.from(genres).map(element => {
@@ -26,7 +27,19 @@ const createCommentTemplate = comments => {
   });
 };
 
-const createFilmRaringTemplate = () => {
+const createRatingItems = userRating => {
+  let scores = [];
+  for (let i = 1; i < 10; i++) {
+    const row = `<input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="${i}" id="rating-${i}" ${
+      Number(userRating) === i ? 'checked' : ''
+    }>
+    <label class="film-details__user-rating-label" for="rating-${i}">${i}</label>`;
+    scores += row;
+  }
+
+  return scores;
+};
+const createFilmRaringTemplate = (poster, title, userRating) => {
   return `<div class="form-details__middle-container">
       <section class="film-details__user-rating-wrap">
         <div class="film-details__user-rating-controls">
@@ -35,40 +48,15 @@ const createFilmRaringTemplate = () => {
 
         <div class="film-details__user-score">
           <div class="film-details__user-rating-poster">
-            <img src="./images/posters/the-great-flamarion.jpg" alt="film-poster" class="film-details__user-rating-img">
+            <img src="./images/posters/${poster}.jpg" alt="film-poster" class="film-details__user-rating-img">
           </div>
 
           <section class="film-details__user-rating-inner">
-            <h3 class="film-details__user-rating-title">The Great Flamarion</h3>
+            <h3 class="film-details__user-rating-title">${title}</h3>
 
             <p class="film-details__user-rating-feelings">How you feel it?</p>
             <div class="film-details__user-rating-score">
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="1" id="rating-1">
-              <label class="film-details__user-rating-label" for="rating-1">1</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="2" id="rating-2">
-              <label class="film-details__user-rating-label" for="rating-2">2</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="3" id="rating-3">
-              <label class="film-details__user-rating-label" for="rating-3">3</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="4" id="rating-4">
-              <label class="film-details__user-rating-label" for="rating-4">4</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="5" id="rating-5">
-              <label class="film-details__user-rating-label" for="rating-5">5</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="6" id="rating-6">
-              <label class="film-details__user-rating-label" for="rating-6">6</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="7" id="rating-7">
-              <label class="film-details__user-rating-label" for="rating-7">7</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="8" id="rating-8">
-              <label class="film-details__user-rating-label" for="rating-8">8</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="9" id="rating-9" checked>
-              <label class="film-details__user-rating-label" for="rating-9">9</label>
+            ${createRatingItems(userRating)}
             </div>
           </section>
         </div>
@@ -97,7 +85,6 @@ const createPopupCardComponent = film => {
     comments,
     userRating,
   } = film;
-  //const { isHistory } = options;
 
   const hasUserRatign = userRating !== 0 && isHistory;
   const commentsMarkup = createCommentTemplate(comments);
@@ -125,7 +112,11 @@ const createPopupCardComponent = film => {
 
             <div class="film-details__rating">
               <p class="film-details__total-rating">${rating}</p>
-  ${hasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>` : ``}
+  ${
+    hasUserRatign
+      ? `<p class="film-details__user-rating">Your rate ${userRating}</p>`
+      : ``
+  }
             </div>
           </div>
           <table class="film-details__table">
@@ -147,7 +138,7 @@ const createPopupCardComponent = film => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${duration}</td>
+              <td class="film-details__cell">${formatDuration(duration)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
@@ -182,7 +173,7 @@ const createPopupCardComponent = film => {
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
-    ${isHistory ? createFilmRaringTemplate() : ''}
+    ${isHistory ? createFilmRaringTemplate(poster, title, userRating) : ''}
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${
@@ -252,6 +243,8 @@ export default class Popup extends AbstractSmartComponent {
 
     this._isHistory = this._film.isHistory;
     this._commentInputEnterPressHandler = null;
+    this._onDataChange = null;
+    this._bodyElement = document.querySelector(`body`);
   }
 
   getTemplate() {
@@ -262,6 +255,7 @@ export default class Popup extends AbstractSmartComponent {
     const formData = new FormData(form);
     return parseFormData(formData);
   }
+
   setDeleteClickHandler(handler) {
     this.getElement()
       .querySelectorAll(`.film-details__comment-delete`)
@@ -309,40 +303,56 @@ export default class Popup extends AbstractSmartComponent {
   }
 
   showElement() {
-    const bodyElement = document.querySelector(`body`);
-    const visiblePopup = bodyElement.querySelector(`.film-details`);
+    const visiblePopup = this._bodyElement.querySelector(`.film-details`);
     if (visiblePopup) {
       visiblePopup.remove();
     }
 
-    render(bodyElement, this, RenderPosition.BEFOREEND);
+    render(this._bodyElement, this, RenderPosition.BEFOREEND);
 
     document.onkeydown = evt => this.onButtonKeyDown(evt);
-    //this.setCommentEnterPressHandler(this._commentInputEnterPressHandler);
     this._subscribeOnEvents();
   }
 
   _subscribeOnEvents() {
     const popupElement = this.getElement();
-    const controlInputs = popupElement.querySelectorAll(`.film-details__control-input`);
+    const controlsWrapper = popupElement.querySelector(`.film-details__controls`);
 
-    controlInputs.forEach(input => {
-      input.addEventListener(`change`, () => {
-        if (input.name === 'watched') {
+    controlsWrapper.addEventListener(`change`, evt => {
+      switch (evt.target.name) {
+        case 'watched':
           this._film.isHistory = !this._film.isHistory;
           this._film.isWatchlist = false;
-          //this._onDataChange(this, card, Object.assign({}, card, { isWatchlist: !card.isWatchlist, isHistory: false }));
-        } else if (input.name === 'watchlist') {
+          break;
+        case 'watchlist':
           this._film.isWatchlist = !this._film.isWatchlist;
           this._film.isHistory = false;
-          //this._onDataChange(this, card, Object.assign({}, card, { isHistory: !card.isHistory, isWatchlist: false }));
-        } else if (input.name === 'favorite') {
+          break;
+        case 'favorite':
           this._film.isFavorite = !this._film.isFavorite;
-          //this._onDataChange(this, card, Object.assign({}, card, { isFavorite: !card.isFavorite }));
+          break;
+      }
+      this._onDataChange(this._film);
+      this.rerender();
+    });
+
+    const ratingWrappers = popupElement.querySelector(`.film-details__user-rating-score`);
+    if (ratingWrappers) {
+      ratingWrappers.addEventListener(`change`, evt => {
+        if (evt.target.name === `score`) {
+          this._film.userRating = evt.target.value;
+          evt.target.checked = true;
+          this._onDataChange(this._film);
+          this.rerender();
         }
+      });
+      const buttonUndo = popupElement.querySelector('.film-details__watched-reset');
+      buttonUndo.addEventListener(`click`, () => {
+        this._film.userRating = 0;
+        this._onDataChange(this._film);
         this.rerender();
       });
-    });
+    }
 
     const popupButtonClose = popupElement.querySelector(`.film-details__close-btn`);
     popupButtonClose.addEventListener(`click`, () => this.hidePopup());
@@ -362,5 +372,11 @@ export default class Popup extends AbstractSmartComponent {
         parentEmotion.append(newImg);
       });
     });
+  }
+  onControlsChangeHandler(handler) {
+    this._onDataChange = handler;
+  }
+  onRatingClichHandler(handler) {
+    this._onDataChange = handler;
   }
 }
