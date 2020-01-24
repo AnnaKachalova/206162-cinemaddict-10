@@ -24,6 +24,7 @@ export default class StatisticController {
     this._topGenre = null;
     this._quantityWatched = null;
     this._durationWatched = null;
+    this._canvas = null;
 
     this._watchedList = [];
     this._cardsList = [];
@@ -33,22 +34,21 @@ export default class StatisticController {
     const rank = countRank(this._cards);
 
     // topGenre
-    console.log(this._watchedList);
-    console.log(this._cardsList);
     this._allGenres = [];
+    this._allGenresNew = [];
 
     this._cardsList.forEach(card => {
       this._allGenres = this._allGenres.concat(card.genre);
     });
 
     if (this._allGenres.length) {
-      this._allGenres = this._allGenres.reduce((accum, current) => {
+      this._allGenresNew = this._allGenres.reduce((accum, current) => {
         accum[current] = (accum[current] || 0) + 1;
         return accum;
       }, {});
     }
-    this._topGenre = Object.keys(this._allGenres).find(
-      key => this._allGenres[key] === Math.max(...Object.values(this._allGenres))
+    this._topGenre = Object.keys(this._allGenresNew).find(
+      key => this._allGenresNew[key] === Math.max(...Object.values(this._allGenresNew))
     );
 
     // quantityWatched
@@ -71,12 +71,14 @@ export default class StatisticController {
       quantityWatched: this._quantityWatched,
       durationWatched: this._durationWatched,
     });
+
     this._statistic.setFilterChangeHandler(this._onFilterChange);
 
     if (oldComponent) {
       replace(this._statistic, oldComponent);
     } else {
       render(this._container, this._statistic, RenderPosition.BEFOREEND);
+      this.renderChart();
     }
   }
   show(cards) {
@@ -94,13 +96,13 @@ export default class StatisticController {
     const getFilteredFilms = () => {
       switch (this._activeFilterType) {
         case `today`:
-          return this._watchedList;
+          return this._watchedList.filter((el, i) => i < 1);
         case `week`:
           console.log('неделя');
-          return this._watchedList;
+          return this._watchedList.filter((el, i) => i < 7);
         case `month`:
           console.log('месяц');
-          return this._watchedList;
+          return this._watchedList.filter((el, i) => i < 5);
         case `year`:
           console.log('год');
           return this._watchedList.filter((el, i) => i < 2);
@@ -116,4 +118,9 @@ export default class StatisticController {
   _onDataChange() {
     this._render();
   }
+  renderChart() {
+    this._canvas = this._statistic.getElement().querySelector(`.statistic__chart`);
+    this._chart = new Chart(this._canvas, this._getChart());
+  }
+  _getChart() {}
 }
