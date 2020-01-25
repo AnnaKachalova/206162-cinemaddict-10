@@ -17,7 +17,7 @@ export default class FilmCard {
     this.producer = data[`film_info`][`director`] || ``;
     this.screenwriter = data[`film_info`][`writers`] || [];
     this.actors = data[`film_info`][`actors`] || [];
-    this.releaseDate = data[`film_info`][`release`][`date`] || null;
+    this.releaseDate = new Date(data[`film_info`][`release`][`date`] || null);
     this.country = data[`film_info`][`release`][`release_country`] || ``;
     this.ageRating = data[`film_info`][`age_rating`] || 0;
     this.comments = data[`comments`];

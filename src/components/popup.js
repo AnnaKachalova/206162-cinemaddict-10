@@ -38,9 +38,9 @@ const createRatingItems = userRating => {
     <label class="film-details__user-rating-label" for="rating-${i}">${i}</label>`;
     scores += row;
   }
-
   return scores;
 };
+
 const createFilmRaringTemplate = (poster, title, userRating) => {
   return `<div class="form-details__middle-container">
       <section class="film-details__user-rating-wrap">
@@ -67,8 +67,6 @@ const createFilmRaringTemplate = (poster, title, userRating) => {
 };
 
 const createPopupCardComponent = film => {
-  console.log('popup film');
-  console.log(film);
   const {
     title,
     poster,
@@ -89,6 +87,7 @@ const createPopupCardComponent = film => {
     userRating,
   } = film;
   const comments = film[`comments`];
+
   const hasUserRatign = userRating !== 0 && isHistory;
   const commentsMarkup = createCommentTemplate(comments);
   const genreMarkup = createGenreTemplate(genre);
@@ -242,7 +241,6 @@ export default class Popup extends AbstractSmartComponent {
     //return parseFormData(formData);
     return new FormData(form);
   }
-
   setDeleteClickHandler(handler) {
     this.getElement()
       .querySelectorAll(`.film-details__comment-delete`)
@@ -253,7 +251,6 @@ export default class Popup extends AbstractSmartComponent {
         })
       );
   }
-
   setCommentEnterPressHandler(handler) {
     this.getElement()
       .querySelector(`.film-details__comment-input`)
@@ -288,7 +285,6 @@ export default class Popup extends AbstractSmartComponent {
       this.hidePopup();
     }
   }
-
   showElement() {
     const visiblePopup = this._bodyElement.querySelector(`.film-details`);
     if (visiblePopup) {

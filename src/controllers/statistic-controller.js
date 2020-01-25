@@ -1,14 +1,13 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { render, replace, RenderPosition } from '../utils/render.js';
-import { generateRank } from '../mock/profile.js';
+import { render, replace, RenderPosition, getRank } from '../utils/render.js';
 
 import StatisticComponent from '../components/statistics.js';
 import moment from 'moment';
 
 const countRank = cards => {
   const filmsHistoryCount = cards.filter(film => film.isHistory === true).length;
-  return generateRank(filmsHistoryCount);
+  return getRank(filmsHistoryCount);
 };
 
 export default class StatisticController {
@@ -81,6 +80,9 @@ export default class StatisticController {
       //this.renderChart();
     }
   }
+  hide() {
+    this._statistic && this._statistic.hide();
+  }
   show(cards) {
     this._cards = cards;
     const isHistoryFilms = this._cards.filter(film => film.isHistory === true);
@@ -89,6 +91,7 @@ export default class StatisticController {
     this._watchedList = isHistoryFilms.concat(isFavoriteFilms);
     this._cardsList = this._watchedList;
     this._render();
+    this._statistic.show();
   }
   _onFilterChange(filterType) {
     this._activeFilterType = filterType;

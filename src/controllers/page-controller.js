@@ -6,11 +6,9 @@ import TopRatedComponent from '../components/top-rated.js';
 import MostCommentedComponent from '../components/most-commented.js';
 import MoreButtonComponent from '../components/more-button.js';
 
-import { generateMostCommented } from '../mock/most-commented.js';
-import { generateTopRated } from '../mock/top-rated.js';
+import { getTopRated, getMostCommented } from '../utils/render.js';
 import { render, remove, RenderPosition, getItemsByField } from '../utils/render.js';
 
-import StatisticController from './statistic-controller.js';
 import MovieController from './movie-controller.js';
 
 const SHOWING_CARDS_COUNT_ON_START = 5;
@@ -40,8 +38,6 @@ export default class PageController {
     this._moreButtonComponent = new MoreButtonComponent();
     this._sortComponent = new SortComponent();
 
-    this._statisticController = new StatisticController(container);
-
     this._filmsContainerComponent = new FilmsContainerComponent();
     this._filmsContainerElement = this._filmsContainerComponent.getElement();
     this._filmList = this._filmsContainerElement.querySelector(`.films-list`);
@@ -60,11 +56,13 @@ export default class PageController {
     this._cardsModel.setFilterChangeHandler(this._onFilterChange);
   }
   hide() {
-    this._container.hide();
+    this._filmsContainerComponent.hide();
+    this._sortComponent.hide();
   }
 
   show() {
-    this._container.show();
+    this._filmsContainerComponent.show();
+    this._sortComponent.show();
   }
   render() {
     const cards = this._cardsModel.getCards();
@@ -72,8 +70,6 @@ export default class PageController {
     if (cards.length) {
       render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
       render(this._container, this._filmsContainerComponent, RenderPosition.BEFOREEND);
-
-      this._statisticController.show(cards);
 
       const newCards = renderCards(
         this._filmListContainer,
@@ -96,25 +92,16 @@ export default class PageController {
     render(this._filmsContainerElement, component, RenderPosition.BEFOREEND);
 
     const elementList = element.querySelector(`.films-list__container`);
-
-    assortedArray.forEach(card => {
-      const movieController = new MovieController(
-        elementList,
-        this._cardsModel,
-        this._onDataChange
-      );
-      movieController.render(card);
-      return movieController;
-    });
+    renderCards(elementList, assortedArray, this._onDataChange, this._cardsModel);
   }
   _renderMostCommeted(cards) {
-    const mostCommeted = generateMostCommented(cards);
+    const mostCommeted = getMostCommented(cards);
     if (mostCommeted.length) {
       this._renderSpecial(this._mostCommentedComponent, mostCommeted);
     }
   }
   _renderTopRated(cards) {
-    const topRated = generateTopRated(cards);
+    const topRated = getTopRated(cards);
     if (topRated.length) {
       this._renderSpecial(this._topRatedComponent, topRated);
     }
@@ -154,7 +141,6 @@ export default class PageController {
       this._renderMostCommeted(cards);
       this._renderTopRated(cards);
     } */
-    console.log(this._api);
     this._api.updateCard(oldData.id, newData).then(cardsModel => {
       const isSuccess = this._cardsModel.updateCard(oldData.id, cardsModel);
 
@@ -170,7 +156,7 @@ export default class PageController {
     const cards = this._cardsModel.getCards();
     switch (sortType) {
       case SortType.DATE:
-        sortedCards = getItemsByField(cards, `productionYear`);
+        sortedCards = getItemsByField(cards, `releaseDate`);
 
         break;
       case SortType.RATING:

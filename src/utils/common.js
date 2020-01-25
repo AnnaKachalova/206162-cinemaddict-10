@@ -12,3 +12,6 @@ export const formatDuration = minutes => {
     .utc(moment.duration(minutes, 'minutes').asMilliseconds())
     .format(`h[h] m[m]`);
 };
+export const formatYear = date => {
+  return moment(date).format(`YYYY`);
+};

@@ -9,7 +9,7 @@ export default class FilterController {
     this._cardsModel = cardsModel;
 
     this._activeFilterType = FilterType.ALL;
-    this._filterComponent = null;
+    this._menuComponent = null;
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
@@ -19,9 +19,7 @@ export default class FilterController {
   render() {
     const container = this._container;
     const allCards = this._cardsModel.getCardsAll();
-    console.log(this._cardsModel);
-    console.log('allCards');
-    console.log(allCards);
+
     const filters = Object.values(FilterType).map(filterType => {
       return {
         name: filterType,
@@ -29,18 +27,22 @@ export default class FilterController {
         checked: filterType === this._activeFilterType,
       };
     });
-    const oldComponent = this._filterComponent;
 
-    this._filterComponent = new MenuComponent(filters);
-    this._filterComponent.setFilterChangeHandler(this._onFilterChange);
+    const oldComponent = this._menuComponent;
+
+    this._menuComponent = new MenuComponent(filters);
+    this._menuComponent.setFilterChangeHandler(this._onFilterChange);
+    this._menuComponent.setOnChange(this._menuOnChange);
 
     if (oldComponent) {
-      replace(this._filterComponent, oldComponent);
+      replace(this._menuComponent, oldComponent);
     } else {
-      render(container, this._filterComponent, RenderPosition.BEFOREEND);
+      render(container, this._menuComponent, RenderPosition.BEFOREEND);
     }
   }
-
+  setOnChange(handler) {
+    this._menuOnChange = handler;
+  }
   _onFilterChange(filterType) {
     this._cardsModel.setFilter(filterType);
     this._activeFilterType = filterType;
