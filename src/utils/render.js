@@ -1,3 +1,5 @@
+import { RankGradation } from '../const.js';
+
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
@@ -8,6 +10,16 @@ export const getItemsByField = (array, field, length) => {
     .filter(element => !!element[field])
     .sort((a, b) => b[field] - a[field])
     .slice(0, length);
+};
+export const getTopRated = films => {
+  return getItemsByField(films, `rating`, 2);
+};
+
+export const getMostCommented = films => {
+  return films
+    .filter(element => !!element.comments)
+    .sort((a, b) => b.comments.length - a.comments.length)
+    .slice(0, 2);
 };
 
 export const createElement = component => {
@@ -40,4 +52,12 @@ export const replace = (newComponent, oldComponent) => {
   if (isExistElements && parentElement.contains(oldElement)) {
     parentElement.replaceChild(newElement, oldElement);
   }
+};
+export const getRank = isHistoryCount => {
+  let rank = Object.keys(RankGradation).find(key => {
+    const min = Number(RankGradation[key].MIN_VALUE);
+    const max = Number(RankGradation[key].MAX_VALUE);
+    return min <= isHistoryCount && isHistoryCount <= max;
+  });
+  return rank;
 };

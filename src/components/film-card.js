@@ -1,6 +1,5 @@
-import PopupComponent from './popup.js';
 import AbstractComponent from './abstract-component.js';
-import { formatDuration } from '../utils/common.js';
+import { formatDuration, formatYear } from '../utils/common.js';
 
 const MAX_DESCRIPTION_LENGTH = 140;
 
@@ -10,14 +9,15 @@ const createFilmCardComponent = film => {
     poster,
     description,
     rating,
-    productionYear,
     duration,
     genre,
-    isWatchlist,
+    releaseDate,
     isHistory,
+    isWatchlist,
     isFavorite,
-    comments,
   } = film;
+
+  const comments = film[`comments`];
 
   const newDescription =
     description.length > MAX_DESCRIPTION_LENGTH
@@ -32,11 +32,11 @@ const createFilmCardComponent = film => {
     <h3 class="film-card__title">${title}</h3>
         <p class="film-card__rating">${rating}</p>
         <p class="film-card__info">
-        <span class="film-card__year">${productionYear}</span>
+        <span class="film-card__year">${formatYear(releaseDate)}</span>
         <span class="film-card__duration">${formatDuration(duration)}</span>
         <span class="film-card__genre">${genre}</span>
         </p>
-        <img src="./images/posters/${poster}.jpg" alt="" class="film-card__poster">
+        <img src="./${poster}" alt="" class="film-card__poster">
         <p class="film-card__description">${newDescription}</p>
         <a class="film-card__comments">${comments.length} comments</a>
     <form class="film-card__controls">

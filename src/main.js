@@ -1,45 +1,52 @@
-// components
+import API from './api.js';
+
 import PageController from './controllers/page-controller.js';
 import FilterController from './controllers/filter-controller.js';
+import StatisticController from './controllers/statistic-controller.js';
 import ProfileComponent from './components/profile.js';
-//import StatisticsComponent from './components/statistics.js';
+import FilmCardsModel from './models/film-cards.js';
 
-import FilmCardsModel from './models/film-card.js';
+import { getRank, render, RenderPosition } from './utils/render.js';
 
-// mock
-import { generateFilmCards } from './mock/film-card.js';
-import { generateRank } from './mock/profile.js';
-
-import { render, RenderPosition } from './utils/render.js';
-
-const CARD_COUNT = 15;
-
-const mainElement = document.querySelector(`.main`);
-
-// filters
-const cards = generateFilmCards(CARD_COUNT);
+const AUTHORIZATION = `Basic eo0w5d90ik29889a`;
+const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
 
 const filmCardsModel = new FilmCardsModel();
-filmCardsModel.setCards(cards);
 
-// header
+const api = new API(END_POINT, AUTHORIZATION);
+
+const mainElement = document.querySelector(`.main`);
 const siteHeader = document.querySelector(`.header`);
-const filmsHistoryCount = cards.filter(film => film.isHistory === true).length;
-const rank = generateRank(filmsHistoryCount);
-render(siteHeader, new ProfileComponent(rank), RenderPosition.BEFOREEND);
 
-// menu
-const filterController = new FilterController(mainElement, filmCardsModel);
-filterController.render();
+const pageController = new PageController(mainElement, filmCardsModel, api);
 
-// statistics
-//const statisticsComponent = new StatisticsComponent();
-//render(mainElement, statisticsComponent, RenderPosition.BEFOREEND);
-//statisticsComponent.hide();
+const statisticController = new StatisticController(mainElement);
 
-const pageController = new PageController(mainElement, filmCardsModel);
-pageController.render();
+api.getCards().then(cards => {
+  filmCardsModel.setCards(cards);
 
-document.querySelector(
-  '.footer__statistics p'
-).innerHTML = `${cards.length} movies inside`;
+  const filterController = new FilterController(mainElement, filmCardsModel);
+
+  filterController.setOnChange(link => {
+    if (link === 'statistics') {
+      pageController.hide();
+      statisticController.show(cards);
+    } else {
+      statisticController.hide();
+      pageController.show();
+    }
+  });
+
+  filterController.render();
+
+  const filmsHistoryCount = cards.filter(film => film.isHistory === true).length;
+  const rank = getRank(filmsHistoryCount);
+
+  render(siteHeader, new ProfileComponent(rank), RenderPosition.BEFOREEND);
+
+  pageController.render();
+
+  document.querySelector(
+    `.footer__statistics p`
+  ).innerHTML = `${cards.length} movies inside`;
+});

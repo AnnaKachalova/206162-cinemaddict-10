@@ -1,6 +1,25 @@
 import FilmCardComponent from '../components/film-card.js';
 import PopupComponent from '../components/popup.js';
 import { render, replace, remove, RenderPosition } from '../utils/render.js';
+import CardFilm from '../models/film-card.js';
+
+const parseFormData = formData => {
+  const options = {
+    hour12: false,
+    year: `numeric`,
+    month: `numeric`,
+    day: `numeric`,
+    hour: `numeric`,
+    minute: `numeric`,
+  };
+
+  return {
+    name: `You`,
+    text: formData.get(`comment`),
+    time: new Date().toLocaleString(`en-US`, options),
+    emoji: formData.get(`comment-emoji`),
+  };
+};
 
 export default class MovieController {
   constructor(container, cardModel, onDataChange) {
@@ -21,17 +40,41 @@ export default class MovieController {
     // card buttons
     this._cardComponent.onWatchlistButtonClick(evt => {
       evt.preventDefault();
-      this._onDataChange(this, card, Object.assign({}, card, { isWatchlist: !card.isWatchlist, isHistory: false }));
+      /*this._onDataChange(
+        this,
+        card,
+        Object.assign({}, card, { isWatchlist: !card.isWatchlist, isHistory: false })
+      );*/
+      const newCard = CardFilm.clone(card);
+      newCard.isArchive = !newCard.isArchive;
+
+      this._onDataChange(this, card, newCard);
     });
 
     this._cardComponent.onWatchedButtonClick(evt => {
       evt.preventDefault();
-      this._onDataChange(this, card, Object.assign({}, card, { isHistory: !card.isHistory, isWatchlist: false }));
+      /*this._onDataChange(
+        this,
+        card,
+        Object.assign({}, card, { isHistory: !card.isHistory, isWatchlist: false })
+      );*/
+      const newCard = CardFilm.clone(card);
+      newCard.isWatchlist = !newCard.isWatchlist;
+
+      this._onDataChange(this, card, newCard);
     });
 
     this._cardComponent.onFavoritesButtonClick(evt => {
       evt.preventDefault();
-      this._onDataChange(this, card, Object.assign({}, card, { isFavorite: !card.isFavorite }));
+      /*this._onDataChange(
+        this,
+        card,
+        Object.assign({}, card, { isFavorite: !card.isFavorite })
+      );*/
+      const newCard = CardFilm.clone(card);
+      newCard.isFavorite = !newCard.isFavorite;
+
+      this._onDataChange(this, card, newCard);
     });
 
     if (oldCardComponent) {
