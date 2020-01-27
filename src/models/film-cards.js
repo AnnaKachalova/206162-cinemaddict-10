@@ -39,19 +39,25 @@ export default class FilmCard {
     this._dataChangeHandlers.forEach(handler => handler());
     return true;
   }
-  addComment(cardId, comment) {
+  addComment(cardId, comment, api) {
     const cardIndex = this._cards.findIndex(it => it.id === cardId);
 
     if (cardIndex === -1) {
       return;
     }
-
-    this._cards[cardIndex].comments.unshift(comment);
-
     this._dataChangeHandlers.forEach(handler => handler());
+    //this._cards[cardIndex].comments.unshift(comment);
+    console.log('коммент добавился');
+    return api.createComment({ comment, cardId }).then(response => {
+      const { movie, comments } = response;
+      this._cards[cardIndex].comments = comments;
+      console.log(this._cards[cardIndex]);
+
+      return comments;
+    });
   }
 
-  removeComment(cardId, commentIndex) {
+  removeComment(cardId, commentIndex, api) {
     const cardIndex = this._cards.findIndex(it => it.id === cardId);
 
     if (cardIndex === -1) {

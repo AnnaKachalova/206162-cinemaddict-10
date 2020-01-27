@@ -37,7 +37,9 @@ const createFilmCardComponent = film => {
         <span class="film-card__genre">${genre}</span>
         </p>
         <img src="./${poster}" alt="" class="film-card__poster">
-        <p class="film-card__description">${newDescription}</p>
+        <p class="film-card__description">${
+          newDescription.length > 1 ? newDescription : ''
+        }</p>
         <a class="film-card__comments">${comments.length} comments</a>
     <form class="film-card__controls">
         <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchlistClass}">Add to watchlist</button>

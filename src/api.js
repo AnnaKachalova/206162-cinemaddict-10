@@ -49,6 +49,20 @@ const API = class {
   getComments(filmId) {
     return this._load({ url: `comments/${filmId}` }).then(response => response.json());
   }
+  createComment({ comment, cardId }) {
+    console.log(cardId);
+    console.log(comment);
+    return this._load({
+      url: `comments/${cardId}`,
+      method: `POST`,
+      body: JSON.stringify(comment),
+      headers: new Headers({ 'Content-Type': `application/json` }),
+    }).then(response => response.json());
+  }
+
+  deleteComment({ commentId }) {
+    return this._load({ url: `comments/${commentId}`, method: `DELETE` });
+  }
 };
 
 export default API;

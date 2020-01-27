@@ -14,12 +14,13 @@ import MovieController from './movie-controller.js';
 const SHOWING_CARDS_COUNT_ON_START = 5;
 const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
 
-const renderCards = (filmListContainer, cards, onDataChange, cardsModel) => {
+const renderCards = (filmListContainer, cards, onDataChange, cardsModel, api) => {
   return cards.map(card => {
     const movieController = new MovieController(
       filmListContainer,
       cardsModel,
-      onDataChange
+      onDataChange,
+      api
     );
     movieController.render(card);
     return movieController;
@@ -75,7 +76,8 @@ export default class PageController {
         this._filmListContainer,
         cards.slice(0, this._showingCardsCount),
         this._onDataChange,
-        this._cardsModel
+        this._cardsModel,
+        this._api
       );
       this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
 
@@ -93,7 +95,13 @@ export default class PageController {
 
     const elementList = element.querySelector(`.films-list__container`);
     this._getCommens();
-    renderCards(elementList, assortedArray, this._onDataChange, this._cardsModel);
+    renderCards(
+      elementList,
+      assortedArray,
+      this._onDataChange,
+      this._cardsModel,
+      this._api
+    );
   }
   _renderMostCommeted(cards) {
     const mostCommeted = getMostCommented(cards);
@@ -120,7 +128,8 @@ export default class PageController {
       this._filmListContainer,
       cards,
       this._onDataChange,
-      this._cardsModel
+      this._cardsModel,
+      this._api
     );
 
     this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
@@ -174,7 +183,7 @@ export default class PageController {
 
     this._filmListContainer.innerHTML = ``;
     this._getCommens();
-    renderCards(this._filmListContainer, sortedCards, this._cardsModel);
+    renderCards(this._filmListContainer, sortedCards, this._cardsModel, this._api);
 
     this._removeCards();
     this._renderCards(sortedCards);

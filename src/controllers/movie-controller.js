@@ -4,15 +4,17 @@ import { render, replace, remove, RenderPosition } from '../utils/render.js';
 import CardFilm from '../models/film-card.js';
 
 export default class MovieController {
-  constructor(container, cardModel, onDataChange) {
+  constructor(container, cardModel, onDataChange, api) {
     this._container = container;
     this._cardComponent = null;
     this._onDataChange = onDataChange;
     this._cardModel = cardModel;
+    this._api = api;
   }
   render(card) {
     const oldCardComponent = this._cardComponent;
-
+    console.log(`добавила комментарий учет обновления`);
+    console.log(card);
     this._cardComponent = new FilmCardComponent(card);
 
     this._cardComponent.setPosterClickHandler(() => this._onCardClick(card));
@@ -67,14 +69,14 @@ export default class MovieController {
   }
   _onCommentDataChange(card, index, newData) {
     if (newData === null) {
-      this._cardModel.removeComment(card.id, index);
+      this._cardModel.removeComment(card.id, index, this._api);
+      this.render(card);
       this._onCardClick(card);
     } else if (index === null) {
-      this._cardModel.addComment(card.id, newData);
+      this._cardModel.addComment(card.id, newData, this._api);
+      this.render(card);
       this._onCardClick(card);
     }
-
-    this.render(card);
   }
   _onCardClick(card) {
     this._popupComponent = new PopupComponent(card);

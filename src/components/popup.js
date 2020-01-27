@@ -1,6 +1,7 @@
 import { render, RenderPosition } from '../utils/render.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
 import { formatReleaseDate, formatDateAgo, formatDuration } from '../utils/common.js';
+import moment from 'moment';
 
 const createGenreTemplate = genres => {
   return Array.from(genres)
@@ -221,19 +222,10 @@ const createPopupCardComponent = film => {
 </section>`;
 };
 const parseFormData = formData => {
-  const options = {
-    hour12: false,
-    year: `numeric`,
-    month: `numeric`,
-    day: `numeric`,
-    hour: `numeric`,
-    minute: `numeric`,
-  };
-
   return {
     author: `You`,
     comment: formData.get(`comment`),
-    date: new Date().toLocaleString(`en-US`, options),
+    date: moment().format(),
     emotion: formData.get(`comment-emoji`),
   };
 };
@@ -256,7 +248,6 @@ export default class Popup extends AbstractSmartComponent {
     const form = this.getElement().querySelector(`.film-details__inner`);
     const formData = new FormData(form);
     return parseFormData(formData);
-    //return new FormData(form);
   }
   setDeleteClickHandler(handler) {
     this.getElement()
@@ -307,7 +298,8 @@ export default class Popup extends AbstractSmartComponent {
     if (visiblePopup) {
       visiblePopup.remove();
     }
-
+    console.log(`перерендеривание попапа`);
+    console.log(this);
     render(this._bodyElement, this, RenderPosition.BEFOREEND);
 
     document.onkeydown = evt => this.onButtonKeyDown(evt);
