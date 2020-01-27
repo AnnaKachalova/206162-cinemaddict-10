@@ -11,17 +11,17 @@ const createGenreTemplate = genres => {
 };
 
 const createCommentTemplate = comments => {
-  return Array.from(comments).map(comment => {
-    const { emoji, name, text, time } = comment;
+  return Array.from(comments).map(commentItem => {
+    const { emotion, author, comment, date } = commentItem;
     return `<li class="film-details__comment">
               <span class="film-details__comment-emoji">
-                <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">
+                <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji">
               </span>
               <div>
-                <p class="film-details__comment-text">${text}</p>
+                <p class="film-details__comment-text">${comment}</p>
                 <p class="film-details__comment-info">
-                  <span class="film-details__comment-author">${name}</span>
-                  <span class="film-details__comment-day">${time}</span>
+                  <span class="film-details__comment-author">${author}</span>
+                  <span class="film-details__comment-day">${formatDateAgo(date)}</span>
                   <button class="film-details__comment-delete">Delete</button>
                 </p>
               </div>
@@ -220,6 +220,23 @@ const createPopupCardComponent = film => {
   </form>
 </section>`;
 };
+const parseFormData = formData => {
+  const options = {
+    hour12: false,
+    year: `numeric`,
+    month: `numeric`,
+    day: `numeric`,
+    hour: `numeric`,
+    minute: `numeric`,
+  };
+
+  return {
+    author: `You`,
+    comment: formData.get(`comment`),
+    date: new Date().toLocaleString(`en-US`, options),
+    emotion: formData.get(`comment-emoji`),
+  };
+};
 
 export default class Popup extends AbstractSmartComponent {
   constructor(film) {
@@ -237,9 +254,9 @@ export default class Popup extends AbstractSmartComponent {
   }
   getData() {
     const form = this.getElement().querySelector(`.film-details__inner`);
-    //const formData = new FormData(form);
-    //return parseFormData(formData);
-    return new FormData(form);
+    const formData = new FormData(form);
+    return parseFormData(formData);
+    //return new FormData(form);
   }
   setDeleteClickHandler(handler) {
     this.getElement()

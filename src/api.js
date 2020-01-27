@@ -46,6 +46,9 @@ const API = class {
         throw err;
       });
   }
+  getComments(filmId) {
+    return this._load({ url: `comments/${filmId}` }).then(response => response.json());
+  }
 };
 
 export default API;

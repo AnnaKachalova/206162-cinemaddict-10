@@ -70,7 +70,7 @@ export default class PageController {
     if (cards.length) {
       render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
       render(this._container, this._filmsContainerComponent, RenderPosition.BEFOREEND);
-
+      this._getCommens();
       const newCards = renderCards(
         this._filmListContainer,
         cards.slice(0, this._showingCardsCount),
@@ -92,6 +92,7 @@ export default class PageController {
     render(this._filmsContainerElement, component, RenderPosition.BEFOREEND);
 
     const elementList = element.querySelector(`.films-list__container`);
+    this._getCommens();
     renderCards(elementList, assortedArray, this._onDataChange, this._cardsModel);
   }
   _renderMostCommeted(cards) {
@@ -113,12 +114,15 @@ export default class PageController {
   }
 
   _renderCards(cards) {
+    this._getCommens();
+    console.log('_getCommens');
     const newCards = renderCards(
       this._filmListContainer,
       cards,
       this._onDataChange,
       this._cardsModel
     );
+
     this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
     this._showingCardsCount = this._showedCardsControllers.length;
   }
@@ -169,6 +173,7 @@ export default class PageController {
     }
 
     this._filmListContainer.innerHTML = ``;
+    this._getCommens();
     renderCards(this._filmListContainer, sortedCards, this._cardsModel);
 
     this._removeCards();
@@ -194,6 +199,14 @@ export default class PageController {
     if (this._showingCardsCount >= cards.length) {
       remove(this._moreButtonComponent);
     }
+  }
+  _getCommens() {
+    const cardsAll = this._cardsModel.getCards();
+    cardsAll.map(card => {
+      return this._api.getComments(card.id).then(comments => {
+        card.comments = comments;
+      });
+    });
   }
   _onFilterChange() {
     this._removeCards();

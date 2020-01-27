@@ -3,24 +3,6 @@ import PopupComponent from '../components/popup.js';
 import { render, replace, remove, RenderPosition } from '../utils/render.js';
 import CardFilm from '../models/film-card.js';
 
-const parseFormData = formData => {
-  const options = {
-    hour12: false,
-    year: `numeric`,
-    month: `numeric`,
-    day: `numeric`,
-    hour: `numeric`,
-    minute: `numeric`,
-  };
-
-  return {
-    name: `You`,
-    text: formData.get(`comment`),
-    time: new Date().toLocaleString(`en-US`, options),
-    emoji: formData.get(`comment-emoji`),
-  };
-};
-
 export default class MovieController {
   constructor(container, cardModel, onDataChange) {
     this._container = container;
@@ -46,8 +28,8 @@ export default class MovieController {
         Object.assign({}, card, { isWatchlist: !card.isWatchlist, isHistory: false })
       );*/
       const newCard = CardFilm.clone(card);
-      newCard.isArchive = !newCard.isArchive;
-
+      newCard.isWatchlist = !newCard.isWatchlist;
+      newCard.isHistory = false;
       this._onDataChange(this, card, newCard);
     });
 
@@ -59,8 +41,8 @@ export default class MovieController {
         Object.assign({}, card, { isHistory: !card.isHistory, isWatchlist: false })
       );*/
       const newCard = CardFilm.clone(card);
-      newCard.isWatchlist = !newCard.isWatchlist;
-
+      newCard.isHistory = !newCard.isHistory;
+      newCard.isWatchlist = false;
       this._onDataChange(this, card, newCard);
     });
 
