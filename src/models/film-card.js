@@ -46,7 +46,7 @@ export default class FilmCard {
       },
       comments: this.comments,
       user_details: {
-        watchedDate: this.watchedDate,
+        watchedDate: new Date(this.watchedDate) || null,
         isHistory: this.isHistory,
         isWatchlist: this.isWatchlist,
         isFavorite: this.isFavorite,

@@ -46,6 +46,22 @@ const API = class {
         throw err;
       });
   }
+  getComments({ filmId }) {
+    return this._load({ url: `comments/${filmId}` }).then(toJSON);
+  }
+
+  createComment({ comment, filmId }) {
+    return this._load({
+      url: `comments/${filmId}`,
+      method: `POST`,
+      body: JSON.stringify(comment),
+      headers: new Headers({ 'Content-Type': `application/json` }),
+    }).then(toJSON);
+  }
+
+  deleteComment({ commentId }) {
+    return this._load({ url: `comments/${commentId}`, method: `DELETE` });
+  }
 };
 
 export default API;

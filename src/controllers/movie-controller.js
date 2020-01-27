@@ -46,8 +46,8 @@ export default class MovieController {
         Object.assign({}, card, { isWatchlist: !card.isWatchlist, isHistory: false })
       );*/
       const newCard = CardFilm.clone(card);
-      newCard.isArchive = !newCard.isArchive;
-
+      newCard.isWatchlist = !newCard.isWatchlist;
+      newCard.isHistory = false;
       this._onDataChange(this, card, newCard);
     });
 
@@ -59,8 +59,8 @@ export default class MovieController {
         Object.assign({}, card, { isHistory: !card.isHistory, isWatchlist: false })
       );*/
       const newCard = CardFilm.clone(card);
-      newCard.isWatchlist = !newCard.isWatchlist;
-
+      newCard.isHistory = !newCard.isHistory;
+      newCard.isWatchlist = false;
       this._onDataChange(this, card, newCard);
     });
 
