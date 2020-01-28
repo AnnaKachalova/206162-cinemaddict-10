@@ -123,7 +123,7 @@ export default class PageController {
 
   _renderCards(cards) {
     this._getCommens();
-    console.log('_getCommens');
+    //console.log('_getCommens');
     const newCards = renderCards(
       this._filmListContainer,
       cards,
@@ -154,6 +154,7 @@ export default class PageController {
       this._renderMostCommeted(cards);
       this._renderTopRated(cards);
     } */
+    console.log('page-controller');
     this._api.updateCard(oldData.id, newData).then(cardsModel => {
       const isSuccess = this._cardsModel.updateCard(oldData.id, cardsModel);
 

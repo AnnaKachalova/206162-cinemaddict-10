@@ -13,8 +13,8 @@ export default class MovieController {
   }
   render(card) {
     const oldCardComponent = this._cardComponent;
-    console.log(`добавила комментарий учет обновления`);
-    console.log(card);
+    //console.log(`добавила комментарий учет обновления ${new Date()}`);
+    //console.log(card);
     this._cardComponent = new FilmCardComponent(card);
 
     this._cardComponent.setPosterClickHandler(() => this._onCardClick(card));
@@ -69,13 +69,15 @@ export default class MovieController {
   }
   _onCommentDataChange(card, index, newData) {
     if (newData === null) {
-      this._cardModel.removeComment(card.id, index, this._api);
-      this.render(card);
-      this._onCardClick(card);
+      this._cardModel.removeComment(card.id, index, this._api).then(() => {
+        this.render(card);
+        this._onCardClick(card);
+      });
     } else if (index === null) {
-      this._cardModel.addComment(card.id, newData, this._api);
-      this.render(card);
-      this._onCardClick(card);
+      this._cardModel.addComment(card.id, newData, this._api).then(() => {
+        this.render(card);
+        this._onCardClick(card);
+      });
     }
   }
   _onCardClick(card) {
@@ -93,6 +95,7 @@ export default class MovieController {
     this._popupComponent.setCommentEnterPressHandler(() => {
       this._onCommentDataChange(card, null, this._popupComponent.getData());
     });
+
     this._popupComponent.showElement();
   }
 }

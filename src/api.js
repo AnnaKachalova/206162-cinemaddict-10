@@ -50,8 +50,6 @@ const API = class {
     return this._load({ url: `comments/${filmId}` }).then(response => response.json());
   }
   createComment({ comment, cardId }) {
-    console.log(cardId);
-    console.log(comment);
     return this._load({
       url: `comments/${cardId}`,
       method: `POST`,
@@ -60,8 +58,10 @@ const API = class {
     }).then(response => response.json());
   }
 
-  deleteComment({ commentId }) {
-    return this._load({ url: `comments/${commentId}`, method: `DELETE` });
+  deleteComment({ commentIndex }) {
+    console.log(commentIndex);
+    console.log(this._load({ url: `comments/${commentIndex}`, method: `DELETE` }));
+    return this._load({ url: `comments/${commentIndex}`, method: `DELETE` });
   }
 };
 

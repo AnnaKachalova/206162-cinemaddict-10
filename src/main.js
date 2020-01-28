@@ -8,7 +8,7 @@ import FilmCardsModel from './models/film-cards.js';
 
 import { getRank, render, RenderPosition } from './utils/render.js';
 
-const AUTHORIZATION = `Basic eo0w5d90ik29889a`;
+const AUTHORIZATION = `Basic eo0whfghgfhtrhh`;
 const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
 
 const filmCardsModel = new FilmCardsModel();

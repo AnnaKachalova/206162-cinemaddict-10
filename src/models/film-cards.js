@@ -45,16 +45,16 @@ export default class FilmCard {
     if (cardIndex === -1) {
       return;
     }
-    this._dataChangeHandlers.forEach(handler => handler());
-    //this._cards[cardIndex].comments.unshift(comment);
-    console.log('коммент добавился');
-    return api.createComment({ comment, cardId }).then(response => {
-      const { movie, comments } = response;
-      this._cards[cardIndex].comments = comments;
-      console.log(this._cards[cardIndex]);
+    return api
+      .createComment({ comment, cardId })
+      .then(response => {
+        const { movie, comments } = response;
 
-      return comments;
-    });
+        this._cards[cardIndex].comments.unshift(comment);
+
+        return comments;
+      })
+      .then(this._dataChangeHandlers.forEach(handler => handler()));
   }
 
   removeComment(cardId, commentIndex, api) {
@@ -64,9 +64,17 @@ export default class FilmCard {
       return;
     }
 
-    this._cards[cardIndex].comments.splice(commentIndex, 1);
+    /* this._cards[cardIndex].comments.splice(commentIndex, 1);
 
-    this._dataChangeHandlers.forEach(handler => handler());
+    this._dataChangeHandlers.forEach(handler => handler());*/
+    return api
+      .deleteComment({ commentIndex })
+      .then(() => {
+        const comments = this._cards[cardIndex].comments;
+        this._cards[cardIndex].comments.splice(commentIndex, 1);
+        return comments;
+      })
+      .then(this._dataChangeHandlers.forEach(handler => handler()));
   }
 
   setFilterChangeHandler(handler) {

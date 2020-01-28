@@ -12,9 +12,10 @@ const createGenreTemplate = genres => {
 };
 
 const createCommentTemplate = comments => {
-  return Array.from(comments).map(commentItem => {
-    const { emotion, author, comment, date } = commentItem;
-    return `<li class="film-details__comment">
+  return Array.from(comments)
+    .map(commentItem => {
+      const { emotion, author, comment, date } = commentItem;
+      return `<li class="film-details__comment">
               <span class="film-details__comment-emoji">
                 <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji">
               </span>
@@ -27,7 +28,8 @@ const createCommentTemplate = comments => {
                 </p>
               </div>
           </li>`;
-  });
+    })
+    .join('');
 };
 
 const createRatingItems = userRating => {
@@ -242,9 +244,11 @@ export default class Popup extends AbstractSmartComponent {
   }
 
   getTemplate() {
+    console.log(`попадание в шаблон попапа`);
     return createPopupCardComponent(this._film);
   }
   getData() {
+    console.log(`получение свежих данных из формы`);
     const form = this.getElement().querySelector(`.film-details__inner`);
     const formData = new FormData(form);
     return parseFormData(formData);
@@ -273,6 +277,7 @@ export default class Popup extends AbstractSmartComponent {
     this._subscribeOnEvents();
   }
   rerender() {
+    console.log(`массовое перерендеривание`);
     super.rerender();
   }
   reset() {
@@ -298,7 +303,7 @@ export default class Popup extends AbstractSmartComponent {
     if (visiblePopup) {
       visiblePopup.remove();
     }
-    console.log(`перерендеривание попапа`);
+    console.log(`перерендеривание попапа входят новые данные`);
     console.log(this);
     render(this._bodyElement, this, RenderPosition.BEFOREEND);
 
