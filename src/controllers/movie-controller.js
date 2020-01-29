@@ -3,6 +3,8 @@ import PopupComponent from '../components/popup.js';
 import { render, replace, remove, RenderPosition } from '../utils/render.js';
 import CardFilm from '../models/film-card.js';
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 export default class MovieController {
   constructor(container, cardModel, onDataChange, api) {
     this._container = container;
@@ -10,6 +12,7 @@ export default class MovieController {
     this._onDataChange = onDataChange;
     this._cardModel = cardModel;
     this._api = api;
+    this._fieldText = null;
   }
   render(card) {
     const oldCardComponent = this._cardComponent;
@@ -69,16 +72,47 @@ export default class MovieController {
   }
   _onCommentDataChange(card, index, newData) {
     if (newData === null) {
-      this._cardModel.removeComment(card.id, index, this._api).then(() => {
-        this.render(card);
-        this._onCardClick(card);
-      });
+      this._cardModel
+        .removeComment(card.id, index, this._api)
+        .then(() => {
+          this._enabledButtonDelete();
+          this.render(card);
+          this._onCardClick(card);
+        })
+        .catch(() => {
+          this._enabledButtonDelete();
+        });
     } else if (index === null) {
-      this._cardModel.addComment(card.id, newData, this._api).then(() => {
-        this.render(card);
-        this._onCardClick(card);
-      });
+      this._disabledFieldText();
+      this._cardModel
+        .addComment(card.id, newData, this._api)
+        .then(() => {
+          this._enabledFieldText();
+          this.render(card);
+          this._onCardClick(card);
+        })
+        .catch(() => {
+          this._shake();
+          this._enabledFieldText();
+        });
     }
+  }
+  _shake() {
+    const form = document.querySelector(`.film-details`);
+    form.classList.add('shake');
+    setTimeout(() => {
+      form.classList.remove('shake');
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+  _enabledButtonDelete() {
+    this._deleteButton.disabled = false;
+    this._deleteButton.textContent = `Delete`;
+  }
+  _disabledFieldText() {
+    this._fieldText.disabled = true;
+  }
+  _enabledFieldText() {
+    this._fieldText.disabled = false;
   }
   _onCardClick(card) {
     this._popupComponent = new PopupComponent(card);
@@ -88,7 +122,11 @@ export default class MovieController {
     });
 
     // comments
-    this._popupComponent.setDeleteClickHandler(index => {
+    this._popupComponent.setDeleteClickHandler(handler => {
+      const { index, button } = handler;
+      console.log(index);
+      console.log(button);
+      this._deleteButton = button;
       this._onCommentDataChange(card, index, null);
     });
 
@@ -97,5 +135,6 @@ export default class MovieController {
     });
 
     this._popupComponent.showElement();
+    this._fieldText = document.querySelector(`.film-details__comment-input`);
   }
 }

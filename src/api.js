@@ -58,10 +58,8 @@ const API = class {
     }).then(response => response.json());
   }
 
-  deleteComment({ commentIndex }) {
-    console.log(commentIndex);
-    console.log(this._load({ url: `comments/${commentIndex}`, method: `DELETE` }));
-    return this._load({ url: `comments/${commentIndex}`, method: `DELETE` });
+  deleteComment({ idComment }) {
+    return this._load({ url: `comments/${idComment}`, method: `DELETE` });
   }
 };
 

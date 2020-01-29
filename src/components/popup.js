@@ -117,11 +117,7 @@ const createPopupCardComponent = film => {
 
             <div class="film-details__rating">
               <p class="film-details__total-rating">${rating}</p>
-  ${
-    hasUserRatign
-      ? `<p class="film-details__user-rating">Your rate ${userRating}</p>`
-      : ``
-  }
+  ${hasUserRatign ? `<p class="film-details__user-rating">Your rate ${userRating}</p>` : ``}
             </div>
           </div>
           <table class="film-details__table">
@@ -256,13 +252,20 @@ export default class Popup extends AbstractSmartComponent {
   setDeleteClickHandler(handler) {
     this.getElement()
       .querySelectorAll(`.film-details__comment-delete`)
-      .forEach((it, i) =>
+      .forEach((it, index) =>
         it.addEventListener(`click`, evt => {
           evt.preventDefault();
-          handler(i);
+          const button = evt.target;
+          this._disabledButtonDelete(evt.target);
+          handler({ index, button });
         })
       );
   }
+  _disabledButtonDelete(button) {
+    button.disabled = true;
+    button.textContent = `Deleting…`;
+  }
+
   setCommentEnterPressHandler(handler) {
     this.getElement()
       .querySelector(`.film-details__comment-input`)

@@ -31,11 +31,7 @@ export default class FilmCard {
       return false;
     }
 
-    this._cards = [].concat(
-      this._cards.slice(0, index),
-      card,
-      this._cards.slice(index + 1)
-    );
+    this._cards = [].concat(this._cards.slice(0, index), card, this._cards.slice(index + 1));
     this._dataChangeHandlers.forEach(handler => handler());
     return true;
   }
@@ -49,8 +45,10 @@ export default class FilmCard {
       .createComment({ comment, cardId })
       .then(response => {
         const { movie, comments } = response;
+        const lastId = comments[comments.length - 1].id;
+        comment.id = Number(lastId) + 1;
 
-        this._cards[cardIndex].comments.unshift(comment);
+        this._cards[cardIndex].comments.push(comment);
 
         return comments;
       })
@@ -64,14 +62,14 @@ export default class FilmCard {
       return;
     }
 
-    /* this._cards[cardIndex].comments.splice(commentIndex, 1);
+    const idComment = this._cards[cardIndex].comments[commentIndex].id;
 
-    this._dataChangeHandlers.forEach(handler => handler());*/
     return api
-      .deleteComment({ commentIndex })
+      .deleteComment({ idComment })
       .then(() => {
         const comments = this._cards[cardIndex].comments;
         this._cards[cardIndex].comments.splice(commentIndex, 1);
+
         return comments;
       })
       .then(this._dataChangeHandlers.forEach(handler => handler()));
