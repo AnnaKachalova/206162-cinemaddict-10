@@ -16,8 +16,7 @@ export default class MovieController {
   }
   render(card) {
     const oldCardComponent = this._cardComponent;
-    //console.log(`добавила комментарий учет обновления ${new Date()}`);
-    //console.log(card);
+
     this._cardComponent = new FilmCardComponent(card);
 
     this._cardComponent.setPosterClickHandler(() => this._onCardClick(card));
@@ -27,11 +26,6 @@ export default class MovieController {
     // card buttons
     this._cardComponent.onWatchlistButtonClick(evt => {
       evt.preventDefault();
-      /*this._onDataChange(
-        this,
-        card,
-        Object.assign({}, card, { isWatchlist: !card.isWatchlist, isHistory: false })
-      );*/
       const newCard = CardFilm.clone(card);
       newCard.isWatchlist = !newCard.isWatchlist;
       newCard.isHistory = false;
@@ -40,11 +34,6 @@ export default class MovieController {
 
     this._cardComponent.onWatchedButtonClick(evt => {
       evt.preventDefault();
-      /*this._onDataChange(
-        this,
-        card,
-        Object.assign({}, card, { isHistory: !card.isHistory, isWatchlist: false })
-      );*/
       const newCard = CardFilm.clone(card);
       newCard.isHistory = !newCard.isHistory;
       newCard.isWatchlist = false;
@@ -53,11 +42,6 @@ export default class MovieController {
 
     this._cardComponent.onFavoritesButtonClick(evt => {
       evt.preventDefault();
-      /*this._onDataChange(
-        this,
-        card,
-        Object.assign({}, card, { isFavorite: !card.isFavorite })
-      );*/
       const newCard = CardFilm.clone(card);
       newCard.isFavorite = !newCard.isFavorite;
 
@@ -124,8 +108,6 @@ export default class MovieController {
     // comments
     this._popupComponent.setDeleteClickHandler(handler => {
       const { index, button } = handler;
-      console.log(index);
-      console.log(button);
       this._deleteButton = button;
       this._onCommentDataChange(card, index, null);
     });

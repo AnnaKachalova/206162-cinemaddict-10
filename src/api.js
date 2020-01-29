@@ -29,8 +29,8 @@ const API = class {
   updateCard(id, data) {
     return this._load({
       url: `movies/${id}`,
-      method: Method.PUT,
-      body: JSON.stringify(data.toRAW()),
+      method: `PUT`,
+      body: JSON.stringify(data),
       headers: new Headers({ 'Content-Type': `application/json` }),
     })
       .then(response => response.json())

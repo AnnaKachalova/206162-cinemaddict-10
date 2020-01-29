@@ -26,31 +26,32 @@ export default class FilmCard {
 
   toRAW() {
     return {
+      comments: this.comments,
+
       film_info: {
-        title: this.title,
-        poster: this.poster,
-        description: this.description,
-        originalTitle: this.originalTitle,
-        rating: this.rating,
-        duration: this.duration,
-        genre: this.genre,
-        producer: this.producer,
-        screenwriter: this.screenwriter,
         actors: this.actors,
-        country: this.country,
-        ageRating: this.ageRating,
+        age_rating: this.ageRating,
+        alternative_title: this.originalTitle,
+        description: this.description,
+        director: this.producer,
+        genre: this.genre,
+        poster: this.poster,
         release: {
           date: new Date(this.releaseDate),
           release_country: this.country,
         },
+        runtime: this.duration,
+        title: this.title,
+        total_rating: parseInt(this.rating, 10),
+        writers: this.screenwriter,
       },
-      comments: this.comments,
+      id: this.id,
       user_details: {
-        watchedDate: this.watchedDate,
-        isHistory: this.isHistory,
-        isWatchlist: this.isWatchlist,
-        isFavorite: this.isFavorite,
-        userRating: this.userRating,
+        already_watched: this.isHistory,
+        favorite: this.isFavorite,
+        personal_rating: parseInt(this.userRating, 10) || 0,
+        watching_date: new Date(this.watchedDate) || null,
+        watchlist: this.isWatchlist,
       },
     };
   }

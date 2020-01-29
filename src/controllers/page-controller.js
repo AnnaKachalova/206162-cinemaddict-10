@@ -142,14 +142,37 @@ export default class PageController {
       this._renderTopRated(cards);
     } */
     console.log('page-controller');
-    this._api.updateCard(oldData.id, newData).then(cardsModel => {
+    console.log('updateCard');
+    const oldComments = newData.comments;
+    const isSuccess = this._cardsModel.updateCard(oldData.id, newData);
+    const a = newData.comments.map(comment => comment.id);
+    newData.comments = a;
+    console.log(a);
+    return this._api
+      .updateCard(newData.id, newData.toRAW())
+      .then(film => {
+        //this._store.setItem({key: film.id, item: film.toRAW()});
+        return film;
+      })
+      .then(() => {
+        newData.comments = oldComments;
+        movieController.render(newData);
+        const cards = this._cardsModel.getCards();
+        //this._renderMostCommeted(cards);
+        //this._renderTopRated(cards);
+        //this._updateCards(this._showingCardsCount);
+      });
+
+    /*this._api.updateCard(oldData.id, newData).then(cardsModel => {
       const isSuccess = this._cardsModel.updateCard(oldData.id, cardsModel);
+      console.log('isSuccess');
+      console.log(isSuccess);
 
       if (isSuccess) {
         movieController.render(newData);
         this._updateCards(this._showingCardsCount);
       }
-    });
+    });*/
   }
 
   _onSortTypeChange(sortType) {

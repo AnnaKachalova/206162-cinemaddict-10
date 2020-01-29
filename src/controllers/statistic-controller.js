@@ -58,19 +58,13 @@ export default class StatisticController {
     const rank = countRank(this._cards);
 
     // topGenre
-    //this._allGenres = [];
     this._allGenresNew = [];
 
     this._cardsList.forEach(card => {
-      //this._allGenres = this._allGenres.concat(card.genre);
-      this._allGenres = this._cardsList.reduce(
-        (accum, film) => accum.concat(film.genre),
-        []
-      );
+      this._allGenres = this._cardsList.reduce((accum, film) => accum.concat(film.genre), []);
     });
 
     if (this._allGenres.length) {
-      //this._allGenresNew = this._allGenres.reduce((accum, current) => {
       this._allGenres = this._allGenres.reduce((accum, current) => {
         accum[current] = (accum[current] || 0) + 1;
         return accum;
@@ -85,11 +79,6 @@ export default class StatisticController {
       (object, key) => Object.assign(object, { [key]: this._allGenres[key] }),
       {}
     );
-
-    /*this._topGenre = Object.keys(this._allGenresNew).find(
-      key => this._allGenresNew[key] === Math.max(...Object.values(this._allGenresNew))
-    );*/
-
     // quantityWatched
     this._quantityWatched = this._cardsList.length;
 
@@ -140,9 +129,7 @@ export default class StatisticController {
     const getFilteredFilms = () => {
       switch (this._activeFilterType) {
         case `today`:
-          return this._watchedList.filter(film =>
-            moment().isSame(moment(film.watchedDate), `day`)
-          );
+          return this._watchedList.filter(film => moment().isSame(moment(film.watchedDate), `day`));
 
         case `week`:
           return this._watchedList.filter(

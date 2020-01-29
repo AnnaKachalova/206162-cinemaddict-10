@@ -306,8 +306,7 @@ export default class Popup extends AbstractSmartComponent {
     if (visiblePopup) {
       visiblePopup.remove();
     }
-    console.log(`перерендеривание попапа входят новые данные`);
-    console.log(this);
+
     render(this._bodyElement, this, RenderPosition.BEFOREEND);
 
     document.onkeydown = evt => this.onButtonKeyDown(evt);
