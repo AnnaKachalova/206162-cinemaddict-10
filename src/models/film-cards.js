@@ -41,8 +41,7 @@ export default class FilmCard {
     if (cardIndex === -1) {
       return;
     }
-    return api
-      .createComment({comment, cardId})
+    return api.createComment({comment, cardId})
       .then((response) => {
         const {comments} = response;
         const lastId = comments[comments.length - 1].id;
@@ -64,8 +63,7 @@ export default class FilmCard {
 
     const idComment = this._cards[cardIndex].comments[commentIndex].id;
 
-    return api
-      .deleteComment({idComment})
+    return api.deleteComment({idComment})
       .then(() => {
         const comments = this._cards[cardIndex].comments;
         this._cards[cardIndex].comments.splice(commentIndex, 1);
