@@ -29,7 +29,7 @@ export default class MovieController {
     this._cardComponent.setCommentBlockClickHandler(() => this._onCardClick(card));
 
     // card buttons
-    this._cardComponent.onWatchlistButtonClick(evt => {
+    this._cardComponent.onWatchlistButtonClick((evt) => {
       evt.preventDefault();
       const newCard = CardFilm.clone(card);
       newCard.isWatchlist = !newCard.isWatchlist;
@@ -37,7 +37,7 @@ export default class MovieController {
       this._onDataChange(this, card, newCard);
     });
 
-    this._cardComponent.onWatchedButtonClick(evt => {
+    this._cardComponent.onWatchedButtonClick((evt) => {
       evt.preventDefault();
       const newCard = CardFilm.clone(card);
       newCard.isHistory = !newCard.isHistory;
@@ -45,7 +45,7 @@ export default class MovieController {
       this._onDataChange(this, card, newCard);
     });
 
-    this._cardComponent.onFavoritesButtonClick(evt => {
+    this._cardComponent.onFavoritesButtonClick((evt) => {
       evt.preventDefault();
       const newCard = CardFilm.clone(card);
       newCard.isFavorite = !newCard.isFavorite;
@@ -90,9 +90,9 @@ export default class MovieController {
   }
   _shake() {
     const form = document.querySelector(`.film-details`);
-    form.classList.add('shake');
+    form.classList.add(`shake`);
     setTimeout(() => {
-      form.classList.remove('shake');
+      form.classList.remove(`shake`);
     }, SHAKE_ANIMATION_TIMEOUT);
   }
   _enabledButtonDelete() {
@@ -108,13 +108,13 @@ export default class MovieController {
 
   _onCardClick(card) {
     this._popupComponent = new PopupComponent(card);
-    this._popupComponent.onControlsChangeHandler(newData => {
+    this._popupComponent.onControlsChangeHandler((newData) => {
       this._onDataChange(this, card, newData);
     });
 
     // comments
-    this._popupComponent.setDeleteClickHandler(handler => {
-      const { index, button } = handler;
+    this._popupComponent.setDeleteClickHandler((handler) => {
+      const {index, button} = handler;
       this._deleteButton = button;
       this._onCommentDataChange(card, index, null);
     });

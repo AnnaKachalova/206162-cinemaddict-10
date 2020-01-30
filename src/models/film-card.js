@@ -26,32 +26,32 @@ export default class FilmCard {
 
   toRAW() {
     return {
-      comments: this.comments,
+      'comments': this.comments,
 
-      film_info: {
-        actors: this.actors,
-        age_rating: this.ageRating,
-        alternative_title: this.originalTitle,
-        description: this.description,
-        director: this.producer,
-        genre: this.genre,
-        poster: this.poster,
-        release: {
-          date: new Date(this.releaseDate),
-          release_country: this.country,
+      'film_info': {
+        'actors': this.actors,
+        'age_rating': this.ageRating,
+        'alternative_title': this.originalTitle,
+        'description': this.description,
+        'director': this.producer,
+        'genre': this.genre,
+        'poster': this.poster,
+        'release': {
+          'date': new Date(this.releaseDate),
+          'release_country': this.country,
         },
-        runtime: this.duration,
-        title: this.title,
-        total_rating: parseInt(this.rating, 10),
-        writers: this.screenwriter,
+        'runtime': this.duration,
+        'title': this.title,
+        'total_rating': parseInt(this.rating, 10),
+        'writers': this.screenwriter,
       },
-      id: this.id,
-      user_details: {
-        already_watched: this.isHistory,
-        favorite: this.isFavorite,
-        personal_rating: parseInt(this.userRating, 10) || 0,
-        watching_date: new Date(this.watchedDate) || null,
-        watchlist: this.isWatchlist,
+      'id': this.id,
+      'user_details': {
+        'already_watched': this.isHistory,
+        'favorite': this.isFavorite,
+        'personal_rating': parseInt(this.userRating, 10) || 0,
+        'watching_date': new Date(this.watchedDate) || null,
+        'watchlist': this.isWatchlist,
       },
     };
   }

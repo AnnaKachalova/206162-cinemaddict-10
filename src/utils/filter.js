@@ -1,15 +1,15 @@
 import {FilterType} from '../const.js';
 
-export const getWatchlistCards = cards => {
-  return cards.filter(card => card.isWatchlist);
+export const getWatchlistCards = (cards) => {
+  return cards.filter((card) => card.isWatchlist);
 };
 
-export const getHistoryCards = cards => {
-  return cards.filter(card => card.isHistory);
+export const getHistoryCards = (cards) => {
+  return cards.filter((card) => card.isHistory);
 };
 
-export const getFavoriteCards = cards => {
-  return cards.filter(card => card.isFavorite);
+export const getFavoriteCards = (cards) => {
+  return cards.filter((card) => card.isFavorite);
 };
 
 export const getCardsByFilter = (cards, filterType) => {

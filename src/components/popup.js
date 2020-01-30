@@ -8,7 +8,7 @@ const createGenreTemplate = (genres) => {
     .map((element) => {
       return `<span class="film-details__genre">${element},</span>`;
     })
-    .join('');
+    .join(``);
 };
 
 const createCommentTemplate = (comments) => {
@@ -29,14 +29,14 @@ const createCommentTemplate = (comments) => {
               </div>
           </li>`;
     })
-    .join('');
+    .join(``);
 };
 
 const createRatingItems = (userRating) => {
   let scores = [];
   for (let i = 1; i < 10; i++) {
     const row = `<input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="${i}" id="rating-${i}" ${
-      Number(userRating) === i ? 'checked' : ''
+      Number(userRating) === i ?  `checked` : ``
     }>
     <label class="film-details__user-rating-label" for="rating-${i}">${i}</label>`;
     scores += row;
@@ -146,7 +146,7 @@ const createPopupCardComponent = (film) => {
               <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">${genre.length > 1 ? 'Genres' : 'Genre'}</td>
+              <td class="film-details__term">${genre.length > 1 ? `Genres` : `Genre`}</td>
               <td class="film-details__cell">
                 ${genreMarkup}
               </td>
@@ -159,27 +159,27 @@ const createPopupCardComponent = (film) => {
 
       <section class="film-details__controls">
         <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${
-          isWatchlist ? `checked` : ``
-        }>
+    isWatchlist ? `checked` : ``
+}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
         <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${
-          isHistory ? `checked` : ``
-        }>
+  isHistory ? `checked` : ``
+}>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
         <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${
-          isFavorite ? `checked` : ``
-        }>
+  isFavorite ? `checked` : ``
+}>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
-    ${isHistory ? createFilmRaringTemplate(poster, title, userRating) : ''}
+    ${isHistory ? createFilmRaringTemplate(poster, title, userRating) : ``}
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${
-          comments.length
-        }</span></h3>
+  comments.length
+}</span></h3>
 
         <ul class="film-details__comments-list">
           ${commentsMarkup}
@@ -251,11 +251,11 @@ export default class Popup extends AbstractSmartComponent {
     this.getElement()
       .querySelectorAll(`.film-details__comment-delete`)
       .forEach((it, index) =>
-        it.addEventListener(`click`, evt => {
+        it.addEventListener(`click`, (evt) => {
           evt.preventDefault();
           const button = evt.target;
           this._disabledButtonDelete(evt.target);
-          handler({ index, button });
+          handler({index, button});
         })
       );
   }
@@ -267,7 +267,7 @@ export default class Popup extends AbstractSmartComponent {
   setCommentEnterPressHandler(handler) {
     this.getElement()
       .querySelector(`.film-details__comment-input`)
-      .addEventListener(`keydown`, evt => {
+      .addEventListener(`keydown`, (evt) => {
         if (evt.ctrlKey === true && evt.key === `Enter`) {
           handler();
         }
@@ -305,7 +305,7 @@ export default class Popup extends AbstractSmartComponent {
     }
 
     render(this._bodyElement, this, RenderPosition.BEFOREEND);
-    document.onkeydown = evt => this.onButtonKeyDown(evt);
+    document.onkeydown = (evt) => this.onButtonKeyDown(evt);
     this._subscribeOnEvents();
   }
 
@@ -314,17 +314,17 @@ export default class Popup extends AbstractSmartComponent {
 
     const controlsWrapper = popupElement.querySelector(`.film-details__controls`);
 
-    controlsWrapper.addEventListener(`change`, evt => {
+    controlsWrapper.addEventListener(`change`, (evt) => {
       switch (evt.target.name) {
-        case 'watched':
+        case `watched`:
           this._film.isHistory = !this._film.isHistory;
           this._film.isWatchlist = false;
           break;
-        case 'watchlist':
+        case `watchlist`:
           this._film.isWatchlist = !this._film.isWatchlist;
           this._film.isHistory = false;
           break;
-        case 'favorite':
+        case `favorite`:
           this._film.isFavorite = !this._film.isFavorite;
           break;
       }
@@ -334,7 +334,7 @@ export default class Popup extends AbstractSmartComponent {
 
     const ratingWrappers = popupElement.querySelector(`.film-details__user-rating-score`);
     if (ratingWrappers) {
-      ratingWrappers.addEventListener(`change`, evt => {
+      ratingWrappers.addEventListener(`change`, (evt) => {
         if (evt.target.name === `score`) {
           this._film.userRating = evt.target.value;
           evt.target.checked = true;
@@ -342,7 +342,7 @@ export default class Popup extends AbstractSmartComponent {
           this.rerender();
         }
       });
-      const buttonUndo = popupElement.querySelector('.film-details__watched-reset');
+      const buttonUndo = popupElement.querySelector(`.film-details__watched-reset`);
       buttonUndo.addEventListener(`click`, () => {
         this._film.userRating = 0;
         this._onDataChange(this._film);
@@ -357,14 +357,14 @@ export default class Popup extends AbstractSmartComponent {
     const emoji = popupElement.querySelectorAll(`.film-details__emoji-item`);
     const parentEmotion = popupElement.querySelector(`.film-details__add-emoji-label`);
 
-    emoji.forEach(emotion => {
+    emoji.forEach((emotion) => {
       emotion.addEventListener(`change`, () => {
         const emotionValue = emotion.value;
-        const newImg = document.createElement('img');
-        newImg.style.width = '50px';
-        newImg.style.height = '50px';
+        const newImg = document.createElement(`img`);
+        newImg.style.width = `50px`;
+        newImg.style.height = `50px`;
         newImg.src = `./images/emoji/${emotionValue}.png`;
-        parentEmotion.innerHTML = '';
+        parentEmotion.innerHTML = ``;
         parentEmotion.append(newImg);
       });
     });

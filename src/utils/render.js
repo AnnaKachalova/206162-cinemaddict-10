@@ -7,7 +7,7 @@ export const RenderPosition = {
 
 export const getItemsByField = (array, field, length) => {
   return array
-    .filter(element => !!element[field])
+    .filter((element) => !!element[field])
     .sort((a, b) => b[field] - a[field])
     .slice(0, length);
 };
@@ -17,7 +17,7 @@ export const getTopRated = (films) => {
 
 export const getMostCommented = (films) => {
   return films
-    .filter(element => !!element.comments)
+    .filter((element) => !!element.comments)
     .sort((a, b) => b.comments.length - a.comments.length)
     .slice(0, 2);
 };
@@ -54,7 +54,7 @@ export const replace = (newComponent, oldComponent) => {
   }
 };
 export const getRank = (isHistoryCount) => {
-  let rank = Object.keys(RankGradation).find(key => {
+  let rank = Object.keys(RankGradation).find((key) => {
     const min = Number(RankGradation[key].MIN_VALUE);
     const max = Number(RankGradation[key].MAX_VALUE);
     return min <= isHistoryCount && isHistoryCount <= max;

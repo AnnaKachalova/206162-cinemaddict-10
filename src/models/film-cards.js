@@ -1,5 +1,5 @@
-import { getCardsByFilter } from '../utils/filter.js';
-import { FilterType } from '../const.js';
+import {getCardsByFilter} from '../utils/filter.js';
+import {FilterType} from '../const.js';
 
 export default class FilmCard {
   constructor() {
@@ -25,7 +25,7 @@ export default class FilmCard {
     this._filterChangeHandlers.forEach((handler) => handler());
   }
   updateCard(id, card) {
-    const index = this._cards.findIndex(it => it.id === id);
+    const index = this._cards.findIndex((it) => it.id === id);
 
     if (index === -1) {
       return false;
@@ -36,15 +36,15 @@ export default class FilmCard {
     return true;
   }
   addComment(cardId, comment, api) {
-    const cardIndex = this._cards.findIndex(it => it.id === cardId);
+    const cardIndex = this._cards.findIndex((it) => it.id === cardId);
 
     if (cardIndex === -1) {
       return;
     }
     return api
-      .createComment({ comment, cardId })
+      .createComment({comment, cardId})
       .then(response => {
-        const { movie, comments } = response;
+        const {comments} = response;
         const lastId = comments[comments.length - 1].id;
         comment.id = Number(lastId) + 1;
 
@@ -65,7 +65,7 @@ export default class FilmCard {
     const idComment = this._cards[cardIndex].comments[commentIndex].id;
 
     return api
-      .deleteComment({ idComment })
+      .deleteComment({idComment})
       .then(() => {
         const comments = this._cards[cardIndex].comments;
         this._cards[cardIndex].comments.splice(commentIndex, 1);

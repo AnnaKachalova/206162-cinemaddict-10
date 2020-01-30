@@ -14,14 +14,7 @@ import MovieController from './movie-controller.js';
 const SHOWING_CARDS_COUNT_ON_START = 5;
 const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
 
-const renderCards = (
-  filmListContainer,
-  cards,
-  onDataChange,
-  cardsModel,
-  api,
-  onMostCommetedChange
-) => {
+const renderCards = (filmListContainer, cards, onDataChange, cardsModel, api, onMostCommetedChange) => {
   return cards.map((card) => {
     const movieController = new MovieController(
       filmListContainer,

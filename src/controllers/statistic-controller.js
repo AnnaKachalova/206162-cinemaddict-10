@@ -6,7 +6,7 @@ import StatisticComponent from '../components/statistics.js';
 import moment from 'moment';
 
 const countRank = (cards) => {
-  const filmsHistoryCount = cards.filter(film => film.isHistory === true).length;
+  const filmsHistoryCount = cards.filter((film) => film.isHistory === true).length;
   return getRank(filmsHistoryCount);
 };
 const StatisticBar = {
@@ -60,7 +60,7 @@ export default class StatisticController {
     // topGenre
     this._allGenresNew = [];
 
-    this._cardsList.forEach((card) => {
+    this._cardsList.forEach(() => {
       this._allGenres = this._cardsList.reduce((accum, film) => accum.concat(film.genre), []);
     });
 
@@ -71,13 +71,13 @@ export default class StatisticController {
       }, {});
     }
     const sortedGenres = Object.keys(this._allGenres).sort(
-      (a, b) => this._allGenres[b] - this._allGenres[a]
+        (a, b) => this._allGenres[b] - this._allGenres[a]
     );
     this._topGenre = sortedGenres[0];
     // Преобразуем массив обратно в объект
     this._allGenres = sortedGenres.reduce(
-      (object, key) => Object.assign(object, { [key]: this._allGenres[key] }),
-      {}
+        (object, key) => Object.assign(object, {[key]: this._allGenres[key]}),
+        {}
     );
     // quantityWatched
     this._quantityWatched = this._cardsList.length;
@@ -88,8 +88,8 @@ export default class StatisticController {
       allDurations = allDurations.concat(card.duration);
     });
     this._durationWatched = this._cardsList.reduce(
-      (accumulator, film) => accumulator + film.duration,
-      0
+        (accumulator, film) => accumulator + film.duration,
+        0
     );
     const oldComponent = this._statistic;
     this._statistic = new StatisticComponent({
@@ -115,8 +115,8 @@ export default class StatisticController {
   }
   show(cards) {
     this._cards = cards;
-    const isHistoryFilms = this._cards.filter(film => film.isHistory === true);
-    const isFavoriteFilms = this._cards.filter(film => film.isFavorite === true);
+    const isHistoryFilms = this._cards.filter((film) => film.isHistory === true);
+    const isFavoriteFilms = this._cards.filter((film) => film.isFavorite === true);
 
     this._watchedList = isHistoryFilms.concat(isFavoriteFilms);
     this._cardsList = this._watchedList;
@@ -129,21 +129,21 @@ export default class StatisticController {
     const getFilteredFilms = () => {
       switch (this._activeFilterType) {
         case `today`:
-          return this._watchedList.filter(film => moment().isSame(moment(film.watchedDate), `day`));
+          return this._watchedList.filter((film) => moment().isSame(moment(film.watchedDate), `day`));
 
         case `week`:
           return this._watchedList.filter(
-            film => moment(film.watchedDate) > moment().subtract(1, `w`)
+              (film) => moment(film.watchedDate) > moment().subtract(1, `w`)
           );
 
         case `month`:
           return this._watchedList.filter(
-            film => moment(film.watchedDate) > moment().subtract(1, `months`)
+              (film) => moment(film.watchedDate) > moment().subtract(1, `months`)
           );
 
         case `year`:
           return this._watchedList.filter(
-            film => moment(film.watchedDate) > moment().subtract(1, `y`)
+              (film) => moment(film.watchedDate) > moment().subtract(1, `y`)
           );
       }
       return this._watchedList;
@@ -178,7 +178,7 @@ export default class StatisticController {
     const barOptions = {
       plugins: {
         datalabels: {
-          font: { size: StatisticBar.options.datalabel.fontSize },
+          font: {size: StatisticBar.options.datalabel.fontSize},
           color: StatisticBar.options.datalabel.color,
           anchor: StatisticBar.options.datalabel.anchor,
           align: StatisticBar.options.datalabel.align,
@@ -208,8 +208,8 @@ export default class StatisticController {
           },
         ],
       },
-      legend: { display: false },
-      tooltips: { enabled: false },
+      legend: {display: false},
+      tooltips: {enabled: false},
     };
 
     return {
