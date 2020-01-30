@@ -9,7 +9,7 @@ import LoadingComponent from './components/load.js';
 
 import {getRank, render, RenderPosition} from './utils/render.js';
 
-const AUTHORIZATION = `Basic eo0whfghgfhtrhvhv`;
+const AUTHORIZATION = `Basic eo0whfghhtrhvhv`;
 const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
 
 const filmCardsModel = new FilmCardsModel();
@@ -26,7 +26,7 @@ const pageController = new PageController(mainElement, filmCardsModel, api);
 
 const statisticController = new StatisticController(mainElement);
 
-api.getCards().then(cards => {
+api.getCards().then((cards) => {
   loadingComponent.hide();
   loadingComponent.removeElement();
 
@@ -34,8 +34,8 @@ api.getCards().then(cards => {
 
   const filterController = new FilterController(mainElement, filmCardsModel);
 
-  filterController.setOnChange(link => {
-    if (link === 'statistics') {
+  filterController.setOnChange((link) => {
+    if (link === `statistics`) {
       pageController.hide();
       statisticController.show(cards);
     } else {
@@ -46,7 +46,7 @@ api.getCards().then(cards => {
 
   filterController.render();
 
-  const filmsHistoryCount = cards.filter(film => film.isHistory === true).length;
+  const filmsHistoryCount = cards.filter((film) => film.isHistory === true).length;
   const rank = getRank(filmsHistoryCount);
 
   render(siteHeader, new ProfileComponent(rank), RenderPosition.BEFOREEND);
