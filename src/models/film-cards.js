@@ -43,7 +43,7 @@ export default class FilmCard {
     }
     return api
       .createComment({comment, cardId})
-      .then(response => {
+      .then((response) => {
         const {comments} = response;
         const lastId = comments[comments.length - 1].id;
         comment.id = Number(lastId) + 1;
@@ -56,7 +56,7 @@ export default class FilmCard {
   }
 
   removeComment(cardId, commentIndex, api) {
-    const cardIndex = this._cards.findIndex(it => it.id === cardId);
+    const cardIndex = this._cards.findIndex((it) => it.id === cardId);
 
     if (cardIndex === -1) {
       return;

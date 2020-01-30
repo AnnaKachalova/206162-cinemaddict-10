@@ -211,7 +211,6 @@ export default class StatisticController {
       legend: {display: false},
       tooltips: {enabled: false},
     };
-
     return {
       plugins: [ChartDataLabels],
       type: `horizontalBar`,

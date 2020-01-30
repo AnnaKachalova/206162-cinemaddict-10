@@ -36,7 +36,7 @@ const createRatingItems = (userRating) => {
   let scores = [];
   for (let i = 1; i < 10; i++) {
     const row = `<input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="${i}" id="rating-${i}" ${
-      Number(userRating) === i ?  `checked` : ``
+      Number(userRating) === i ? `checked` : ``
     }>
     <label class="film-details__user-rating-label" for="rating-${i}">${i}</label>`;
     scores += row;
@@ -159,7 +159,7 @@ const createPopupCardComponent = (film) => {
 
       <section class="film-details__controls">
         <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${
-    isWatchlist ? `checked` : ``
+  isWatchlist ? `checked` : ``
 }>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 

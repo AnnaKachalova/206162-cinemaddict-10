@@ -10,10 +10,10 @@ const createFilterTemplate = ({name, count, checked}) => {
     checked ? `main-navigation__item--active` : ``
   }" id="filter__${name}">${name} 
   ${
-    name === `All movies`
-      ? ``
-      : `<span class="main-navigation__item-count">${count}</span></a>`
-  }`;
+  name === `All movies`
+    ? ``
+    : `<span class="main-navigation__item-count">${count}</span></a>`
+}`;
 };
 
 const createMenuComponent = (filters) => {
@@ -55,7 +55,7 @@ export default class Menu extends AbstractComponent {
     const classActive =  `main-navigation__item--active`;
     const navigation = this.getElement();
 
-    const activeLink = navigation.querySelector(`.${classActive}`);
+    const activeLink = navigation.querySelector(`.main-navigation__item--active`);
     const link = evt.target;
     let linkType = ``;
 
