@@ -71,11 +71,11 @@ export default class MovieController {
         this._onCardClick(card);
       }).catch(() => {
         this._enabledButtonDelete();
-      });  
+      });
     } else if (index === null) {
       this._disabledFieldText();
 
-      this._api.createComment({ comment: newData, cardId: card.id })
+      this._api.createComment({comment: newData, cardId: card.id})
       .then((response) => {
         const {comments} = response;
 
@@ -85,9 +85,9 @@ export default class MovieController {
         this._onMostCommetedChange();
         this._onCardClick(card);
       }).catch(() => {
-          this._shake();
-          this._enabledFieldText();
-        });
+        this._shake();
+        this._enabledFieldText();
+      });
     }
   }
   _shake() {
