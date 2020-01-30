@@ -6,11 +6,11 @@ export const FilterType = {
 };
 
 export const StatisticFilterType = [
-  { title: `All time`, value: `all-time` },
-  { title: `Today`, value: `today` },
-  { title: `Week`, value: `week` },
-  { title: `Month`, value: `month` },
-  { title: `Year`, value: `year` },
+  {title: `All time`, value: `all-time`},
+  {title: `Today`, value: `today`},
+  {title: `Week`, value: `week`},
+  {title: `Month`, value: `month`},
+  {title: `Year`, value: `year`},
 ];
 export const RankType = {
   NEITHER: false,
