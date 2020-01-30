@@ -54,23 +54,13 @@ export default class FilmCard {
       .then(this._dataChangeHandlers.forEach((handler) => handler()));
   }
 
-  removeComment(cardId, commentIndex, api) {
+  removeComment(cardId, commentIndex) {
     const cardIndex = this._cards.findIndex((it) => it.id === cardId);
-
     if (cardIndex === -1) {
       return;
     }
-
-    const idComment = this._cards[cardIndex].comments[commentIndex].id;
-
-    return api.deleteComment({idComment})
-      .then(() => {
-        const comments = this._cards[cardIndex].comments;
-        this._cards[cardIndex].comments.splice(commentIndex, 1);
-
-        return comments;
-      })
-      .then(this._dataChangeHandlers.forEach((handler) => handler()));
+    this._cards[cardIndex].comments.splice(commentIndex, 1);
+    this._dataChangeHandlers.forEach((handler) => handler())
   }
 
   setFilterChangeHandler(handler) {
