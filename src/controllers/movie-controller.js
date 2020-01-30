@@ -61,17 +61,19 @@ export default class MovieController {
   }
   _onCommentDataChange(card, index, newData) {
     if (newData === null) {
-      this._cardModel
-        .removeComment(card.id, index, this._api)
-        .then(() => {
+        const idComment = card.comments[index].id;
+ 
+        return this._api.deleteComment({idComment}).then(() =>{
+          this._cardModel.removeComment(card.id, index)
           this._enabledButtonDelete();
           this.render(card);
           this._onMostCommetedChange();
           this._onCardClick(card);
-        })
-        .catch(() => {
+        }).catch(() => {
           this._enabledButtonDelete();
-        });
+        });  
+        
+
     } else if (index === null) {
       this._disabledFieldText();
       this._cardModel

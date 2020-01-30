@@ -26,7 +26,7 @@ const pageController = new PageController(mainElement, filmCardsModel, api);
 
 const statisticController = new StatisticController(mainElement);
 
-api.getCards().then(cards => {
+api.getCards().then((cards) => {
   loadingComponent.hide();
   loadingComponent.removeElement();
 
@@ -34,7 +34,7 @@ api.getCards().then(cards => {
 
   const filterController = new FilterController(mainElement, filmCardsModel);
 
-  filterController.setOnChange(link => {
+  filterController.setOnChange((link) => {
     if (link === 'statistics') {
       pageController.hide();
       statisticController.show(cards);
@@ -46,7 +46,7 @@ api.getCards().then(cards => {
 
   filterController.render();
 
-  const filmsHistoryCount = cards.filter(film => film.isHistory === true).length;
+  const filmsHistoryCount = cards.filter((film) => film.isHistory === true).length;
   const rank = getRank(filmsHistoryCount);
 
   render(siteHeader, new ProfileComponent(rank), RenderPosition.BEFOREEND);
