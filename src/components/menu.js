@@ -52,10 +52,10 @@ export default class Menu extends AbstractComponent {
     this._filterClickHandler = handler;
   }
   _onLinkClick(evt) {
-    const classActive =  `main-navigation__item--active`;
+    const classActive = `main-navigation__item--active`;
     const navigation = this.getElement();
 
-    const activeLink = navigation.querySelector(`.main-navigation__item--active`);
+    const activeLink = navigation.querySelector(`.${classActive}`);
     const link = evt.target;
     let linkType = ``;
 
