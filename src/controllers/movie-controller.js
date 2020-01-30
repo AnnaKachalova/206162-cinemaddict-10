@@ -61,31 +61,33 @@ export default class MovieController {
   }
   _onCommentDataChange(card, index, newData) {
     if (newData === null) {
-      this._cardModel
-        .removeComment(card.id, index, this._api)
-        .then(() => {
-          this._enabledButtonDelete();
-          this.render(card);
-          this._onMostCommetedChange();
-          this._onCardClick(card);
-        })
-        .catch(() => {
-          this._enabledButtonDelete();
-        });
+      const idComment = card.comments[index].id;
+      this._api.deleteComment({idComment})
+      .then(() => {
+        this._cardModel.removeComment(card.id, index);
+        this._enabledButtonDelete();
+        this.render(card);
+        this._onMostCommetedChange();
+        this._onCardClick(card);
+      }).catch(() => {
+        this._enabledButtonDelete();
+      });
     } else if (index === null) {
       this._disabledFieldText();
-      this._cardModel
-        .addComment(card.id, newData, this._api)
-        .then(() => {
-          this._enabledFieldText();
-          this.render(card);
-          this._onMostCommetedChange();
-          this._onCardClick(card);
-        })
-        .catch(() => {
-          this._shake();
-          this._enabledFieldText();
-        });
+
+      this._api.createComment({comment: newData, cardId: card.id})
+      .then((response) => {
+        const {comments} = response;
+
+        this._cardModel.addComment(card.id, newData, comments);
+        this._enabledFieldText();
+        this.render(card);
+        this._onMostCommetedChange();
+        this._onCardClick(card);
+      }).catch(() => {
+        this._shake();
+        this._enabledFieldText();
+      });
     }
   }
   _shake() {
