@@ -1,11 +1,11 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { render, replace, RenderPosition, getRank } from '../utils/render.js';
+import {render, replace, RenderPosition, getRank} from '../utils/render.js';
 
 import StatisticComponent from '../components/statistics.js';
 import moment from 'moment';
 
-const countRank = cards => {
+const countRank = (cards) => {
   const filmsHistoryCount = cards.filter(film => film.isHistory === true).length;
   return getRank(filmsHistoryCount);
 };
@@ -60,7 +60,7 @@ export default class StatisticController {
     // topGenre
     this._allGenresNew = [];
 
-    this._cardsList.forEach(card => {
+    this._cardsList.forEach((card) => {
       this._allGenres = this._cardsList.reduce((accum, film) => accum.concat(film.genre), []);
     });
 
@@ -84,7 +84,7 @@ export default class StatisticController {
 
     // durationWatched
     let allDurations = [];
-    this._cardsList.forEach(card => {
+    this._cardsList.forEach((card) => {
       allDurations = allDurations.concat(card.duration);
     });
     this._durationWatched = this._cardsList.reduce(

@@ -8,7 +8,6 @@ const createMostCommentedComponent = () => {
 };
 
 export default class MostCommented extends AbstractComponent {
-
   getTemplate() {
     return createMostCommentedComponent();
   }

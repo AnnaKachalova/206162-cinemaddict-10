@@ -22,7 +22,7 @@ export default class FilmCard {
   }
   setFilter(filterType) {
     this._activeFilterType = filterType;
-    this._filterChangeHandlers.forEach(handler => handler());
+    this._filterChangeHandlers.forEach((handler) => handler());
   }
   updateCard(id, card) {
     const index = this._cards.findIndex(it => it.id === id);
@@ -32,7 +32,7 @@ export default class FilmCard {
     }
 
     this._cards = [].concat(this._cards.slice(0, index), card, this._cards.slice(index + 1));
-    this._dataChangeHandlers.forEach(handler => handler());
+    this._dataChangeHandlers.forEach((handler) => handler());
     return true;
   }
   addComment(cardId, comment, api) {
@@ -52,7 +52,7 @@ export default class FilmCard {
 
         return comments;
       })
-      .then(this._dataChangeHandlers.forEach(handler => handler()));
+      .then(this._dataChangeHandlers.forEach((handler) => handler()));
   }
 
   removeComment(cardId, commentIndex, api) {
@@ -72,7 +72,7 @@ export default class FilmCard {
 
         return comments;
       })
-      .then(this._dataChangeHandlers.forEach(handler => handler()));
+      .then(this._dataChangeHandlers.forEach((handler) => handler()));
   }
 
   setFilterChangeHandler(handler) {

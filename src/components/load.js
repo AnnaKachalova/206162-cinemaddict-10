@@ -1,8 +1,8 @@
 import AbstractComponent from './abstract-component.js';
 
 const createLoadingComponent = () => {
-  return `<section class="films-list--extra">
-      <div class="films-list__container">
+  return `<section>
+      <div>
         Loading...
       </div>
     </section>`;

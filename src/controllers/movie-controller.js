@@ -1,15 +1,16 @@
 import FilmCardComponent from '../components/film-card.js';
 import PopupComponent from '../components/popup.js';
-import { render, replace, remove, RenderPosition } from '../utils/render.js';
+import {render, replace, RenderPosition} from '../utils/render.js';
 import CardFilm from '../models/film-card.js';
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
 export default class MovieController {
-  constructor(container, cardModel, onDataChange, api) {
+  constructor(container, cardModel, onDataChange, api, onMostCommetedChange) {
     this._container = container;
     this._cardComponent = null;
     this._onDataChange = onDataChange;
+    this._onMostCommetedChange = onMostCommetedChange;
     this._cardModel = cardModel;
     this._api = api;
     this._fieldText = null;
@@ -65,6 +66,7 @@ export default class MovieController {
         .then(() => {
           this._enabledButtonDelete();
           this.render(card);
+          this._onMostCommetedChange();
           this._onCardClick(card);
         })
         .catch(() => {
@@ -77,6 +79,7 @@ export default class MovieController {
         .then(() => {
           this._enabledFieldText();
           this.render(card);
+          this._onMostCommetedChange();
           this._onCardClick(card);
         })
         .catch(() => {
@@ -102,6 +105,7 @@ export default class MovieController {
   _enabledFieldText() {
     this._fieldText.disabled = false;
   }
+
   _onCardClick(card) {
     this._popupComponent = new PopupComponent(card);
     this._popupComponent.onControlsChangeHandler(newData => {

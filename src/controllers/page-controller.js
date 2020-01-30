@@ -1,22 +1,35 @@
 import NoFilms from '../components/no-films.js';
-import SortComponent, { SortType } from '../components/sort.js';
+import SortComponent, {SortType} from '../components/sort.js';
 import FilmsContainerComponent from '../components/films-container.js';
 
 import TopRatedComponent from '../components/top-rated.js';
 import MostCommentedComponent from '../components/most-commented.js';
 import MoreButtonComponent from '../components/more-button.js';
 
-import { getTopRated, getMostCommented } from '../utils/render.js';
-import { render, remove, RenderPosition, getItemsByField } from '../utils/render.js';
+import {getTopRated, getMostCommented} from '../utils/render.js';
+import {render, remove, RenderPosition, getItemsByField} from '../utils/render.js';
 
 import MovieController from './movie-controller.js';
 
 const SHOWING_CARDS_COUNT_ON_START = 5;
 const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
 
-const renderCards = (filmListContainer, cards, onDataChange, cardsModel, api) => {
-  return cards.map(card => {
-    const movieController = new MovieController(filmListContainer, cardsModel, onDataChange, api);
+const renderCards = (
+  filmListContainer,
+  cards,
+  onDataChange,
+  cardsModel,
+  api,
+  onMostCommetedChange
+) => {
+  return cards.map((card) => {
+    const movieController = new MovieController(
+      filmListContainer,
+      cardsModel,
+      onDataChange,
+      api,
+      onMostCommetedChange
+    );
     movieController.render(card);
     return movieController;
   });
@@ -41,10 +54,13 @@ export default class PageController {
 
     this._showedCardsControllers = [];
     this._onDataChange = this._onDataChange.bind(this);
+
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._showingCardsCount = SHOWING_CARDS_COUNT_ON_START;
     this._onMoreButtonClick = this._onMoreButtonClick.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
+
+    this._onMostCommetedChange = this._onMostCommetedChange.bind(this);
 
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     this._cardsModel.setFilterChangeHandler(this._onFilterChange);
@@ -70,13 +86,14 @@ export default class PageController {
         cards.slice(0, this._showingCardsCount),
         this._onDataChange,
         this._cardsModel,
-        this._api
+        this._api,
+        this._onMostCommetedChange
       );
       this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
 
       this._renderMoreButton();
-      this._renderMostCommeted(cards);
-      this._renderTopRated(cards);
+      this._renderMostCommeted();
+      this._renderTopRated();
     } else {
       render(this._filmList, this._noFilms, RenderPosition.BEFOREEND);
     }
@@ -88,15 +105,24 @@ export default class PageController {
 
     const elementList = element.querySelector(`.films-list__container`);
     this._getCommens();
-    renderCards(elementList, assortedArray, this._onDataChange, this._cardsModel, this._api);
+    renderCards(
+      elementList,
+      assortedArray,
+      this._onDataChange,
+      this._cardsModel,
+      this._api,
+      this._onMostCommetedChange
+    );
   }
-  _renderMostCommeted(cards) {
+  _renderMostCommeted() {
+    const cards = this._cardsModel.getCards();
     const mostCommeted = getMostCommented(cards);
     if (mostCommeted.length) {
       this._renderSpecial(this._mostCommentedComponent, mostCommeted);
     }
   }
-  _renderTopRated(cards) {
+  _renderTopRated() {
+    const cards = this._cardsModel.getCards();
     const topRated = getTopRated(cards);
     if (topRated.length) {
       this._renderSpecial(this._topRatedComponent, topRated);
@@ -116,7 +142,8 @@ export default class PageController {
       cards,
       this._onDataChange,
       this._cardsModel,
-      this._api
+      this._api,
+      this._onMostCommetedChange
     );
 
     this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
@@ -147,13 +174,22 @@ export default class PageController {
     return updateChange;
   }
 
+  _onMostCommetedChange() {
+    const wrappers = document.querySelectorAll('.films-list--extra .film-card');
+    wrappers.forEach(wrapper => {
+      wrapper.remove();
+    });
+
+    this._renderMostCommeted();
+    this._renderTopRated();
+  }
+
   _onSortTypeChange(sortType) {
     let sortedCards = [];
     const cards = this._cardsModel.getCards();
     switch (sortType) {
       case SortType.DATE:
         sortedCards = getItemsByField(cards, `releaseDate`);
-
         break;
       case SortType.RATING:
         sortedCards = getItemsByField(cards, `rating`);
@@ -166,7 +202,13 @@ export default class PageController {
 
     this._filmListContainer.innerHTML = ``;
     this._getCommens();
-    renderCards(this._filmListContainer, sortedCards, this._cardsModel, this._api);
+    renderCards(
+      this._filmListContainer,
+      sortedCards,
+      this._cardsModel,
+      this._api,
+      this._onMostCommetedChange
+    );
 
     this._removeCards();
     this._renderCards(sortedCards);

@@ -7,9 +7,9 @@ import ProfileComponent from './components/profile.js';
 import FilmCardsModel from './models/film-cards.js';
 import LoadingComponent from './components/load.js';
 
-import { getRank, render, RenderPosition } from './utils/render.js';
+import {getRank, render, RenderPosition} from './utils/render.js';
 
-const AUTHORIZATION = `Basic eo0whfghgfhtrhhv`;
+const AUTHORIZATION = `Basic eo0whfghgfhtrhvhv`;
 const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
 
 const filmCardsModel = new FilmCardsModel();

@@ -1,7 +1,7 @@
 import MenuComponent from '../components/menu.js';
-import { FilterType } from '../const.js';
-import { render, replace, RenderPosition } from '../utils/render.js';
-import { getCardsByFilter } from '../utils/filter.js';
+import {FilterType} from '../const.js';
+import {render, replace, RenderPosition} from '../utils/render.js';
+import {getCardsByFilter} from '../utils/filter.js';
 
 export default class FilterController {
   constructor(container, cardsModel) {

@@ -1,20 +1,20 @@
-import { render, RenderPosition, createElement } from '../utils/render.js';
+import {render, RenderPosition} from '../utils/render.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
-import { formatReleaseDate, formatDateAgo, formatDuration } from '../utils/common.js';
+import {formatReleaseDate, formatDateAgo, formatDuration} from '../utils/common.js';
 import moment from 'moment';
 
-const createGenreTemplate = genres => {
+const createGenreTemplate = (genres) => {
   return Array.from(genres)
-    .map(element => {
+    .map((element) => {
       return `<span class="film-details__genre">${element},</span>`;
     })
     .join('');
 };
 
-const createCommentTemplate = comments => {
+const createCommentTemplate = (comments) => {
   return Array.from(comments)
-    .map(commentItem => {
-      const { emotion, author, comment, date } = commentItem;
+    .map((commentItem) => {
+      const {emotion, author, comment, date} = commentItem;
       return `<li class="film-details__comment">
               <span class="film-details__comment-emoji">
                 <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji">
@@ -32,7 +32,7 @@ const createCommentTemplate = comments => {
     .join('');
 };
 
-const createRatingItems = userRating => {
+const createRatingItems = (userRating) => {
   let scores = [];
   for (let i = 1; i < 10; i++) {
     const row = `<input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="${i}" id="rating-${i}" ${
@@ -69,7 +69,7 @@ const createFilmRaringTemplate = (poster, title, userRating) => {
     </div>`;
 };
 
-const createPopupCardComponent = film => {
+const createPopupCardComponent = (film) => {
   const {
     title,
     poster,
@@ -219,7 +219,7 @@ const createPopupCardComponent = film => {
   </form>
 </section>`;
 };
-const parseFormData = formData => {
+const parseFormData = (formData) => {
   return {
     author: `You`,
     comment: formData.get(`comment`),

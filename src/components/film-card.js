@@ -1,5 +1,5 @@
 import AbstractComponent from './abstract-component.js';
-import { formatDuration, formatYear } from '../utils/common.js';
+import {formatDuration, formatYear} from '../utils/common.js';
 
 const MAX_DESCRIPTION_LENGTH = 140;
 

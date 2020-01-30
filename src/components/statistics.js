@@ -1,6 +1,6 @@
 import AbstractComponent from './abstract-component.js';
 import moment from 'moment';
-import { StatisticFilterType } from '../const.js';
+import {StatisticFilterType} from '../const.js';
 
 const createFiltersTemplate = (filters, activeFilter) => {
   let scores = [];
@@ -86,7 +86,7 @@ export default class Statistics extends AbstractComponent {
     const statistics = this.getElement();
     const filters = statistics.querySelectorAll('.statistic__filters-input');
 
-    filters.forEach(filter => {
+    filters.forEach((filter) => {
       filter.addEventListener(`click`, evt => {
         const filterName = evt.target.value;
         this._activeFilterType = filterName;

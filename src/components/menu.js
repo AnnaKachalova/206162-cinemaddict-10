@@ -5,7 +5,7 @@ const getFilterNameById = id => {
   return id.substring(FILTER_ID_PREFIX.length);
 };
 
-const createFilterTemplate = ({ name, count, checked }) => {
+const createFilterTemplate = ({name, count, checked}) => {
   return `<a href="#${name}" class="main-navigation__item ${
     checked ? 'main-navigation__item--active' : ''
   }" id="filter__${name}">${name} 
@@ -16,9 +16,9 @@ const createFilterTemplate = ({ name, count, checked }) => {
   }`;
 };
 
-const createMenuComponent = filters => {
+const createMenuComponent = (filters) => {
   const filtersMarkup = filters
-    .map(it => createFilterTemplate(it, it.checked))
+    .map((it) => createFilterTemplate(it, it.checked))
     .join(`\n`);
 
   return `<nav class="main-navigation">
