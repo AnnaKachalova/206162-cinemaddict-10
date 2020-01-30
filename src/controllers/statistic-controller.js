@@ -111,8 +111,8 @@ export default class StatisticController {
     }
   }
   hide() {
-    if(this._statistic) {
-      this._statistic.hide()
+    if (this._statistic) {
+      this._statistic.hide();
     }
   }
   show(cards) {
