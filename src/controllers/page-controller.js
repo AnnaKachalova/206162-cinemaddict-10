@@ -1,25 +1,27 @@
 import NoFilms from '../components/no-films.js';
-import SortComponent, { SortType } from '../components/sort.js';
+import SortComponent, {SortType} from '../components/sort.js';
 import FilmsContainerComponent from '../components/films-container.js';
 
 import TopRatedComponent from '../components/top-rated.js';
 import MostCommentedComponent from '../components/most-commented.js';
 import MoreButtonComponent from '../components/more-button.js';
 
-import { getTopRated, getMostCommented } from '../utils/render.js';
-import { render, remove, RenderPosition, getItemsByField } from '../utils/render.js';
+import {getTopRated, getMostCommented} from '../utils/render.js';
+import {render, remove, RenderPosition, getItemsByField} from '../utils/render.js';
 
 import MovieController from './movie-controller.js';
 
 const SHOWING_CARDS_COUNT_ON_START = 5;
 const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
 
-const renderCards = (filmListContainer, cards, onDataChange, cardsModel) => {
-  return cards.map(card => {
+const renderCards = (filmListContainer, cards, onDataChange, cardsModel, api, onMostCommetedChange) => {
+  return cards.map((card) => {
     const movieController = new MovieController(
-      filmListContainer,
-      cardsModel,
-      onDataChange
+        filmListContainer,
+        cardsModel,
+        onDataChange,
+        api,
+        onMostCommetedChange
     );
     movieController.render(card);
     return movieController;
@@ -41,16 +43,17 @@ export default class PageController {
     this._filmsContainerComponent = new FilmsContainerComponent();
     this._filmsContainerElement = this._filmsContainerComponent.getElement();
     this._filmList = this._filmsContainerElement.querySelector(`.films-list`);
-    this._filmListContainer = this._filmsContainerElement.querySelector(
-      `.films-list__container`
-    );
+    this._filmListContainer = this._filmsContainerElement.querySelector(`.films-list__container`);
 
     this._showedCardsControllers = [];
     this._onDataChange = this._onDataChange.bind(this);
+
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._showingCardsCount = SHOWING_CARDS_COUNT_ON_START;
     this._onMoreButtonClick = this._onMoreButtonClick.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
+
+    this._onMostCommetedChange = this._onMostCommetedChange.bind(this);
 
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     this._cardsModel.setFilterChangeHandler(this._onFilterChange);
@@ -70,18 +73,20 @@ export default class PageController {
     if (cards.length) {
       render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
       render(this._container, this._filmsContainerComponent, RenderPosition.BEFOREEND);
-
+      this._getCommens();
       const newCards = renderCards(
-        this._filmListContainer,
-        cards.slice(0, this._showingCardsCount),
-        this._onDataChange,
-        this._cardsModel
+          this._filmListContainer,
+          cards.slice(0, this._showingCardsCount),
+          this._onDataChange,
+          this._cardsModel,
+          this._api,
+          this._onMostCommetedChange
       );
       this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
 
       this._renderMoreButton();
-      this._renderMostCommeted(cards);
-      this._renderTopRated(cards);
+      this._renderMostCommeted();
+      this._renderTopRated();
     } else {
       render(this._filmList, this._noFilms, RenderPosition.BEFOREEND);
     }
@@ -92,15 +97,25 @@ export default class PageController {
     render(this._filmsContainerElement, component, RenderPosition.BEFOREEND);
 
     const elementList = element.querySelector(`.films-list__container`);
-    renderCards(elementList, assortedArray, this._onDataChange, this._cardsModel);
+    this._getCommens();
+    renderCards(
+        elementList,
+        assortedArray,
+        this._onDataChange,
+        this._cardsModel,
+        this._api,
+        this._onMostCommetedChange
+    );
   }
-  _renderMostCommeted(cards) {
+  _renderMostCommeted() {
+    const cards = this._cardsModel.getCards();
     const mostCommeted = getMostCommented(cards);
     if (mostCommeted.length) {
       this._renderSpecial(this._mostCommentedComponent, mostCommeted);
     }
   }
-  _renderTopRated(cards) {
+  _renderTopRated() {
+    const cards = this._cardsModel.getCards();
     const topRated = getTopRated(cards);
     if (topRated.length) {
       this._renderSpecial(this._topRatedComponent, topRated);
@@ -113,12 +128,17 @@ export default class PageController {
   }
 
   _renderCards(cards) {
+    this._getCommens();
+
     const newCards = renderCards(
-      this._filmListContainer,
-      cards,
-      this._onDataChange,
-      this._cardsModel
+        this._filmListContainer,
+        cards,
+        this._onDataChange,
+        this._cardsModel,
+        this._api,
+        this._onMostCommetedChange
     );
+
     this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
     this._showingCardsCount = this._showedCardsControllers.length;
   }
@@ -134,21 +154,27 @@ export default class PageController {
   }
 
   _onDataChange(movieController, oldData, newData) {
-    /*const isSuccess = this._cardsModel.updateCard(oldData.id, newData);
-    if (isSuccess) {
-      movieController.render(newData);
-      const cards = this._cardsModel.getCards();
-      this._renderMostCommeted(cards);
-      this._renderTopRated(cards);
-    } */
-    this._api.updateCard(oldData.id, newData).then(cardsModel => {
-      const isSuccess = this._cardsModel.updateCard(oldData.id, cardsModel);
+    const oldComments = newData.comments;
+    newData.comments = newData.comments.map((comment) => comment.id);
 
-      if (isSuccess) {
-        movieController.render(newData);
-        this._updateCards(this._showingCardsCount);
-      }
+    const updateChange = this._api.updateCard(newData.id, newData.toRAW()).then((film) => {
+      return film;
     });
+    newData.comments = oldComments;
+    this._cardsModel.updateCard(oldData.id, newData);
+
+    movieController.render(newData);
+    return updateChange;
+  }
+
+  _onMostCommetedChange() {
+    const wrappers = document.querySelectorAll(`.films-list--extra .film-card`);
+    wrappers.forEach((wrapper) => {
+      wrapper.remove();
+    });
+
+    this._renderMostCommeted();
+    this._renderTopRated();
   }
 
   _onSortTypeChange(sortType) {
@@ -157,7 +183,6 @@ export default class PageController {
     switch (sortType) {
       case SortType.DATE:
         sortedCards = getItemsByField(cards, `releaseDate`);
-
         break;
       case SortType.RATING:
         sortedCards = getItemsByField(cards, `rating`);
@@ -169,7 +194,14 @@ export default class PageController {
     }
 
     this._filmListContainer.innerHTML = ``;
-    renderCards(this._filmListContainer, sortedCards, this._cardsModel);
+    this._getCommens();
+    renderCards(
+        this._filmListContainer,
+        sortedCards,
+        this._cardsModel,
+        this._api,
+        this._onMostCommetedChange
+    );
 
     this._removeCards();
     this._renderCards(sortedCards);
@@ -186,14 +218,19 @@ export default class PageController {
 
     this._showingCardsCount = this._showingCardsCount + SHOWING_CARDS_COUNT_BY_BUTTON;
 
-    this._renderCards(
-      cards.slice(prevCardsCount, this._showingCardsCount),
-      this._cardsModel
-    );
+    this._renderCards(cards.slice(prevCardsCount, this._showingCardsCount), this._cardsModel);
 
     if (this._showingCardsCount >= cards.length) {
       remove(this._moreButtonComponent);
     }
+  }
+  _getCommens() {
+    const cardsAll = this._cardsModel.getCards();
+    cardsAll.map((card) => {
+      return this._api.getComments(card.id).then((comments) => {
+        card.comments = comments;
+      });
+    });
   }
   _onFilterChange() {
     this._removeCards();

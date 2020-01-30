@@ -29,8 +29,8 @@ const API = class {
   updateCard(id, data) {
     return this._load({
       url: `movies/${id}`,
-      method: Method.PUT,
-      body: JSON.stringify(data.toRAW()),
+      method: `PUT`,
+      body: JSON.stringify(data),
       headers: new Headers({ 'Content-Type': `application/json` }),
     })
       .then(response => response.json())
@@ -45,6 +45,21 @@ const API = class {
       .catch(err => {
         throw err;
       });
+  }
+  getComments(filmId) {
+    return this._load({ url: `comments/${filmId}` }).then(response => response.json());
+  }
+  createComment({ comment, cardId }) {
+    return this._load({
+      url: `comments/${cardId}`,
+      method: `POST`,
+      body: JSON.stringify(comment),
+      headers: new Headers({ 'Content-Type': `application/json` }),
+    }).then(response => response.json());
+  }
+
+  deleteComment({ idComment }) {
+    return this._load({ url: `comments/${idComment}`, method: `DELETE` });
   }
 };
 

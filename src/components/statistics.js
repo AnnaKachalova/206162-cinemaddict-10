@@ -1,16 +1,16 @@
 import AbstractComponent from './abstract-component.js';
 import moment from 'moment';
-import { StatisticFilterType } from '../const.js';
+import {StatisticFilterType} from '../const.js';
 
 const createFiltersTemplate = (filters, activeFilter) => {
   let scores = [];
-  filters.forEach((filter, i) => {
+  filters.forEach((filter) => {
     const row = `<input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${
       filter.value
-    }" value="${filter.value}" ${activeFilter === filter.value ? 'checked' : ''}>
+    }" value="${filter.value}" ${activeFilter === filter.value ? `checked` : ``}>
     <label for="statistic-${filter.value}" class="statistic__filters-label">${
-      filter.title
-    }</label>`;
+  filter.title
+}</label>`;
     scores += row;
   });
 
@@ -64,7 +64,7 @@ const createStatistics = ({
 };
 
 export default class Statistics extends AbstractComponent {
-  constructor({ rank, activeFilter, topGenre, quantityWatched, durationWatched }) {
+  constructor({rank, activeFilter, topGenre, quantityWatched, durationWatched}) {
     super();
     this._rank = rank;
     this._topGenre = topGenre;
@@ -84,10 +84,10 @@ export default class Statistics extends AbstractComponent {
   }
   setFilterChangeHandler(handler) {
     const statistics = this.getElement();
-    const filters = statistics.querySelectorAll('.statistic__filters-input');
+    const filters = statistics.querySelectorAll(`.statistic__filters-input`);
 
-    filters.forEach(filter => {
-      filter.addEventListener(`click`, evt => {
+    filters.forEach((filter) => {
+      filter.addEventListener(`click`, (evt) => {
         const filterName = evt.target.value;
         this._activeFilterType = filterName;
         handler(filterName);

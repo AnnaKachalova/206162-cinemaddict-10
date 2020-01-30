@@ -1,5 +1,5 @@
-import { getCardsByFilter } from '../utils/filter.js';
-import { FilterType } from '../const.js';
+import {getCardsByFilter} from '../utils/filter.js';
+import {FilterType} from '../const.js';
 
 export default class FilmCard {
   constructor() {
@@ -22,45 +22,55 @@ export default class FilmCard {
   }
   setFilter(filterType) {
     this._activeFilterType = filterType;
-    this._filterChangeHandlers.forEach(handler => handler());
+    this._filterChangeHandlers.forEach((handler) => handler());
   }
   updateCard(id, card) {
-    const index = this._cards.findIndex(it => it.id === id);
+    const index = this._cards.findIndex((it) => it.id === id);
 
     if (index === -1) {
       return false;
     }
 
-    this._cards = [].concat(
-      this._cards.slice(0, index),
-      card,
-      this._cards.slice(index + 1)
-    );
-    this._dataChangeHandlers.forEach(handler => handler());
+    this._cards = [].concat(this._cards.slice(0, index), card, this._cards.slice(index + 1));
+    this._dataChangeHandlers.forEach((handler) => handler());
     return true;
   }
-  addComment(cardId, comment) {
-    const cardIndex = this._cards.findIndex(it => it.id === cardId);
+  addComment(cardId, comment, api) {
+    const cardIndex = this._cards.findIndex((it) => it.id === cardId);
 
     if (cardIndex === -1) {
       return;
     }
+    return api.createComment({comment, cardId})
+      .then((response) => {
+        const {comments} = response;
+        const lastId = comments[comments.length - 1].id;
+        comment.id = Number(lastId) + 1;
 
-    this._cards[cardIndex].comments.unshift(comment);
+        this._cards[cardIndex].comments.push(comment);
 
-    this._dataChangeHandlers.forEach(handler => handler());
+        return comments;
+      })
+      .then(this._dataChangeHandlers.forEach((handler) => handler()));
   }
 
-  removeComment(cardId, commentIndex) {
-    const cardIndex = this._cards.findIndex(it => it.id === cardId);
+  removeComment(cardId, commentIndex, api) {
+    const cardIndex = this._cards.findIndex((it) => it.id === cardId);
 
     if (cardIndex === -1) {
       return;
     }
 
-    this._cards[cardIndex].comments.splice(commentIndex, 1);
+    const idComment = this._cards[cardIndex].comments[commentIndex].id;
 
-    this._dataChangeHandlers.forEach(handler => handler());
+    return api.deleteComment({idComment})
+      .then(() => {
+        const comments = this._cards[cardIndex].comments;
+        this._cards[cardIndex].comments.splice(commentIndex, 1);
+
+        return comments;
+      })
+      .then(this._dataChangeHandlers.forEach((handler) => handler()));
   }
 
   setFilterChangeHandler(handler) {

@@ -1,7 +1,7 @@
 import MenuComponent from '../components/menu.js';
-import { FilterType } from '../const.js';
-import { render, replace, RenderPosition } from '../utils/render.js';
-import { getCardsByFilter } from '../utils/filter.js';
+import {FilterType} from '../const.js';
+import {render, replace, RenderPosition} from '../utils/render.js';
+import {getCardsByFilter} from '../utils/filter.js';
 
 export default class FilterController {
   constructor(container, cardsModel) {
@@ -20,7 +20,7 @@ export default class FilterController {
     const container = this._container;
     const allCards = this._cardsModel.getCardsAll();
 
-    const filters = Object.values(FilterType).map(filterType => {
+    const filters = Object.values(FilterType).map((filterType) => {
       return {
         name: filterType,
         count: getCardsByFilter(allCards, filterType).length,

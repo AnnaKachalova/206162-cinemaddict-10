@@ -1,4 +1,4 @@
-import { RankGradation } from '../const.js';
+import {RankGradation} from '../const.js';
 
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
@@ -7,22 +7,22 @@ export const RenderPosition = {
 
 export const getItemsByField = (array, field, length) => {
   return array
-    .filter(element => !!element[field])
+    .filter((element) => !!element[field])
     .sort((a, b) => b[field] - a[field])
     .slice(0, length);
 };
-export const getTopRated = films => {
+export const getTopRated = (films) => {
   return getItemsByField(films, `rating`, 2);
 };
 
-export const getMostCommented = films => {
+export const getMostCommented = (films) => {
   return films
-    .filter(element => !!element.comments)
+    .filter((element) => !!element.comments)
     .sort((a, b) => b.comments.length - a.comments.length)
     .slice(0, 2);
 };
 
-export const createElement = component => {
+export const createElement = (component) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = component;
 
@@ -38,7 +38,7 @@ export const render = (container, element, place) => {
       break;
   }
 };
-export const remove = component => {
+export const remove = (component) => {
   component.getElement().remove();
   component.removeElement();
 };
@@ -53,8 +53,8 @@ export const replace = (newComponent, oldComponent) => {
     parentElement.replaceChild(newElement, oldElement);
   }
 };
-export const getRank = isHistoryCount => {
-  let rank = Object.keys(RankGradation).find(key => {
+export const getRank = (isHistoryCount) => {
+  let rank = Object.keys(RankGradation).find((key) => {
     const min = Number(RankGradation[key].MIN_VALUE);
     const max = Number(RankGradation[key].MAX_VALUE);
     return min <= isHistoryCount && isHistoryCount <= max;

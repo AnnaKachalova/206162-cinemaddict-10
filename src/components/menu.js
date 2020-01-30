@@ -1,24 +1,24 @@
 import AbstractComponent from './abstract-component.js';
 const FILTER_ID_PREFIX = `filter__`;
 
-const getFilterNameById = id => {
+const getFilterNameById = (id) => {
   return id.substring(FILTER_ID_PREFIX.length);
 };
 
-const createFilterTemplate = ({ name, count, checked }) => {
+const createFilterTemplate = ({name, count, checked}) => {
   return `<a href="#${name}" class="main-navigation__item ${
-    checked ? 'main-navigation__item--active' : ''
+    checked ? `main-navigation__item--active` : ``
   }" id="filter__${name}">${name} 
   ${
-    name === 'All movies'
-      ? ''
-      : `<span class="main-navigation__item-count">${count}</span></a>`
-  }`;
+  name === `All movies`
+    ? ``
+    : `<span class="main-navigation__item-count">${count}</span></a>`
+}`;
 };
 
-const createMenuComponent = filters => {
+const createMenuComponent = (filters) => {
   const filtersMarkup = filters
-    .map(it => createFilterTemplate(it, it.checked))
+    .map((it) => createFilterTemplate(it, it.checked))
     .join(`\n`);
 
   return `<nav class="main-navigation">
@@ -44,7 +44,7 @@ export default class Menu extends AbstractComponent {
     const navigation = this.getElement();
     const links = navigation.querySelectorAll(`a`);
 
-    links.forEach(link => {
+    links.forEach((link) => {
       link.addEventListener(`click`, this._onLinkClick);
     });
   }
@@ -52,7 +52,7 @@ export default class Menu extends AbstractComponent {
     this._filterClickHandler = handler;
   }
   _onLinkClick(evt) {
-    const classActive = 'main-navigation__item--active';
+    const classActive = `main-navigation__item--active`;
     const navigation = this.getElement();
 
     const activeLink = navigation.querySelector(`.${classActive}`);
@@ -60,7 +60,7 @@ export default class Menu extends AbstractComponent {
     let linkType = ``;
 
     if (link !== activeLink) {
-      if (link.classList.contains('main-navigation__item--additional')) {
+      if (link.classList.contains(`main-navigation__item--additional`)) {
         linkType = `statistics`;
       } else {
         const filterName = getFilterNameById(link.id);
