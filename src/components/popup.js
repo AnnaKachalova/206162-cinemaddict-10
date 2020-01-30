@@ -70,6 +70,7 @@ const createFilmRaringTemplate = (poster, title, userRating) => {
 };
 
 const createPopupCardComponent = film => {
+  console.log(film);
   const {
     title,
     poster,
@@ -244,7 +245,6 @@ export default class Popup extends AbstractSmartComponent {
     return createPopupCardComponent(this._film);
   }
   getData() {
-    console.log(`получение свежих данных из формы`);
     const form = this.getElement().querySelector(`.film-details__inner`);
     const formData = new FormData(form);
     return parseFormData(formData);
@@ -280,7 +280,7 @@ export default class Popup extends AbstractSmartComponent {
     this._subscribeOnEvents();
   }
   rerender() {
-    console.log(`массовое перерендеривание`);
+    console.log(`массовое перерендеривание теряет коммиты`);
     super.rerender();
   }
   reset() {
@@ -314,7 +314,10 @@ export default class Popup extends AbstractSmartComponent {
   }
 
   _subscribeOnEvents() {
+    console.log(this._film);
     const popupElement = this.getElement();
+    console.log(popupElement);
+    console.log(this);
     const controlsWrapper = popupElement.querySelector(`.film-details__controls`);
 
     controlsWrapper.addEventListener(`change`, evt => {

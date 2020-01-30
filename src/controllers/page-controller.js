@@ -17,6 +17,7 @@ const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
 const renderCards = (filmListContainer, cards, onDataChange, cardsModel, api) => {
   return cards.map(card => {
     const movieController = new MovieController(filmListContainer, cardsModel, onDataChange, api);
+    console.log(card);
     movieController.render(card);
     return movieController;
   });
@@ -60,6 +61,8 @@ export default class PageController {
   }
   render() {
     const cards = this._cardsModel.getCards();
+    /*console.log('cards');
+    console.log(cards);*/
 
     if (cards.length) {
       render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
@@ -110,7 +113,7 @@ export default class PageController {
 
   _renderCards(cards) {
     this._getCommens();
-    //console.log('_getCommens');
+
     const newCards = renderCards(
       this._filmListContainer,
       cards,
@@ -218,6 +221,17 @@ export default class PageController {
     }
   }
   _getCommens() {
+    /*const cardsAll = this._cardsModel.getCards();
+    cardsAll.map(card => {
+      return this._api.getComments(card.id).then(comments => {
+        const filmDataWithComments = Object.assign({}, cards[card.id], { comments });
+        //console.log(filmDataWithComments);
+        cards[card.id] = filmDataWithComments;
+        this._cardsModel.setCards(cards);
+        //card.comments = comments;
+        return comments;
+      });
+    });*/
     const cardsAll = this._cardsModel.getCards();
     cardsAll.map(card => {
       return this._api.getComments(card.id).then(comments => {
