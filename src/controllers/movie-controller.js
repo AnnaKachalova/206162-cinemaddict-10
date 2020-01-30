@@ -13,13 +13,17 @@ export default class MovieController {
     this._cardModel = cardModel;
     this._api = api;
     this._fieldText = null;
+    this._cardForPopup = null;
   }
   render(card) {
+    this._cardForPopup = card;
     const oldCardComponent = this._cardComponent;
 
     this._cardComponent = new FilmCardComponent(card);
 
-    this._cardComponent.setPosterClickHandler(() => this._onCardClick(card));
+    this._cardComponent.setPosterClickHandler(() => {
+      this._onCardClick(card);
+    });
     this._cardComponent.setTitleClickHandler(() => this._onCardClick(card));
     this._cardComponent.setCommentBlockClickHandler(() => this._onCardClick(card));
 
@@ -100,7 +104,6 @@ export default class MovieController {
   }
   _onCardClick(card) {
     this._popupComponent = new PopupComponent(card);
-
     this._popupComponent.onControlsChangeHandler(newData => {
       this._onDataChange(this, card, newData);
     });

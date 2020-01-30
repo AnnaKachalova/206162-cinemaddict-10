@@ -17,7 +17,6 @@ const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
 const renderCards = (filmListContainer, cards, onDataChange, cardsModel, api) => {
   return cards.map(card => {
     const movieController = new MovieController(filmListContainer, cardsModel, onDataChange, api);
-    console.log(card);
     movieController.render(card);
     return movieController;
   });
@@ -61,8 +60,6 @@ export default class PageController {
   }
   render() {
     const cards = this._cardsModel.getCards();
-    /*console.log('cards');
-    console.log(cards);*/
 
     if (cards.length) {
       render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
@@ -137,45 +134,17 @@ export default class PageController {
   }
 
   _onDataChange(movieController, oldData, newData) {
-    /*const isSuccess = this._cardsModel.updateCard(oldData.id, newData);
-    if (isSuccess) {
-      movieController.render(newData);
-      const cards = this._cardsModel.getCards();
-      this._renderMostCommeted(cards);
-      this._renderTopRated(cards);
-    } */
-    console.log('page-controller');
-    console.log('updateCard');
     const oldComments = newData.comments;
-    const isSuccess = this._cardsModel.updateCard(oldData.id, newData);
-    const a = newData.comments.map(comment => comment.id);
-    newData.comments = a;
-    console.log(a);
-    return this._api
-      .updateCard(newData.id, newData.toRAW())
-      .then(film => {
-        //this._store.setItem({key: film.id, item: film.toRAW()});
-        return film;
-      })
-      .then(() => {
-        newData.comments = oldComments;
-        movieController.render(newData);
-        const cards = this._cardsModel.getCards();
-        //this._renderMostCommeted(cards);
-        //this._renderTopRated(cards);
-        //this._updateCards(this._showingCardsCount);
-      });
+    newData.comments = newData.comments.map(comment => comment.id);
 
-    /*this._api.updateCard(oldData.id, newData).then(cardsModel => {
-      const isSuccess = this._cardsModel.updateCard(oldData.id, cardsModel);
-      console.log('isSuccess');
-      console.log(isSuccess);
+    const updateChange = this._api.updateCard(newData.id, newData.toRAW()).then(film => {
+      return film;
+    });
+    newData.comments = oldComments;
+    this._cardsModel.updateCard(oldData.id, newData);
 
-      if (isSuccess) {
-        movieController.render(newData);
-        this._updateCards(this._showingCardsCount);
-      }
-    });*/
+    movieController.render(newData);
+    return updateChange;
   }
 
   _onSortTypeChange(sortType) {
@@ -221,17 +190,6 @@ export default class PageController {
     }
   }
   _getCommens() {
-    /*const cardsAll = this._cardsModel.getCards();
-    cardsAll.map(card => {
-      return this._api.getComments(card.id).then(comments => {
-        const filmDataWithComments = Object.assign({}, cards[card.id], { comments });
-        //console.log(filmDataWithComments);
-        cards[card.id] = filmDataWithComments;
-        this._cardsModel.setCards(cards);
-        //card.comments = comments;
-        return comments;
-      });
-    });*/
     const cardsAll = this._cardsModel.getCards();
     cardsAll.map(card => {
       return this._api.getComments(card.id).then(comments => {

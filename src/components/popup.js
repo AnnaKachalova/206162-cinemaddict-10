@@ -1,4 +1,4 @@
-import { render, RenderPosition } from '../utils/render.js';
+import { render, RenderPosition, createElement } from '../utils/render.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
 import { formatReleaseDate, formatDateAgo, formatDuration } from '../utils/common.js';
 import moment from 'moment';
@@ -70,7 +70,6 @@ const createFilmRaringTemplate = (poster, title, userRating) => {
 };
 
 const createPopupCardComponent = film => {
-  console.log(film);
   const {
     title,
     poster,
@@ -241,7 +240,6 @@ export default class Popup extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    console.log(`попадание в шаблон попапа`);
     return createPopupCardComponent(this._film);
   }
   getData() {
@@ -280,7 +278,6 @@ export default class Popup extends AbstractSmartComponent {
     this._subscribeOnEvents();
   }
   rerender() {
-    console.log(`массовое перерендеривание теряет коммиты`);
     super.rerender();
   }
   reset() {
@@ -308,16 +305,13 @@ export default class Popup extends AbstractSmartComponent {
     }
 
     render(this._bodyElement, this, RenderPosition.BEFOREEND);
-
     document.onkeydown = evt => this.onButtonKeyDown(evt);
     this._subscribeOnEvents();
   }
 
   _subscribeOnEvents() {
-    console.log(this._film);
     const popupElement = this.getElement();
-    console.log(popupElement);
-    console.log(this);
+
     const controlsWrapper = popupElement.querySelector(`.film-details__controls`);
 
     controlsWrapper.addEventListener(`change`, evt => {
